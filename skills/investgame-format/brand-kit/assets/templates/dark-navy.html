@@ -1,0 +1,839 @@
+<!--
+  InvestGame — Dark Navy template (dark navy, 1456x820). COPY this file, then replace placeholders in place and keep the class names. Render to PDF with scripts/render_pdf.py. Brand tokens: assets/ig_brand.css.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>InvestGame · [Deck title goes here]</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  /* ---- Page setup: 16:9 presentation ---- */
+  @page { size: 1456px 820px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #0E1F33;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---- Palette · InvestGame brand (navy / teal / blue / slate only) ---- */
+  :root {
+    --navy: #0E1F33;
+    --navy-2: #142A44;
+    --teal: #61BFB3;       /* primary brand teal (from IG teaser palette) */
+    --teal-2: #1ECABA;     /* brighter teal accent */
+    --teal-dark: #00928A;  /* deep teal for emphasis */
+    --blue: #6189D6;       /* IG secondary blue */
+    --blue-dark: #2D5BA8;
+    --slate: #8A95A4;      /* IG slate text */
+    --gray: #8FA1B5;
+    --light: #F5F7FA;
+    --rule: #E1E6EC;
+    /* aliases used by older rules (keep teal-leaning) */
+    --pink: #2D5BA8;
+    --orange: #00928A;
+    /* delta semantics: positive = teal, caution = rust (never green) */
+    --rust: #C07B5A;
+  }
+
+  /* ---- Common page wrapper ---- */
+  .page {
+    width: 1456px; height: 820px;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .page-light { background: #FFFFFF; padding: 36px 56px; }
+  .page-dark  { background: var(--navy); color: #fff; padding: 36px 56px; }
+
+  /* ---- Header bar / footer ---- */
+  .feature-chip {
+    display: inline-block; background: var(--teal-dark);
+    color: #fff; font-weight: 800; padding: 6px 14px;
+    font-size: 14px; letter-spacing: 1px; vertical-align: middle;
+  }
+  .feature-chip.wide { padding: 8px 18px; font-size: 13px; letter-spacing: 1.4px; }
+  .header-row { display: flex; align-items: center; gap: 14px; }
+  .header-row .feature-title {
+    font-size: 14px; font-weight: 700; letter-spacing: 1.5px;
+    color: var(--gray); text-transform: uppercase;
+  }
+  .header-row.dark .feature-title { color: rgba(255,255,255,0.7); }
+
+  .footer {
+    position: absolute; left: 56px; right: 56px; bottom: 24px;
+    display: flex; justify-content: space-between; align-items: end;
+    font-size: 12px; color: var(--gray);
+  }
+  .footer.dark { color: rgba(255,255,255,0.6); }
+  .footer img { height: 24px; opacity: 0.9; }
+  .page-num { font-weight: 700; font-size: 14px; }
+
+  /* ---- Cover page ---- */
+  .cover {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    background: var(--navy);
+    color: #fff;
+  }
+  .cover-left { padding: 56px 56px 56px 64px; display: flex; flex-direction: column; justify-content: space-between; }
+  .cover-right {
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(30,202,186,0.20) 0%, transparent 65%),
+      radial-gradient(ellipse at 70% 70%, rgba(240,53,107,0.18) 0%, transparent 60%),
+      linear-gradient(135deg, #11253D 0%, #0A1726 100%);
+    position: relative; overflow: hidden;
+  }
+  /* Decorative SVG-like grid lines */
+  .cover-right::before, .cover-right::after {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(transparent 95%, rgba(30,202,186,0.18) 95%),
+      linear-gradient(90deg, transparent 95%, rgba(30,202,186,0.12) 95%);
+    background-size: 28px 28px;
+    transform: perspective(900px) rotateX(58deg) translateY(80px) scale(1.6);
+    transform-origin: 50% 100%;
+  }
+  .cover-right::after {
+    background-image:
+      radial-gradient(circle, var(--pink) 1px, transparent 2px),
+      radial-gradient(circle, var(--teal) 1px, transparent 2px);
+    background-size: 56px 56px, 84px 84px;
+    background-position: 0 0, 30px 30px;
+    transform: perspective(900px) rotateX(58deg) translateY(60px) scale(1.55);
+    opacity: 0.65;
+  }
+  .cover-headline {
+    font-size: 78px; line-height: 1.02; font-weight: 800;
+    color: #fff; margin: 28px 0 18px; letter-spacing: -1px;
+  }
+  .cover-headline .accent { color: var(--teal); }
+  .cover-sub {
+    font-size: 20px; line-height: 1.45; color: rgba(255,255,255,0.78);
+    max-width: 640px; font-weight: 500;
+  }
+  .cover-bottom {
+    display: flex; align-items: center; gap: 22px; margin-top: 32px;
+  }
+  .cover-bottom img { height: 38px; }
+  .cover-bottom .divider { width: 1px; height: 36px; background: rgba(255,255,255,0.25); }
+  .cover-prep {
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
+  /* ---- KPI tiles ---- */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .kpi {
+    background: #fff; border: 1px solid var(--rule);
+    border-top: 4px solid var(--teal); padding: 18px 20px; border-radius: 4px;
+  }
+  .kpi.alt { border-top-color: var(--blue); }
+  .kpi.alt2 { border-top-color: var(--teal-dark); }
+  .kpi.alt3 { border-top-color: var(--blue-dark); }
+  .kpi .label { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; }
+  .kpi .big { font-size: 40px; font-weight: 800; color: var(--navy); line-height: 1; margin: 8px 0 4px; }
+  .kpi .small { font-size: 12px; color: var(--gray); }
+
+  /* ---- Section blocks ---- */
+  .h-banner {
+    background: var(--navy); color: #fff; padding: 10px 18px;
+    font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .page-title {
+    font-size: 32px; font-weight: 800; color: var(--navy);
+    margin: 14px 0 8px; line-height: 1.1;
+  }
+  .page-deck {
+    font-size: 15px; color: #45596F; max-width: 1100px; line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  /* ---- Tables ---- */
+  table.data {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+    background: #fff;
+  }
+  table.data thead th {
+    background: var(--navy); color: #fff; font-weight: 700;
+    padding: 8px 10px; text-align: left; font-size: 11px; letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  table.data tbody td {
+    padding: 6px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle;
+    white-space: nowrap;
+  }
+  table.data tbody td.wrap { white-space: normal; }
+  table.data tbody tr.highlight td { background: #E1F4F1; font-weight: 700; color: var(--navy); }
+  table.data tbody tr.highlight td:first-child { border-left: 4px solid var(--teal-dark); padding-left: 8px; }
+  .rank { width: 38px; color: var(--gray); font-weight: 700; }
+  .raised { font-weight: 700; color: var(--navy); }
+  .flag { display: inline-block; width: 18px; height: 13px; vertical-align: middle; border: 1px solid var(--rule); margin-right: 6px; font-size: 10px; line-height: 11px; text-align: center; font-weight: 700; color: #555; }
+
+  /* ---- Sub-segment universe page ---- */
+  .universe { display: grid; grid-template-columns: 260px 1fr; gap: 32px; padding-top: 6px; }
+  .universe .left h3 { font-size: 15px; color: var(--gray); letter-spacing: 1.5px; text-transform: uppercase; margin: 0 0 14px; font-weight: 700; }
+  .total-block { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; padding: 26px 26px 30px; border-radius: 4px; }
+  .total-block .num { font-size: 72px; font-weight: 800; color: var(--teal-2); line-height: 1; }
+  .total-block .num2 { font-size: 44px; font-weight: 800; color: #fff; margin-top: 18px; line-height: 1; }
+  .total-block .label { font-size: 12px; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,0.78); margin-top: 6px; }
+  .method { font-size: 13px; color: #45596F; margin-top: 18px; line-height: 1.55; }
+  .method b { color: var(--navy); font-size: 14px; }
+  .method li { margin: 4px 0; }
+
+  .seg { display: grid; grid-template-columns: 150px 1fr; gap: 22px; align-items: stretch; padding: 22px 0; border-bottom: 1px solid var(--rule); }
+  .seg:last-child { border-bottom: none; }
+  .seg .seg-stat { display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+  .seg .seg-stat .v { font-size: 38px; font-weight: 800; line-height: 1; }
+  .seg .seg-stat .v.t { color: var(--teal-2); }
+  .seg .seg-stat .v.b { color: var(--blue); }
+  .seg .seg-stat .v.g { color: var(--slate); }
+  .seg .seg-stat .l { font-size: 11px; color: var(--gray); letter-spacing: 1.1px; text-transform: uppercase; font-weight: 700; }
+  .seg .seg-body h4 { margin: 0 0 6px; color: var(--navy); font-size: 22px; font-weight: 800; }
+  .seg .seg-body p { margin: 0; font-size: 14px; color: #45596F; line-height: 1.55; }
+  .seg .seg-body .examples { margin-top: 12px; font-size: 13px; color: var(--navy); }
+  .seg .seg-body .examples span { display: inline-block; padding: 5px 11px; background: var(--light); border: 1px solid var(--rule); border-radius: 3px; margin: 0 7px 7px 0; font-weight: 700; }
+  .seg .seg-body .examples span.deep { background: #E1F4F1; border-color: #B6E2DC; color: var(--teal-dark); }
+
+  /* ---- Timeline page ---- */
+  .timeline {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    margin-top: 26px; position: relative;
+  }
+  .timeline::before {
+    content: ""; position: absolute; left: 6%; right: 6%; top: 56px;
+    height: 4px; background: linear-gradient(90deg, var(--teal) 0%, var(--blue) 50%, var(--teal-dark) 100%);
+    z-index: 0;
+  }
+  .tl-step { position: relative; padding: 0 16px; text-align: center; z-index: 1; }
+  .tl-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; border: 4px solid var(--navy); margin: 42px auto 12px;
+    box-shadow: 0 0 0 4px #fff;
+  }
+  .tl-step:nth-child(1) .tl-dot { border-color: var(--teal); }
+  .tl-step:nth-child(2) .tl-dot { border-color: var(--blue); }
+  .tl-step:nth-child(3) .tl-dot { border-color: var(--blue-dark); }
+  .tl-step:nth-child(4) .tl-dot { border-color: var(--teal-dark); }
+  .tl-step .date { font-size: 12px; color: var(--gray); letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; }
+  .tl-step .stage { font-size: 16px; font-weight: 800; color: var(--navy); margin: 4px 0 6px; }
+  .tl-step .amount { font-size: 38px; font-weight: 800; color: var(--navy); line-height: 1; }
+  .tl-step .val { font-size: 11px; color: #45596F; margin: 6px 0 4px; }
+  .tl-step .leads { font-size: 11px; color: #45596F; line-height: 1.4; }
+  .tl-step.peak .amount { color: var(--teal-dark); }
+  .tl-step.peak::after {
+    content: "ANNOUNCED · [DATE]"; display: inline-block; margin-top: 8px;
+    background: var(--teal-dark); color: #fff; font-size: 9px; padding: 3px 8px;
+    font-weight: 800; letter-spacing: 1px;
+  }
+
+  .stats-foot { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 28px; }
+  .stat-card { background: var(--light); border-left: 4px solid var(--teal); padding: 14px 16px; }
+  .stat-card.alt { border-left-color: var(--blue); }
+  .stat-card.alt2 { border-left-color: var(--teal-dark); }
+  .stat-card .h { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; }
+  .stat-card .v { font-size: 22px; font-weight: 800; color: var(--navy); margin: 6px 0 4px; }
+  .stat-card .d { font-size: 12px; color: #45596F; line-height: 1.4; }
+
+  /* ---- Bar chart (yearly trend) ---- */
+  .chart-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; margin-top: 16px; }
+  .chart-card { border: 1px solid var(--rule); padding: 16px 18px; background: #fff; }
+  .chart-card h3 {
+    margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px;
+    color: #fff; background: var(--navy); padding: 8px 12px;
+    margin: -16px -18px 14px;
+  }
+  .bars-wrap { padding-top: 6px; }
+  .bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; align-items: end; padding-bottom: 4px; border-bottom: 1px solid var(--rule); }
+  .bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 270px; justify-content: end; }
+  .bar-stack { display: flex; flex-direction: column; justify-content: end; width: 56px; }
+  .bar-seg { width: 100%; }
+  .bar-seg.c { background: var(--teal); }
+  .bar-seg.d { background: var(--blue); }
+  .bar-seg.o { background: var(--slate); }
+  .bar-total { font-size: 13px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+  .bar-label { font-size: 11px; color: var(--gray); font-weight: 600; padding-top: 3px; }
+  .bar-labels { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; margin-top: 6px; text-align: center; }
+  .bar-labels span { font-size: 11px; color: var(--gray); font-weight: 700; }
+  .legend { display: flex; gap: 14px; justify-content: center; margin-top: 12px; font-size: 11px; color: #45596F; }
+  .legend .sw { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: middle; }
+
+  /* ---- Interactive Chart.js canvas (hover tooltips) ---- */
+  .canvas-wrap { position: relative; height: 470px; margin-top: 6px; }
+  .canvas-wrap canvas { width: 100% !important; height: 100% !important; }
+  .chart-hint { font-size: 12px; color: var(--gray); font-style: italic; margin-top: 14px; }
+
+  /* ---- Investor table page ---- */
+  table.vc { font-size: 13px; }
+  table.vc thead th { padding: 10px 12px; }
+  table.vc tbody td { padding: 11px 12px; }
+  table.vc .pos { width: 50px; text-align: center; font-weight: 800; color: var(--gray); font-size: 14px; }
+  table.vc tr.highlight .pos { color: var(--teal-dark); }
+  .invest-callout {
+    background: linear-gradient(135deg, #E1F4F1 0%, #CFEBE5 100%);
+    border-left: 5px solid var(--teal-dark); padding: 14px 18px; margin-top: 18px;
+  }
+  .invest-callout .t { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--teal-dark); font-weight: 800; }
+  .invest-callout .m { font-size: 14px; color: var(--navy); margin-top: 4px; line-height: 1.5; }
+
+  /* ---- Stage + Geo page ---- */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+  /* Stage bars (horizontal) — InvestGame palette only */
+  .hbar-row { display: grid; grid-template-columns: 110px 1fr 90px; gap: 12px; align-items: center; margin: 6px 0; font-size: 12px; }
+  .hbar-label { color: var(--navy); font-weight: 700; }
+  .hbar-track { background: #F0F3F7; height: 26px; position: relative; border-radius: 2px; }
+  .hbar-fill { height: 100%; background: var(--teal); }
+  .hbar-fill.alt { background: var(--blue); }
+  .hbar-fill.alt2 { background: var(--teal-dark); }
+  .hbar-fill.alt3 { background: var(--blue-dark); }
+  .hbar-fill.alt4 { background: var(--slate); }
+  .hbar-val { text-align: right; font-weight: 800; color: var(--navy); font-size: 13px; }
+
+  /* Geo */
+  .geo-row { display: grid; grid-template-columns: 120px 1fr 50px 130px; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 12px; }
+  .geo-row:last-child { border-bottom: none; }
+  .geo-label { font-weight: 700; color: var(--navy); }
+  .geo-bar-track { background: #F0F3F7; height: 14px; border-radius: 2px; position: relative; }
+  .geo-bar-fill { height: 100%; background: var(--teal); }
+  .geo-bar-fill.alt { background: var(--blue); }
+  .geo-bar-fill.alt2 { background: var(--teal-dark); }
+  .geo-bar-fill.alt3 { background: var(--blue-dark); }
+  .geo-num { font-weight: 700; color: var(--navy); text-align: right; font-size: 13px; }
+
+  /* ---- Closing page ---- */
+  .close-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 36px; margin-top: 18px; }
+  .close-left ul.points { list-style: none; padding: 0; margin: 16px 0 0; }
+  .close-left ul.points li {
+    background: rgba(255,255,255,0.06); border-left: 4px solid var(--teal-2);
+    padding: 14px 18px; margin-bottom: 12px; font-size: 14px; color: #fff; line-height: 1.55;
+  }
+  .close-left ul.points li b { color: var(--teal-2); }
+  .close-left ul.points li:nth-child(2) { border-left-color: var(--blue); }
+  .close-left ul.points li:nth-child(3) { border-left-color: var(--teal-dark); }
+
+  .ig-card {
+    background: linear-gradient(135deg, #142A44 0%, #0A1726 100%);
+    color: #fff; padding: 28px 30px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .ig-card img { height: 32px; margin-bottom: 14px; }
+  .ig-card .built-by { font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--teal-2); font-weight: 800; margin-bottom: 4px; }
+  .ig-card h3 { font-size: 22px; margin: 4px 0 12px; color: #fff; font-weight: 800; line-height: 1.2; }
+  .ig-card p { font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.84); }
+  .ig-card .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0 16px; }
+  .ig-card .kpis .k { background: rgba(255,255,255,0.06); padding: 12px 14px; border-radius: 3px; border-top: 3px solid var(--teal-2); }
+  .ig-card .kpis .k .vv { color: var(--teal-2); font-size: 26px; font-weight: 800; line-height: 1; }
+  .ig-card .kpis .k .ll { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; font-weight: 700; }
+  .ig-card .users-block { background: rgba(255,255,255,0.06); padding: 12px 14px; margin: 16px 0; border-radius: 3px; border-left: 3px solid var(--teal-2); }
+  .ig-card .users-block .lbl { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .ig-card .users-block .names { font-size: 13px; font-weight: 700; color: #fff; margin-top: 4px; line-height: 1.5; }
+  .ig-card .cta-btn {
+    display: block; text-align: center; margin-top: 18px;
+    background: var(--teal-2); color: var(--navy); padding: 16px 20px;
+    font-weight: 800; font-size: 16px; letter-spacing: 1px; text-transform: uppercase;
+    border-radius: 4px; text-decoration: none;
+  }
+  .ig-card .cta-btn .arrow { display: inline-block; margin-left: 8px; }
+  .ig-card .cta-url { display: block; text-align: center; font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 6px; letter-spacing: 0.5px; }
+
+  .sub-foot { font-size: 11px; color: var(--gray); margin-top: 8px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PAGE 1 — COVER
+============================================================ -->
+<section class="page cover">
+  <div class="cover-left">
+    <div>
+      <div class="header-row dark">
+        <span class="feature-chip wide">[KICKER · CHIP TEXT]</span>
+        <span class="feature-title" style="color:#fff;">[Kicker] · [Date]</span>
+      </div>
+      <h1 class="cover-headline">
+        [Hero headline line one]<br/>
+        <span class="accent">[accent phrase]</span>:<br/>
+        [Hero headline line two]<br/>
+        [Hero headline line three]
+      </h1>
+      <p class="cover-sub">
+        [One-line subhead that frames the deck thesis goes here.]
+      </p>
+    </div>
+    <div>
+      <div class="cover-bottom">
+        <img src="../logos/ig-logotype-white.png" alt="InvestGame"/>
+        <span class="divider"></span>
+        <div>
+          <div class="cover-prep">Prepared for</div>
+          <div style="font-size:18px;font-weight:700;margin-top:4px;color:#fff;">[Recipient Name]</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.6);">[Title, Organisation]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-right">
+    <!-- decorative grid via CSS -->
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 2 — CONTENT · KPI ROW
+============================================================ -->
+<section class="page page-light">
+  <div class="header-row">
+    <span class="feature-chip">02</span>
+    <span class="feature-title">[Section kicker · period or scope]</span>
+  </div>
+  <h2 class="page-title">[Headline insight goes here]</h2>
+  <p class="page-deck">
+    [Lead-in paragraph: one or two sentences that frame the KPI row below. Keep it tight —
+    state the takeaway, then let the numbers carry the rest.]
+  </p>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="label">[Metric label]</div>
+      <div class="big">$XXXm</div>
+      <div class="small">[Supporting note]</div>
+    </div>
+    <div class="kpi alt">
+      <div class="label">[Metric label]</div>
+      <div class="big">XXX</div>
+      <div class="small">[Supporting note]</div>
+    </div>
+    <div class="kpi alt2">
+      <div class="label">[Metric label]</div>
+      <div class="big">+XX%</div>
+      <div class="small">[Supporting note]</div>
+    </div>
+    <div class="kpi alt3">
+      <div class="label">[Metric label]</div>
+      <div class="big">XX×</div>
+      <div class="small">[Supporting note]</div>
+    </div>
+  </div>
+
+  <p class="page-deck" style="margin-top:28px;">
+    [Optional second paragraph: expand on the KPI tiles, or pull out the single most important
+    figure and explain why it matters. Positive deltas render in teal; cautionary notes in rust.]
+  </p>
+
+  <div class="footer">
+    <div>Source: InvestGame proprietary database. [Scope / methodology note goes here.]</div>
+    <div class="page-num">02 / 07</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 3 — CONTENT · BAR CHART
+============================================================ -->
+<section class="page page-light">
+  <div class="header-row">
+    <span class="feature-chip">03</span>
+    <span class="feature-title">[Section kicker · trend scope]</span>
+  </div>
+  <h2 class="page-title">[Headline insight about the trend goes here]</h2>
+  <p class="page-deck">
+    [Lead-in paragraph for the chart: state the trend in one sentence, then note the inflection
+    point or the segment driving it.]
+  </p>
+
+  <div class="chart-card" style="max-width:980px;">
+    <h3>[Chart title · units, e.g. annual value by segment ($M)]</h3>
+    <!-- bar columns: pick a max value, scale it to ~220px, then size each .bar-stack and .bar-seg in px -->
+    <div class="bars-wrap">
+      <div class="bars">
+        <div class="bar-col">
+          <div class="bar-total">$XXm</div>
+          <div class="bar-stack" style="height:40px;">
+            <div class="bar-seg o" style="height:6px;"></div>
+            <div class="bar-seg d" style="height:10px;"></div>
+            <div class="bar-seg c" style="height:24px;"></div>
+          </div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-total">$XXm</div>
+          <div class="bar-stack" style="height:70px;">
+            <div class="bar-seg o" style="height:12px;"></div>
+            <div class="bar-seg d" style="height:18px;"></div>
+            <div class="bar-seg c" style="height:40px;"></div>
+          </div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-total">$XXm</div>
+          <div class="bar-stack" style="height:103px;">
+            <div class="bar-seg o" style="height:18px;"></div>
+            <div class="bar-seg d" style="height:25px;"></div>
+            <div class="bar-seg c" style="height:60px;"></div>
+          </div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-total">$XXm</div>
+          <div class="bar-stack" style="height:135px;">
+            <div class="bar-seg o" style="height:22px;"></div>
+            <div class="bar-seg d" style="height:33px;"></div>
+            <div class="bar-seg c" style="height:80px;"></div>
+          </div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-total">$XXXm</div>
+          <div class="bar-stack" style="height:168px;">
+            <div class="bar-seg o" style="height:34px;"></div>
+            <div class="bar-seg d" style="height:44px;"></div>
+            <div class="bar-seg c" style="height:90px;"></div>
+          </div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-total">$XXXm</div>
+          <div class="bar-stack" style="height:190px;">
+            <div class="bar-seg o" style="height:46px;"></div>
+            <div class="bar-seg d" style="height:50px;"></div>
+            <div class="bar-seg c" style="height:94px;"></div>
+          </div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-total" style="color:var(--teal-dark);">$XXXm*</div>
+          <div class="bar-stack" style="height:220px;">
+            <div class="bar-seg o" style="height:60px;"></div>
+            <div class="bar-seg d" style="height:18px;"></div>
+            <div class="bar-seg c" style="height:142px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bar-labels">
+        <span>20XX</span><span>20XX</span><span>20XX</span><span>20XX</span>
+        <span>20XX</span><span>20XX</span><span style="color:var(--teal-dark);">20XX YTD*</span>
+      </div>
+    </div>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--teal);"></span>Segment One</span>
+      <span><span class="sw" style="background:var(--blue);"></span>Segment Two</span>
+      <span><span class="sw" style="background:var(--slate);"></span>Segment Three</span>
+      <span style="color:var(--teal-dark);"><b>*</b> [annotation about the final bar]</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>Source: InvestGame database. [Chart scope / inclusion note goes here.]</div>
+    <div class="page-num">03 / 07</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 4 — CONTENT · INTERACTIVE CHART (Chart.js, hover tooltips)
+     Print-stable twin of PAGE 3. The CSS-bar page above renders without
+     JS; this page adds hover interactivity for on-screen / digital sharing.
+============================================================ -->
+<section class="page page-light">
+  <div class="header-row">
+    <span class="feature-chip">04</span>
+    <span class="feature-title">[Section kicker · interactive trend]</span>
+  </div>
+  <h2 class="page-title">[Headline insight about the trend goes here]</h2>
+  <p class="page-deck">
+    [Lead-in paragraph for the interactive chart: state the trend in one sentence, then note the
+    inflection point or the segment driving it.]
+  </p>
+
+  <div class="chart-card" style="max-width:1300px;">
+    <h3>[Chart title · units, e.g. annual value by segment ($M)]</h3>
+    <div class="canvas-wrap">
+      <canvas id="ig-interactive-chart"></canvas>
+    </div>
+    <div class="chart-hint">Interactive: hover any column to reveal the exact figures.</div>
+  </div>
+
+  <div class="footer">
+    <div>Source: InvestGame database. [Chart scope / inclusion note goes here.]</div>
+    <div class="page-num">04 / 07</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 5 — CONTENT · DATA TABLE
+============================================================ -->
+<section class="page page-light">
+  <div class="header-row">
+    <span class="feature-chip">05</span>
+    <span class="feature-title">[Section kicker · table scope]</span>
+  </div>
+  <h2 class="page-title">[Headline insight about the leaderboard goes here]</h2>
+  <p class="page-deck">
+    [Lead-in paragraph for the table: name the ranking dimension and the single row worth flagging,
+    which is highlighted below with the teal left-border.]
+  </p>
+
+  <table class="data">
+    <thead>
+      <tr>
+        <th class="rank">#</th>
+        <th>Date</th>
+        <th>Company</th>
+        <th>HQ</th>
+        <th>Stage</th>
+        <th>Segment</th>
+        <th>Raised</th>
+        <th>Lead / notable investors</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="highlight">
+        <td class="rank">1</td>
+        <td>MMM 20XX</td>
+        <td>Company A</td>
+        <td>🏳 XX</td>
+        <td>Stage</td>
+        <td>Segment One</td>
+        <td class="raised">$XXXm</td>
+        <td class="wrap" style="font-size:11px;line-height:1.35;">[Lead investor] · [participant] · [participant] · [participant] · [participant]</td>
+      </tr>
+      <tr><td class="rank">2</td><td>MMM 20XX</td><td>Company B</td><td>🏳 XX</td><td>Stage</td><td>Segment One</td><td class="raised">$XXXm</td><td>[Lead investor] · [participant]</td></tr>
+      <tr><td class="rank">3</td><td>MMM 20XX</td><td>Company C</td><td>🏳 XX</td><td>Stage</td><td>Segment Two</td><td class="raised">$XXXm</td><td>[Lead investor] · [participant]</td></tr>
+      <tr><td class="rank">4</td><td>MMM 20XX</td><td>Company D</td><td>🏳 XX</td><td>Stage</td><td>Segment Three</td><td class="raised">$XXXm</td><td>[Lead investor] · [participant]</td></tr>
+      <tr><td class="rank">5</td><td>MMM 20XX</td><td>Company E</td><td>🏳 XX</td><td>Stage</td><td>Segment One</td><td class="raised">$XXXm</td><td>[Lead investor] · [participant]</td></tr>
+      <tr><td class="rank">6</td><td>MMM 20XX</td><td>Company F</td><td>🏳 XX</td><td>Stage</td><td>Segment Two</td><td class="raised">$XXXm</td><td>[Lead investor] · [participant]</td></tr>
+      <tr><td class="rank">7</td><td>MMM 20XX</td><td>Company G</td><td>🏳 XX</td><td>Stage</td><td>Segment One</td><td class="raised">$XXXm</td><td>[Lead investor] · [participant]</td></tr>
+      <tr><td class="rank">8</td><td>MMM 20XX</td><td>Company H</td><td>🏳 XX</td><td>Stage</td><td>Segment Three</td><td class="raised">$XXm</td><td>[Lead investor] · [participant]</td></tr>
+      <tr><td class="rank">9</td><td>MMM 20XX</td><td>Company I</td><td>🏳 XX</td><td>Stage</td><td>Segment Two</td><td class="raised">$XXm</td><td>[Lead investor] · [participant]</td></tr>
+      <tr><td class="rank">10</td><td>MMM 20XX</td><td>Company J</td><td>🏳 XX</td><td>Stage</td><td>Segment One</td><td class="raised">$XXm</td><td>[Lead investor] · [participant]</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <div>Source: InvestGame deal database. [Inclusion / currency note goes here.]</div>
+    <div class="page-num">05 / 07</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 6 — CONTENT · TIMELINE
+============================================================ -->
+<section class="page page-light">
+  <div class="header-row">
+    <span class="feature-chip">06</span>
+    <span class="feature-title">[Section kicker · subject trajectory]</span>
+  </div>
+  <h2 class="page-title">$XXm → $XXm → $XXXm → $XXXm [in NN months]</h2>
+  <p class="page-deck">
+    [Lead-in paragraph for the timeline: introduce the subject and what the four steps show —
+    compounding round size, valuation step-up, or similar. Keep names and figures as placeholders.]
+  </p>
+
+  <div class="timeline">
+    <div class="tl-step">
+      <div class="tl-dot"></div>
+      <div class="date">MMM 20XX</div>
+      <div class="stage">Stage One</div>
+      <div class="amount">$XXm</div>
+      <div class="val">[Lead investor] · led<br/>[Existing investor]</div>
+      <div class="leads">[One-line milestone for this step.]</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-dot"></div>
+      <div class="date">MMM 20XX</div>
+      <div class="stage">Stage Two</div>
+      <div class="amount">$XXm</div>
+      <div class="val">[Lead investor] · led<br/>~$XXXm post-money</div>
+      <div class="leads">[One-line milestone for this step.]</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-dot"></div>
+      <div class="date">MMM 20XX</div>
+      <div class="stage">Stage Three</div>
+      <div class="amount">$XXXm</div>
+      <div class="val">[Investors]<br/><b>$X.Xb post-money</b></div>
+      <div class="leads">[One-line milestone for this step.]</div>
+    </div>
+    <div class="tl-step peak">
+      <div class="tl-dot"></div>
+      <div class="date">MMM 20XX</div>
+      <div class="stage">Stage Four</div>
+      <div class="amount">$XXXm</div>
+      <div class="val">[Lead investor] · led<br/><b>~$Xb post-money</b></div>
+      <div class="leads">[Headline milestone for the latest step — strategic backers, product launch, etc.]</div>
+    </div>
+  </div>
+
+  <div class="stats-foot">
+    <div class="stat-card">
+      <div class="h">[Stat label one]</div>
+      <div class="v">$XXXm+</div>
+      <div class="d">[One-line context for this stat.]</div>
+    </div>
+    <div class="stat-card alt">
+      <div class="h">[Stat label two]</div>
+      <div class="v">~X× in NN months</div>
+      <div class="d">[One-line context for this stat.]</div>
+    </div>
+    <div class="stat-card alt2">
+      <div class="h">[Stat label three]</div>
+      <div class="v">[Strategic perimeter]</div>
+      <div class="d">[One-line context for this stat.]</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>Sources: [primary source] · [secondary sources].</div>
+    <div class="page-num">06 / 07</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 7 — CLOSING / ABOUT IG
+============================================================ -->
+<section class="page page-dark">
+  <div class="header-row dark">
+    <span class="feature-chip">07</span>
+    <span class="feature-title">Thank you — and about InvestGame</span>
+  </div>
+  <h2 class="page-title" style="color:#fff;">[Closing headline — three signals, takeaways, or what's next]</h2>
+  <p class="page-deck" style="color:rgba(255,255,255,0.78); max-width:1180px;">
+    [Closing paragraph: restate the deck thesis in one or two sentences and point to what happens
+    next. End on the single most memorable takeaway.]
+  </p>
+
+  <div class="close-grid">
+    <div class="close-left">
+      <ul class="points">
+        <li><b>1 · [First takeaway headline.]</b>
+          [Supporting sentence with placeholder figures — $XXm, +XX%, NN deals.]</li>
+        <li><b>2 · [Second takeaway headline.]</b>
+          [Supporting sentence with placeholder figures.]</li>
+        <li><b>3 · [Third takeaway headline.]</b>
+          [Supporting sentence with placeholder figures.]</li>
+      </ul>
+    </div>
+
+    <div class="ig-card">
+      <div class="built-by">Built by InvestGame</div>
+      <img src="../logos/ig-logotype-white.png" alt="InvestGame" />
+      <h3>The market-intelligence layer for gaming</h3>
+      <p>
+        [About InvestGame — short boilerplate line goes here.]
+      </p>
+      <div class="kpis">
+        <div class="k"><div class="vv">X,XXX+</div><div class="ll">Companies</div></div>
+        <div class="k"><div class="vv">X,XXX+</div><div class="ll">Deals</div></div>
+        <div class="k"><div class="vv">$XXXb+</div><div class="ll">Cumulative deal value</div></div>
+      </div>
+      <div class="users-block">
+        <div class="lbl">Used by</div>
+        <div class="names">[Client one] · [Client two] · [Client three] · and other gaming-focused funds</div>
+      </div>
+      <a class="cta-btn" href="https://app.investgame.net/teaser/">Read the teaser <span class="arrow">→</span></a>
+      <span class="cta-url">app.investgame.net/teaser/</span>
+    </div>
+  </div>
+
+  <div class="footer dark">
+    <div>
+      <img src="../logos/ig-logotype-white.png" alt="InvestGame" style="height:18px; vertical-align:middle;" />
+      &nbsp;&nbsp;[Compiled DATE]
+    </div>
+    <div class="page-num">07 / 07</div>
+  </div>
+</section>
+
+<script>
+// InvestGame chart palette — dark text labels (chart sits on a white page).
+var IG = {
+  accent: '#61BFB3',     // PRIMARY teal
+  blue: '#6189D6',       // secondary blue
+  deepTeal: '#00928A',   // deep teal
+  deepBlue: '#2D5BA8',   // deep blue
+  text: '#0E1F33',       // navy axis/label text
+  axis: '#8FA1B5',       // slate axis labels
+  grid: 'rgba(143,161,181,0.18)'
+};
+var IG_SERIES = [IG.accent, IG.blue, IG.deepTeal, IG.deepBlue];
+
+Chart.defaults.font.family = '"Helvetica Neue", Arial, sans-serif';
+Chart.defaults.color = IG.text;
+Chart.defaults.animation = false;   // paint immediately so charts export to PDF reliably
+
+// datalabels registered but OFF by default (datalabels optional for this skin)
+if (typeof ChartDataLabels !== 'undefined') Chart.register(ChartDataLabels);
+Chart.defaults.set('plugins.datalabels', { display: false });
+
+function initIgInteractiveChart() {
+  var el = document.getElementById('ig-interactive-chart');
+  if (!el || typeof Chart === 'undefined') return;
+  return new Chart(el, {
+    type: 'bar',  // grouped columns
+    data: {
+      labels: ['20XX', '20XX', '20XX', '20XX', '20XX', '20XX'],
+      datasets: [
+        { label: '[Segment One]', data: [60, 78, 95, 120, 150, 190], backgroundColor: IG_SERIES[0], borderWidth: 0, barPercentage: 0.8, categoryPercentage: 0.7 },
+        { label: '[Segment Two]', data: [40, 52, 70, 88, 110, 130], backgroundColor: IG_SERIES[1], borderWidth: 0, barPercentage: 0.8, categoryPercentage: 0.7 },
+        { label: '[Segment Three]', data: [22, 30, 41, 55, 72, 90], backgroundColor: IG_SERIES[2], borderWidth: 0, barPercentage: 0.8, categoryPercentage: 0.7 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      // hover anywhere in a category column to show the index tooltip
+      interaction: { mode: 'index', intersect: false },
+      layout: { padding: { top: 8, right: 8 } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: IG.axis, font: { size: 13 } } },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: '$M', color: IG.axis, font: { size: 12 } },
+          grid: { color: IG.grid },
+          ticks: { color: IG.axis, font: { size: 12 }, callback: function(v) { return '$' + v + 'm'; } }
+        }
+      },
+      plugins: {
+        legend: { position: 'bottom', align: 'start', labels: { color: IG.text, font: { size: 13 }, padding: 16, boxWidth: 14 } },
+        // Tooltips ON (Chart.js default) — dark navy tooltip with teal border
+        tooltip: {
+          enabled: true,
+          backgroundColor: '#0E1F33',
+          titleColor: '#fff',
+          bodyColor: '#fff',
+          borderColor: '#61BFB3',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: { label: function(ctx) { return ctx.dataset.label + ': $' + ctx.parsed.y + 'm'; } }
+        }
+      }
+    }
+  });
+}
+
+// Init on DOM ready (script is at end of body, but guard for safety).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initIgInteractiveChart);
+} else {
+  initIgInteractiveChart();
+}
+
+// Safety net for PDF export: resize every chart before printing so canvases
+// that measured 0px paint at full size (Chrome --print-to-pdf and Playwright
+// print-media emulation both fire beforeprint).
+function resizeAllCharts() {
+  if (typeof Chart === 'undefined' || !Chart.getChart) return;
+  document.querySelectorAll('canvas').forEach(function(c) {
+    var inst = Chart.getChart(c);
+    if (inst) inst.resize();
+  });
+}
+window.addEventListener('beforeprint', resizeAllCharts);
+if (window.matchMedia) {
+  var mqPrint = window.matchMedia('print');
+  var onPrintChange = function(e) { if (e.matches) resizeAllCharts(); };
+  if (mqPrint.addEventListener) mqPrint.addEventListener('change', onPrintChange);
+}
+</script>
+
+</body>
+</html>

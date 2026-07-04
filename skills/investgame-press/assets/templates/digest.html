@@ -1,0 +1,884 @@
+<!--
+  InvestGame Gaming Pulse - press-intelligence digest template (Warm White, 1280x720).
+  Slide engine + Warm White theme are LIFTED VERBATIM from
+  investgame-format/brand-kit/assets/templates/warm-white.html (keyboard + #s<id> hash nav, P-to-print,
+  chart resize-before-print). The digest components (storyline, source chips, deal table, movers grid,
+  earnings cards, reading list) are lifted from the hand-built Gaming Pulse and turned into a fillable
+  template.
+
+  ============================ GENERATOR CONTRACT ============================
+  * Replace every {{PLACEHOLDER}} token. COUNTS ({{POST_COUNT}}, {{NEWSLETTER_COUNT}},
+    {{CONVERGENCE_COUNT}}, the NN / NN slide-meta pages, etc.) are ALWAYS computed from the data,
+    NEVER hand-typed.
+  * data-id values are [A-Za-z0-9_]+ (NO hyphens) because the hash router matches /^#s(\w+)$/ and the
+    clickable Table of Contents links to #s<data-id>. Keep them word-only.
+  * Big Story slides (data-id="story1", "story2", ...) are REPEATABLE. Emit 4-6, convergence-ranked.
+    Each carries EITHER an embedded chart image OR a Chart.js <canvas> inside .story-media
+    (remove the whole .story-media block for a text-only story). This media slot is the void the
+    old Pulse lacked.
+  * Coverage Sweep facet groups and Wire groups are repeatable; expand or shrink to the period.
+  * FACTUAL-ONLY: every claim must trace to a stored source and be attributed inline; a source's own
+    analysis appears only with the attribution intact ("Konvoy argues..."). No invented InvestGame
+    opinion, prediction, or editorializing. Transactions come from the AUTHORITATIVE InvestGame DB
+    desks (Deals + Public-Markets), not the editorial sweep.
+  * Run the DEEP-DIVE REVIEW before render (sourced, anti-hallucination, devil's advocate, no machine
+    artifacts: no leaked JSON, no "corrupted item" placeholders, no duplicate stories).
+  * LOGO: place ig-logo-navy.png in a sibling logos/ folder next to the rendered HTML before render
+    (canonical file: ../../../investgame-format/brand-kit/assets/logos/ig-logo-navy.png). The kit's
+    default ig-logo.png has a WHITE wordmark and is invisible on the warm background - do not use it.
+  * If a slide overflows, add class "slide-medium" or "slide-dense" to that <section> (helpers below).
+  * Render with render_pdf.py from investgame-format's brand-kit/scripts/ (explicit 1280x720, zero margin).
+  ===========================================================================
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<title>InvestGame Gaming Pulse - {{DATE_RANGE}}</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Chart.js is loaded because chart-heavy Big Stories and the movers desk may render canvases. -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+<style>
+  /* ============================================================
+     WARM WHITE THEME + SLIDE ENGINE - lifted verbatim from
+     brand-kit/assets/templates/warm-white.html. The ONLY change
+     is the corner-logo URL (navy local logo, see note below).
+     ============================================================ */
+  :root {
+    --ig-bg: #F4F3EE;
+    --ig-bg-soft: #EEEDE6;
+    --ig-card-bg: #FFFFFF;
+    --ig-text: #0B1A2A;
+    --ig-text-muted: #5F6B7A;
+    --ig-text-soft: #8E99A6;
+    --ig-accent: #61BFB3;
+    --ig-accent-hover: #4CA89C;
+    --ig-accent-deep: #3D9B8F;
+    --ig-accent-soft: #E6F4F2;
+    --ig-warn: #C07B5A;
+    --ig-warn-soft: #F5E6DD;
+    --ig-border: #E0DFD9;
+    --ig-border-strong: #C7C6C0;
+  }
+  html, body { background: #E7E6DF; color: var(--ig-text); font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 15px; line-height: 1.5; margin: 0; padding: 0; }
+  .font-display { font-family: "Space Grotesk", "Inter", sans-serif; letter-spacing: -0.01em; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .slide { display: none; width: 1280px; height: 720px; background: var(--ig-bg); color: var(--ig-text); padding: 30px 56px 44px; box-sizing: border-box; position: relative; overflow: hidden; }
+  .slide.active { display: flex; flex-direction: column; }
+
+  #stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #E7E6DF; }
+  #stage-inner { width: 1280px; height: 720px; transform-origin: center center; background: var(--ig-bg); box-shadow: 0 0 0 1px var(--ig-border); }
+
+  .slide-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; color: var(--ig-text-muted); text-transform: uppercase; border-bottom: 1px solid var(--ig-border); padding-bottom: 8px; }
+  .section-label { color: var(--ig-text); }
+  .section-label .sep { color: var(--ig-text-soft); margin: 0 8px; font-weight: 500; }
+
+  .kicker { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700; color: var(--ig-accent-deep); text-transform: uppercase; letter-spacing: 0.22em; margin-top: 14px; }
+
+  .slide-title { font-family: "Inter", sans-serif; font-weight: 700; font-size: 28px; line-height: 1.22; letter-spacing: -0.015em; margin-top: 6px; max-width: 1180px; text-wrap: pretty; }
+  .slide-conclusion { font-size: 17px; line-height: 1.42; font-weight: 500; color: var(--ig-text); margin-top: 12px; max-width: 1140px; padding: 12px 16px; background: var(--ig-accent-soft); border-left: 4px solid var(--ig-accent-deep); border-radius: 4px; text-wrap: pretty; }
+
+  .slide-bullets { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-direction: column; gap: 11px; max-width: 1140px; flex: 1; justify-content: flex-start; }
+  .slide-bullets li { font-size: 16px; line-height: 1.48; padding-left: 22px; position: relative; color: var(--ig-text); text-wrap: pretty; }
+  .slide-bullets li::before { content: ""; position: absolute; left: 0; top: 10px; width: 8px; height: 8px; background: var(--ig-accent-deep); border-radius: 1px; }
+  .slide-bullets li strong { font-weight: 600; color: var(--ig-text); }
+
+  sup.fn { font-family: "Inter", sans-serif; font-size: 9px; font-weight: 600; color: var(--ig-accent-deep); vertical-align: super; line-height: 0; margin-left: 1px; }
+  .footnotes { position: absolute; left: 60px; right: 170px; bottom: 18px; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 9.5px; color: var(--ig-text-muted); letter-spacing: 0.01em; line-height: 1.35; }
+
+  /* InvestGame logo in the corner of every content slide. NAVY local logo: the brand-kit default
+     ig-logo.png has a white wordmark that vanishes on the warm background, so the digest points at a
+     sibling logos/ig-logo-navy.png (the render step provides it). This is the only theme deviation. */
+  .slide:not(.cover-slide)::after { content: ""; position: absolute; right: 56px; bottom: 18px; width: 96px; height: 20px; background: url("logos/ig-logo-navy.png") right bottom / contain no-repeat; opacity: .9; pointer-events: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .footnotes .fn-mark { color: var(--ig-accent-deep); font-weight: 600; margin-right: 3px; font-variant-numeric: tabular-nums; }
+
+  /* Visual block: ONE per slide, KPI row OR table OR chart */
+  .visual { margin-top: 14px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .kpi-row.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .kpi { display: flex; flex-direction: column; gap: 4px; padding: 14px 18px; border: 1px solid var(--ig-border); border-radius: 6px; background: var(--ig-card-bg); }
+  .kpi.hero { border: 1px solid var(--ig-accent); background: var(--ig-accent-soft); }
+  .kpi.warn { border: 1px solid var(--ig-warn); background: var(--ig-warn-soft); }
+  .kpi-label { font-size: 10px; color: var(--ig-text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+  .kpi-value { font-family: "Inter", sans-serif; font-size: 30px; font-weight: 700; line-height: 1.08; color: var(--ig-text); margin-top: 4px; }
+  .kpi-value .unit { font-size: 15px; color: var(--ig-text-muted); font-weight: 500; margin-left: 4px; }
+  .kpi-note { font-size: 11.5px; color: var(--ig-text-muted); margin-top: 4px; line-height: 1.35; text-wrap: pretty; }
+
+  table.matrix { width: 100%; font-size: 14px; border-collapse: collapse; }
+  table.matrix th { font-weight: 600; text-align: left; padding: 7px 10px 7px 0; border-bottom: 1.5px solid var(--ig-text); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ig-text-muted); }
+  table.matrix td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--ig-border); vertical-align: top; }
+  table.matrix td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: "JetBrains Mono", monospace; font-size: 13px; }
+  table.matrix .hilite { background: var(--ig-accent-soft); }
+  table.matrix .hilite td { font-weight: 600; }
+  table.matrix.dense td, table.matrix.dense th { padding: 5px 8px 5px 0; font-size: 12px; }
+  table.matrix.dense td.num { font-size: 11.5px; }
+
+  .chart-wrap { position: relative; height: 200px; max-width: 1140px; }
+  .chart-caption { font-size: 10px; color: var(--ig-text-muted); margin-top: 4px; text-align: center; }
+
+  .fade-in { animation: fadeIn 140ms ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  #nav-hint { position: fixed; bottom: 10px; right: 14px; font-size: 10px; color: var(--ig-text-muted); font-family: "JetBrains Mono", monospace; background: rgba(255,255,255,0.85); padding: 3px 7px; border-radius: 3px; border: 1px solid var(--ig-border); }
+
+  /* Glossary slide */
+  .glossary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 22px; margin-top: 12px; }
+  .glossary-item { padding: 6px 10px; border-left: 3px solid var(--ig-accent); background: var(--ig-card-bg); }
+  .glossary-term { font-family: "Inter", sans-serif; font-weight: 600; font-size: 13px; color: var(--ig-text); }
+  .glossary-def { font-size: 12px; color: var(--ig-text-muted); margin-top: 1px; line-height: 1.32; }
+
+  /* Sources slide */
+  .source-list { display: flex; flex-direction: column; gap: 5px; margin-top: 12px; font-size: 12px; line-height: 1.35; max-width: 1140px; }
+  .source-list a { color: var(--ig-accent-deep); text-decoration: none; word-break: break-all; }
+  .source-list a:hover { text-decoration: underline; }
+  .source-list .src-num { display: inline-block; min-width: 26px; color: var(--ig-accent-deep); font-weight: 700; font-family: "JetBrains Mono", monospace; }
+  /* Sources slide: 30+ entries in 2 columns */
+  .source-list.cols-2 { display: grid !important; grid-template-columns: 1fr 1fr; column-gap: 28px; row-gap: 4px; font-size: 10.5px !important; line-height: 1.32 !important; }
+  .source-list.cols-2 a { word-break: break-all; }
+
+  /* Selective per-slide density: apply slide-medium / slide-dense to overflowing slides */
+  .slide.slide-medium .slide-bullets { gap: 7px !important; margin-top: 10px !important; }
+  .slide.slide-medium .slide-bullets li { font-size: 14.5px !important; line-height: 1.42 !important; }
+  .slide.slide-medium .slide-conclusion { font-size: 15px !important; line-height: 1.42 !important; padding: 10px 15px !important; margin-top: 10px !important; }
+  .slide.slide-medium table.matrix td, .slide.slide-medium table.matrix th { font-size: 12.5px !important; padding: 5px 8px 5px 0 !important; }
+  .slide.slide-medium table.matrix td.num { font-size: 12px !important; }
+
+  .slide.slide-dense .slide-bullets { gap: 4px !important; margin-top: 6px !important; }
+  .slide.slide-dense .slide-bullets li { font-size: 11px !important; line-height: 1.3 !important; padding-left: 16px !important; }
+  .slide.slide-dense .slide-bullets li::before { top: 7px !important; width: 6px !important; height: 6px !important; }
+  .slide.slide-dense .slide-conclusion { font-size: 12.5px !important; line-height: 1.34 !important; padding: 7px 12px !important; margin-top: 6px !important; }
+  .slide.slide-dense .slide-title { font-size: 24px !important; line-height: 1.2 !important; margin-top: 4px !important; }
+  .slide.slide-dense table.matrix td, .slide.slide-dense table.matrix th { padding: 3px 6px 3px 0 !important; font-size: 11px !important; }
+  .slide.slide-dense table.matrix td.num { font-size: 10.5px !important; }
+  .slide.slide-dense .visual { margin-top: 8px !important; }
+
+  /* ============================================================
+     DIGEST COMPONENTS - lifted from the hand-built Gaming Pulse
+     plus the new TOC / embedded-image / movers / earnings parts.
+     ============================================================ */
+  .mono { font-family: "JetBrains Mono", monospace; }
+  .cell-meta { color: var(--ig-text-soft); }
+
+  /* Clickable Table of Contents. Links target #s<data-id>; the hash router does the slide switch. */
+  .toc { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 32px; margin-top: 18px; align-content: start; }
+  .toc-item { display: flex; gap: 12px; align-items: baseline; padding: 9px 13px; border-left: 3px solid var(--ig-accent); background: var(--ig-card-bg); border-radius: 0 4px 4px 0; }
+  .toc-num { font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; color: var(--ig-accent-deep); min-width: 26px; }
+  .toc-body { min-width: 0; }
+  .toc-link { font-weight: 600; font-size: 14.5px; color: var(--ig-text); text-decoration: none; }
+  .toc-link:hover { color: var(--ig-accent-deep); text-decoration: underline; }
+  .toc-desc { font-size: 11.5px; color: var(--ig-text-muted); margin-top: 2px; line-height: 1.35; }
+  .toc-sub { display: flex; flex-wrap: wrap; gap: 5px 8px; margin-top: 6px; }
+  .toc-sub a { font-size: 10.5px; color: var(--ig-accent-deep); text-decoration: none; border: 1px solid var(--ig-border); border-radius: 999px; padding: 2px 8px; background: var(--ig-bg-soft); }
+  .toc-sub a:hover { border-color: var(--ig-accent); }
+
+  /* Storyline slide component (Big Story / NARRATIVE register) */
+  .story-body { display: grid; grid-template-columns: 1.65fr 1fr; gap: 24px; margin-top: 14px; flex: 1; min-height: 0; }
+  .what-happened { font-size: 15.5px; line-height: 1.52; color: var(--ig-text); text-wrap: pretty; }
+  .what-happened strong { font-weight: 600; }
+  .story-side { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .pull-stat { background: var(--ig-accent-soft); border: 1px solid var(--ig-accent); border-radius: 6px; padding: 14px 16px; }
+  .pull-stat .l { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ig-text-muted); font-weight: 700; margin-bottom: 5px; }
+  .pull-stat .v { font-family: "Space Grotesk", sans-serif; font-size: 23px; font-weight: 700; color: var(--ig-accent-deep); line-height: 1.12; }
+  .ig-angle { background: var(--ig-card-bg); border: 1px solid var(--ig-border); border-left: 3px solid var(--ig-accent-deep); border-radius: 4px; padding: 12px 14px; }
+  .ig-angle h5 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ig-accent-deep); font-weight: 700; margin: 0 0 6px; display: flex; align-items: center; gap: 6px; }
+  .ig-angle h5::before { content: ""; width: 7px; height: 7px; background: var(--ig-accent); border-radius: 50%; display: inline-block; }
+  .ig-angle p { font-size: 12.5px; line-height: 1.42; margin: 0; color: var(--ig-text); }
+
+  /* EMBEDDED-IMAGE SLOT - the chart/figure void the old Pulse lacked. Holds an S3-mirrored chart
+     image OR a Chart.js canvas; the generator keeps one and removes the other (and removes the whole
+     block for a text-only story). */
+  .story-media { border: 1px solid var(--ig-border); border-radius: 6px; overflow: hidden; background: var(--ig-card-bg); }
+  .story-media img { display: block; width: 100%; height: auto; max-height: 232px; object-fit: contain; background: #FFFFFF; }
+  .story-media .canvas-box { position: relative; height: 200px; padding: 8px 8px 2px; }
+  .story-media figcaption { font-size: 10px; color: var(--ig-text-muted); padding: 5px 11px; border-top: 1px solid var(--ig-border); line-height: 1.32; text-wrap: pretty; }
+
+  /* Per-claim source chips (each distinct source is a clickable pill) */
+  .sources-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; align-items: center; }
+  .sources-row .sr-label { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ig-text-soft); font-weight: 700; margin-right: 2px; }
+  .src-chip { font-size: 11px; color: var(--ig-accent-deep); text-decoration: none; border: 1px solid var(--ig-border); border-radius: 999px; padding: 3px 10px; background: var(--ig-card-bg); white-space: nowrap; }
+  .src-chip:hover { border-color: var(--ig-accent); }
+
+  /* Deal-row link into the InvestGame app deal page */
+  .deal-link { color: var(--ig-accent-deep); text-decoration: none; font-weight: 600; }
+  .deal-link:hover { text-decoration: underline; }
+
+  /* Public-Markets desk: IPO / public-offering marquee */
+  .marquee { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .ipo-card { background: var(--ig-card-bg); border: 1px solid var(--ig-border); border-top: 3px solid var(--ig-accent); border-radius: 6px; padding: 13px 16px; }
+  .ipo-card .tkr { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ig-accent-deep); font-weight: 600; }
+  .ipo-card h4 { font-size: 16px; font-weight: 700; margin: 2px 0 8px; }
+  .ipo-card .stats { display: flex; gap: 18px; flex-wrap: wrap; }
+  .ipo-card .stat .v { font-family: "Space Grotesk", sans-serif; font-size: 19px; font-weight: 700; color: var(--ig-text); line-height: 1; }
+  .ipo-card .stat .l { font-size: 10px; color: var(--ig-text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
+  .ipo-card p { font-size: 11.5px; line-height: 1.4; color: var(--ig-text-muted); margin: 9px 0 0; }
+
+  /* Public-Markets desk: weekly MOVERS bucketed by content segment (+ AdTech). Gainers deep-teal,
+     decliners rust - never green, per the brand. */
+  .movers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  .seg-card { border: 1px solid var(--ig-border); border-radius: 6px; background: var(--ig-card-bg); padding: 11px 13px; }
+  .seg-card h4 { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ig-accent-deep); margin: 0 0 7px; }
+  .mover { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12px; padding: 3px 0; border-bottom: 1px solid var(--ig-border); }
+  .mover:last-child { border-bottom: none; }
+  .mover .nm { color: var(--ig-text); }
+  .mover .nm .tkr { font-family: "JetBrains Mono", monospace; font-size: 9.5px; color: var(--ig-text-soft); margin-left: 5px; }
+  .mover .chg { font-family: "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+  .mover .chg.up { color: var(--ig-accent-deep); }
+  .mover .chg.down { color: var(--ig-warn); }
+
+  /* Public-Markets desk: latest earnings (EPS surprise / revenue / market reaction) */
+  .earnings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 12px; }
+  .earn-card { border: 1px solid var(--ig-border); border-top: 3px solid var(--ig-accent); border-radius: 6px; background: var(--ig-card-bg); padding: 12px 15px; }
+  .earn-card .tkr { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ig-accent-deep); font-weight: 600; }
+  .earn-card h4 { font-size: 15px; font-weight: 700; margin: 2px 0 9px; }
+  .earn-stats { display: flex; gap: 16px; flex-wrap: wrap; }
+  .earn-stats .stat .v { font-family: "Space Grotesk", sans-serif; font-size: 17px; font-weight: 700; color: var(--ig-text); line-height: 1; }
+  .earn-stats .stat .v.beat { color: var(--ig-accent-deep); }
+  .earn-stats .stat .v.miss { color: var(--ig-warn); }
+  .earn-stats .stat .l { font-size: 9.5px; color: var(--ig-text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 3px; }
+  .earn-card p { font-size: 11px; line-height: 1.4; color: var(--ig-text-muted); margin: 9px 0 0; }
+
+  /* Coverage Sweep (SCAN register, 5 by-nature facets) + The Wire (long tail) */
+  .sweep, .wire { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 28px; margin-top: 12px; }
+  .sweep-group h4, .wire-group h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ig-accent-deep); margin: 6px 0 6px; }
+  .sweep-item, .wire-item { font-size: 12.5px; line-height: 1.4; padding: 3px 0; border-bottom: 1px solid var(--ig-border); }
+  .sweep-item a, .wire-item a { color: var(--ig-text); text-decoration: none; }
+  .sweep-item a:hover, .wire-item a:hover { color: var(--ig-accent-deep); }
+  .sweep-item .pub, .wire-item .pub { color: var(--ig-text-soft); font-size: 10.5px; }
+
+  /* Reading list (must-read deconstructions) */
+  .reads-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 26px; margin-top: 14px; }
+  .read-card { border-left: 3px solid var(--ig-accent); background: var(--ig-card-bg); padding: 9px 13px; border-radius: 0 4px 4px 0; }
+  .read-card a { font-weight: 700; font-size: 13.5px; color: var(--ig-text); text-decoration: none; }
+  .read-card a:hover { color: var(--ig-accent-deep); }
+  .read-card .pub { font-size: 10.5px; color: var(--ig-text-soft); }
+  .read-card p { font-size: 12px; line-height: 1.38; color: var(--ig-text-muted); margin: 4px 0 0; }
+  .read-card.wide { grid-column: span 2; }
+
+  @page { size: 1280px 720px; margin: 0; }
+  @media print {
+    html, body { margin: 0 !important; padding: 0 !important; background: white !important; width: 1280px !important; }
+    #stage { position: static !important; background: white !important; display: block !important; padding: 0 !important; inset: auto !important; height: auto !important; }
+    #stage-inner { transform: none !important; box-shadow: none !important; margin: 0 !important; width: 1280px !important; height: auto !important; background: transparent !important; }
+    .slide {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 1280px !important;
+      height: 720px !important;
+      max-height: 720px !important;
+      box-sizing: border-box !important;
+      padding: 30px 56px 44px !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      page-break-after: always !important;
+      page-break-inside: avoid !important;
+      break-after: page !important;
+      break-inside: avoid !important;
+      background: var(--ig-bg) !important;
+      overflow: hidden !important;
+    }
+    .slide:last-child { page-break-after: auto !important; break-after: auto !important; }
+    #nav-hint { display: none !important; }
+  }
+  body.print #stage { position: static; background: white; display: block; padding: 0; }
+  body.print #stage-inner { transform: none !important; margin: 0 auto; box-shadow: none; }
+  body.print .slide { display: flex !important; flex-direction: column !important; margin: 16px auto; box-shadow: 0 0 0 1px var(--ig-border); }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <div id="stage-inner">
+
+  <!-- ============== COVER (period + date range + period THESIS) ============== -->
+  <section class="slide active cover-slide" data-id="cover">
+    <div style="display:flex; flex-direction:column; height:100%; justify-content:space-between; padding-top: 8px;">
+      <div style="display:flex; justify-content:space-between; align-items: baseline; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; color: var(--ig-text-muted); text-transform: uppercase; border-bottom: 1px solid var(--ig-border); padding-bottom: 12px;">
+        <img src="logos/ig-logo-navy.png" alt="InvestGame" style="height:26px; display:block;">
+        <span>{{CADENCE_LABEL}}</span><!-- e.g. Fortnightly Brief -->
+      </div>
+      <div style="text-align:left; padding-bottom: 56px;">
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.22em; color: var(--ig-accent-deep); text-transform: uppercase; margin-bottom: 16px;">Gaming Pulse</div>
+        <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 54px; font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; color: var(--ig-text); margin: 0; max-width: 1080px;">{{COVER_HEADLINE}}</h1>
+        <p style="font-size: 17px; color: var(--ig-text-muted); margin-top: 20px; max-width: 940px; line-height: 1.45;">A synthesis of {{POST_COUNT}} posts across {{NEWSLETTER_COUNT}} gaming-industry newsletters, every storyline cross-checked against InvestGame's own deal database. {{DATE_RANGE}}.</p>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items: baseline; font-size: 10.5px; color: var(--ig-text-muted); border-top: 1px solid var(--ig-border); padding-top: 14px; letter-spacing: 0.08em;">
+        <span style="font-style: italic;">Synthesis with full attribution. Every claim links to its source.</span>
+        <span>Issue: {{DATE_RANGE}}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CONTENTS (real clickable TOC; links resolve via the #s<id> hash router) ============== -->
+  <section class="slide" data-id="toc">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Contents<span class="sep">&middot;</span>This issue</span></div>
+    <h1 class="slide-title">What is in this issue</h1>
+
+    <div class="toc">
+      <div class="toc-item">
+        <span class="toc-num">01</span>
+        <div class="toc-body">
+          <a class="toc-link" href="#sbrief">Executive brief</a>
+          <div class="toc-desc">{{BRIEF_DESC}}<!-- e.g. the fortnight in five lines, with the headline counts. --></div>
+        </div>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">02</span>
+        <div class="toc-body">
+          <a class="toc-link" href="#sstory1">Big stories</a>
+          <div class="toc-desc">{{CONVERGENCE_COUNT}} convergence-ranked storylines where independent newsletters overlapped.</div>
+          <!-- GENERATOR: one chip per Big Story, href="#s<story-data-id>". -->
+          <div class="toc-sub">
+            <a href="#sstory1">1. {{STORY1_SHORT}}</a>
+            <a href="#sstory2">2. {{STORY2_SHORT}}</a>
+            <!-- ...repeat for each Big Story... -->
+          </div>
+        </div>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">03</span>
+        <div class="toc-body">
+          <a class="toc-link" href="#sdeals">Deals desk</a>
+          <div class="toc-desc">M&amp;A and financings from the InvestGame database, each row linking to its deal page.</div>
+        </div>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">04</span>
+        <div class="toc-body">
+          <a class="toc-link" href="#smarkets">Public-markets desk</a>
+          <div class="toc-desc">Weekly movers by segment, public offerings, and <a class="toc-link" href="#searnings" style="font-size:11.5px;">latest earnings</a>.</div>
+        </div>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">05</span>
+        <div class="toc-body">
+          <a class="toc-link" href="#ssweep">Coverage sweep</a>
+          <div class="toc-desc">Breadth across the five editorial facets: product, UA &amp; monetization, AI &amp; tech, people, industry trends.</div>
+        </div>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">06</span>
+        <div class="toc-body">
+          <a class="toc-link" href="#swire">The wire</a>
+          <div class="toc-desc">The long tail of the period, link-only.</div>
+        </div>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">07</span>
+        <div class="toc-body">
+          <a class="toc-link" href="#sreading">Reading list</a>
+          <div class="toc-desc">The deconstructions worth your time, with the one takeaway from each.</div>
+        </div>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">08</span>
+        <div class="toc-body">
+          <a class="toc-link" href="#smethod">Method &amp; sources</a>
+          <div class="toc-desc">How the issue is built, the factual-integrity review, and the <a class="toc-link" href="#ssources" style="font-size:11.5px;">full source list</a>.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== EXECUTIVE BRIEF (5-7 bullets + computed counts) ============== -->
+  <section class="slide" data-id="brief">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Overview<span class="sep">&middot;</span>The period at a glance</span></div>
+    <h1 class="slide-title">{{BRIEF_TITLE}}</h1>
+    <div class="slide-conclusion">{{BRIEF_THESIS}}<!-- The period thesis: factual consolidation of the through-lines. No prediction, no opinion. --></div>
+
+    <div class="visual">
+      <div class="kpi-row cols-4">
+        <div class="kpi hero"><div class="kpi-label">Posts read</div><div class="kpi-value tabular">{{POST_COUNT}}</div><div class="kpi-note">{{POST_COUNT_NOTE}}</div></div>
+        <div class="kpi"><div class="kpi-label">Newsletters</div><div class="kpi-value tabular">{{NEWSLETTER_COUNT}}</div><div class="kpi-note">{{NEWSLETTER_NOTE}}</div></div>
+        <div class="kpi"><div class="kpi-label">Feature stories</div><div class="kpi-value tabular">{{CONVERGENCE_COUNT}}</div><div class="kpi-note">Where several newsletters converged.</div></div>
+        <div class="kpi"><div class="kpi-label">{{MARQUEE_KPI_LABEL}}</div><div class="kpi-value tabular">{{MARQUEE_KPI_VALUE}}<span class="unit">{{MARQUEE_KPI_UNIT}}</span></div><div class="kpi-note">{{MARQUEE_KPI_NOTE}}</div></div>
+      </div>
+    </div>
+
+    <ul class="slide-bullets">
+      <!-- GENERATOR: 5-7 bullets. Each is a sourced fact (attribute inline). No invented "so what". -->
+      <li><strong>{{BULLET1_TAG}}:</strong> {{BULLET1_TEXT}}</li>
+      <li><strong>{{BULLET2_TAG}}:</strong> {{BULLET2_TEXT}}</li>
+      <li><strong>{{BULLET3_TAG}}:</strong> {{BULLET3_TEXT}}</li>
+      <li><strong>{{BULLET4_TAG}}:</strong> {{BULLET4_TEXT}}</li>
+      <li><strong>{{BULLET5_TAG}}:</strong> {{BULLET5_TEXT}}</li>
+    </ul>
+  </section>
+
+  <!-- ==================================================================================
+       BIG STORIES (NARRATIVE register) - REPEATABLE: data-id="story1", "story2", ...
+       Emit 4-6, convergence-ranked. Each story:
+         - slide-conclusion = factual consolidation + convergence fact + DB overlay (NOT opinion)
+         - what-happened     = the story with INLINE per-claim source attribution "(Source)"
+         - story-side        = pull-stat + the InvestGame-data deal overlay + the embedded-media slot
+         - sources-row       = one clickable src-chip per distinct source
+       VARIANT A (story1) shows an EMBEDDED IMAGE (S3-mirrored chart from the article).
+       VARIANT B (story2) shows a Chart.js CANVAS (rendered chart).
+       For a text-only story, delete the whole .story-media block.
+       ================================================================================== -->
+
+  <!-- ====== BIG STORY - variant A: embedded image ====== -->
+  <section class="slide" data-id="story1">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Big stories<span class="sep">&middot;</span>{{STORY1_FACET}}</span></div>
+    <h1 class="slide-title">{{STORY1_HEADLINE}}</h1>
+    <div class="slide-conclusion">{{STORY1_CONSOLIDATION}}<!-- factual + convergence count + DB overlay; attributed analysis only --></div>
+    <div class="story-body">
+      <div class="what-happened">{{STORY1_BODY}}<!-- prose with inline attributions, e.g. "...permanent exclusives (Game File)" --></div>
+      <div class="story-side">
+        <!-- EMBEDDED-IMAGE SLOT (variant A). Mirror chart-heavy figures to the writable default S3 bucket
+             and embed the public URL here. Delete this block for a text-only story. -->
+        <figure class="story-media">
+          <img src="{{STORY1_IMAGE_URL}}" alt="{{STORY1_IMAGE_ALT}}">
+          <figcaption>{{STORY1_IMAGE_CAPTION}} &middot; {{STORY1_IMAGE_SOURCE}}</figcaption>
+        </figure>
+        <div class="pull-stat"><div class="l">{{STORY1_STAT_LABEL}}</div><div class="v">{{STORY1_STAT_VALUE}}</div></div>
+        <div class="ig-angle"><h5>InvestGame data</h5><p>{{STORY1_DB_OVERLAY}}<!-- a proprietary FACT from the deal/markets DB, not an opinion --></p></div>
+      </div>
+    </div>
+    <div class="sources-row"><span class="sr-label">Sources</span>
+      <!-- GENERATOR: one chip per distinct source. -->
+      <a class="src-chip" href="{{STORY1_SRC1_URL}}">{{STORY1_SRC1_NAME}}</a>
+      <a class="src-chip" href="{{STORY1_SRC2_URL}}">{{STORY1_SRC2_NAME}}</a>
+    </div>
+  </section>
+
+  <!-- ====== BIG STORY - variant B: rendered Chart.js canvas ====== -->
+  <section class="slide" data-id="story2">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Big stories<span class="sep">&middot;</span>{{STORY2_FACET}}</span></div>
+    <h1 class="slide-title">{{STORY2_HEADLINE}}</h1>
+    <div class="slide-conclusion">{{STORY2_CONSOLIDATION}}</div>
+    <div class="story-body">
+      <div class="what-happened">{{STORY2_BODY}}</div>
+      <div class="story-side">
+        <!-- EMBEDDED-CHART SLOT (variant B). The canvas id must match the mk() call in the script below.
+             The resize-before-print handler keeps it from exporting blank to PDF. -->
+        <figure class="story-media">
+          <div class="canvas-box"><canvas id="chart-story2"></canvas></div>
+          <figcaption>{{STORY2_CHART_CAPTION}} &middot; {{STORY2_CHART_SOURCE}}</figcaption>
+        </figure>
+        <div class="ig-angle"><h5>InvestGame data</h5><p>{{STORY2_DB_OVERLAY}}</p></div>
+      </div>
+    </div>
+    <div class="sources-row"><span class="sr-label">Sources</span>
+      <a class="src-chip" href="{{STORY2_SRC1_URL}}">{{STORY2_SRC1_NAME}}</a>
+      <a class="src-chip" href="{{STORY2_SRC2_URL}}">{{STORY2_SRC2_NAME}}</a>
+    </div>
+  </section>
+
+  <!-- ==================================================================================
+       DEALS DESK (authoritative InvestGame DB: M&A + financings). Per-row links into the app.
+       ================================================================================== -->
+  <section class="slide" data-id="deals">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Deals<span class="sep">&middot;</span>M&amp;A &amp; financings desk</span></div>
+    <h1 class="slide-title">{{DEALS_TITLE}}</h1>
+    <div class="slide-conclusion">{{DEALS_THESIS}}<!-- factual: what the recorded deals show this period --></div>
+
+    <div class="visual" style="margin-top: 12px;">
+      <table class="matrix dense">
+        <thead><tr><th>Date</th><th>Target</th><th>Acquirer / lead</th><th>Type</th><th style="text-align:right">Size</th></tr></thead>
+        <tbody>
+          <!-- GENERATOR: one row per deal. Wrap the target in a deal-link to its InvestGame app page. -->
+          <tr class="hilite">
+            <td>{{DEAL1_DATE}}</td>
+            <td><a class="deal-link" href="{{DEAL1_URL}}">{{DEAL1_TARGET}}</a> <span class="cell-meta">({{DEAL1_GEO}})</span></td>
+            <td>{{DEAL1_ACQUIRER}}</td>
+            <td>{{DEAL1_TYPE}}</td>
+            <td class="num">{{DEAL1_SIZE}}</td>
+          </tr>
+          <tr>
+            <td>{{DEAL2_DATE}}</td>
+            <td><a class="deal-link" href="{{DEAL2_URL}}">{{DEAL2_TARGET}}</a> <span class="cell-meta">({{DEAL2_GEO}})</span></td>
+            <td>{{DEAL2_ACQUIRER}}</td>
+            <td>{{DEAL2_TYPE}}</td>
+            <td class="num">{{DEAL2_SIZE}}</td>
+          </tr>
+          <!-- ...repeat for each deal row... -->
+        </tbody>
+      </table>
+    </div>
+    <div class="footnotes">Source: InvestGame Deals Database (cut {{DB_CUT_DATE}}). Sizes USD millions; undisclosed shown as n/d. Each target links to its InvestGame deal page.</div>
+  </section>
+
+  <!-- ==================================================================================
+       PUBLIC-MARKETS DESK A: weekly movers by segment + public offerings / IPOs.
+       Movers from markets_pricesignal, segmented by the curated MarketIndex buckets
+       (5 content segments + AdTech). Offerings/IPOs from InvestGame public-offering coverage.
+       ================================================================================== -->
+  <section class="slide" data-id="markets">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Public markets<span class="sep">&middot;</span>Movers &amp; offerings desk</span></div>
+    <h1 class="slide-title">{{MARKETS_TITLE}}</h1>
+    <div class="slide-conclusion">{{MARKETS_THESIS}}</div>
+
+    <!-- Public offerings / IPOs (D4: offerings live on this desk, not the editorial sweep) -->
+    <div class="marquee">
+      <div class="ipo-card">
+        <div class="tkr">{{IPO1_TICKER}}</div>
+        <h4>{{IPO1_NAME}}</h4>
+        <div class="stats">
+          <div class="stat"><div class="v">{{IPO1_STAT1_V}}</div><div class="l">{{IPO1_STAT1_L}}</div></div>
+          <div class="stat"><div class="v">{{IPO1_STAT2_V}}</div><div class="l">{{IPO1_STAT2_L}}</div></div>
+          <div class="stat"><div class="v">{{IPO1_STAT3_V}}</div><div class="l">{{IPO1_STAT3_L}}</div></div>
+        </div>
+        <p>{{IPO1_NOTE}}</p>
+      </div>
+      <div class="ipo-card" style="border-top-color: var(--ig-accent-deep);">
+        <div class="tkr">{{IPO2_TICKER}}</div>
+        <h4>{{IPO2_NAME}}</h4>
+        <div class="stats">
+          <div class="stat"><div class="v">{{IPO2_STAT1_V}}</div><div class="l">{{IPO2_STAT1_L}}</div></div>
+          <div class="stat"><div class="v">{{IPO2_STAT2_V}}</div><div class="l">{{IPO2_STAT2_L}}</div></div>
+          <div class="stat"><div class="v">{{IPO2_STAT3_V}}</div><div class="l">{{IPO2_STAT3_L}}</div></div>
+        </div>
+        <p>{{IPO2_NOTE}}</p>
+      </div>
+    </div>
+
+    <!-- Weekly movers, one seg-card per content segment (+ AdTech). Gainers .up, decliners .down. -->
+    <div class="movers">
+      <div class="seg-card">
+        <h4>{{SEG1_NAME}}</h4>
+        <div class="mover"><span class="nm">{{SEG1_M1_NAME}}<span class="tkr">{{SEG1_M1_TICKER}}</span></span><span class="chg up">{{SEG1_M1_CHG}}</span></div>
+        <div class="mover"><span class="nm">{{SEG1_M2_NAME}}<span class="tkr">{{SEG1_M2_TICKER}}</span></span><span class="chg down">{{SEG1_M2_CHG}}</span></div>
+      </div>
+      <div class="seg-card">
+        <h4>{{SEG2_NAME}}</h4>
+        <div class="mover"><span class="nm">{{SEG2_M1_NAME}}<span class="tkr">{{SEG2_M1_TICKER}}</span></span><span class="chg up">{{SEG2_M1_CHG}}</span></div>
+        <div class="mover"><span class="nm">{{SEG2_M2_NAME}}<span class="tkr">{{SEG2_M2_TICKER}}</span></span><span class="chg down">{{SEG2_M2_CHG}}</span></div>
+      </div>
+      <div class="seg-card">
+        <h4>{{SEG3_NAME}}</h4>
+        <div class="mover"><span class="nm">{{SEG3_M1_NAME}}<span class="tkr">{{SEG3_M1_TICKER}}</span></span><span class="chg up">{{SEG3_M1_CHG}}</span></div>
+        <div class="mover"><span class="nm">{{SEG3_M2_NAME}}<span class="tkr">{{SEG3_M2_TICKER}}</span></span><span class="chg down">{{SEG3_M2_CHG}}</span></div>
+      </div>
+      <!-- ...repeat seg-card for each of the 5 content segments + AdTech... -->
+    </div>
+    <div class="footnotes">Source: InvestGame public-markets data, week to {{MARKET_WEEK_DATE}}. Movers = weekly share-price change; segments per the curated InvestGame market indices.</div>
+  </section>
+
+  <!-- ==================================================================================
+       PUBLIC-MARKETS DESK B: latest earnings (EPS surprise / revenue / market reaction).
+       ================================================================================== -->
+  <section class="slide" data-id="earnings">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Public markets<span class="sep">&middot;</span>Earnings desk</span></div>
+    <h1 class="slide-title">{{EARNINGS_TITLE}}</h1>
+    <div class="slide-conclusion">{{EARNINGS_THESIS}}</div>
+
+    <div class="earnings-grid">
+      <!-- GENERATOR: one earn-card per release. EPS surprise positive -> .beat, negative -> .miss. -->
+      <div class="earn-card">
+        <div class="tkr">{{EARN1_TICKER}}</div>
+        <h4>{{EARN1_NAME}}</h4>
+        <div class="earn-stats">
+          <div class="stat"><div class="v">{{EARN1_EPS_ACTUAL}}</div><div class="l">EPS actual</div></div>
+          <div class="stat"><div class="v">{{EARN1_EPS_EST}}</div><div class="l">EPS est.</div></div>
+          <div class="stat"><div class="v beat">{{EARN1_SURPRISE}}</div><div class="l">Surprise</div></div>
+          <div class="stat"><div class="v">{{EARN1_REVENUE}}</div><div class="l">Revenue</div></div>
+          <div class="stat"><div class="v beat">{{EARN1_REACTION}}</div><div class="l">Mkt reaction</div></div>
+        </div>
+        <p>{{EARN1_NOTE}}</p>
+      </div>
+      <div class="earn-card">
+        <div class="tkr">{{EARN2_TICKER}}</div>
+        <h4>{{EARN2_NAME}}</h4>
+        <div class="earn-stats">
+          <div class="stat"><div class="v">{{EARN2_EPS_ACTUAL}}</div><div class="l">EPS actual</div></div>
+          <div class="stat"><div class="v">{{EARN2_EPS_EST}}</div><div class="l">EPS est.</div></div>
+          <div class="stat"><div class="v miss">{{EARN2_SURPRISE}}</div><div class="l">Surprise</div></div>
+          <div class="stat"><div class="v">{{EARN2_REVENUE}}</div><div class="l">Revenue</div></div>
+          <div class="stat"><div class="v miss">{{EARN2_REACTION}}</div><div class="l">Mkt reaction</div></div>
+        </div>
+        <p>{{EARN2_NOTE}}</p>
+      </div>
+      <!-- ...repeat earn-card for each release... -->
+    </div>
+    <div class="footnotes">Source: InvestGame public-markets data. EPS actual vs consensus; market reaction = share-price move on the release.</div>
+  </section>
+
+  <!-- ==================================================================================
+       COVERAGE SWEEP (SCAN register) - breadth across the 5 by-nature editorial facets.
+       Transactions are NOT a sweep facet (they live on the Deals + Public-Markets desks).
+       ================================================================================== -->
+  <section class="slide" data-id="sweep">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Coverage sweep<span class="sep">&middot;</span>Breadth across the facets</span></div>
+    <h1 class="slide-title">{{SWEEP_TITLE}}</h1>
+
+    <div class="sweep">
+      <div class="sweep-group">
+        <h4>Product, releases &amp; live-ops</h4>
+        <div class="sweep-item"><a href="{{SWEEP_PR1_URL}}">{{SWEEP_PR1_TITLE}}</a> <span class="pub">{{SWEEP_PR1_PUB}}</span></div>
+        <div class="sweep-item"><a href="{{SWEEP_PR2_URL}}">{{SWEEP_PR2_TITLE}}</a> <span class="pub">{{SWEEP_PR2_PUB}}</span></div>
+      </div>
+      <div class="sweep-group">
+        <h4>UA, marketing &amp; monetization</h4>
+        <div class="sweep-item"><a href="{{SWEEP_UA1_URL}}">{{SWEEP_UA1_TITLE}}</a> <span class="pub">{{SWEEP_UA1_PUB}}</span></div>
+        <div class="sweep-item"><a href="{{SWEEP_UA2_URL}}">{{SWEEP_UA2_TITLE}}</a> <span class="pub">{{SWEEP_UA2_PUB}}</span></div>
+      </div>
+      <div class="sweep-group">
+        <h4>AI &amp; tech</h4>
+        <div class="sweep-item"><a href="{{SWEEP_AI1_URL}}">{{SWEEP_AI1_TITLE}}</a> <span class="pub">{{SWEEP_AI1_PUB}}</span></div>
+        <div class="sweep-item"><a href="{{SWEEP_AI2_URL}}">{{SWEEP_AI2_TITLE}}</a> <span class="pub">{{SWEEP_AI2_PUB}}</span></div>
+      </div>
+      <div class="sweep-group">
+        <h4>People &amp; organizations</h4>
+        <div class="sweep-item"><a href="{{SWEEP_PE1_URL}}">{{SWEEP_PE1_TITLE}}</a> <span class="pub">{{SWEEP_PE1_PUB}}</span></div>
+        <div class="sweep-item"><a href="{{SWEEP_PE2_URL}}">{{SWEEP_PE2_TITLE}}</a> <span class="pub">{{SWEEP_PE2_PUB}}</span></div>
+      </div>
+      <div class="sweep-group">
+        <h4>Industry &amp; platform trends</h4>
+        <div class="sweep-item"><a href="{{SWEEP_IN1_URL}}">{{SWEEP_IN1_TITLE}}</a> <span class="pub">{{SWEEP_IN1_PUB}}</span></div>
+        <div class="sweep-item"><a href="{{SWEEP_IN2_URL}}">{{SWEEP_IN2_TITLE}}</a> <span class="pub">{{SWEEP_IN2_PUB}}</span></div>
+      </div>
+    </div>
+    <div class="footnotes">Coverage sweep tags each post by editorial facet (multi-label). Geography is a within-item attribute, not a facet.</div>
+  </section>
+
+  <!-- ==================================================================================
+       THE WIRE - the long tail, link-only, grouped freely by the period's clusters.
+       ================================================================================== -->
+  <section class="slide" data-id="wire">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Wire<span class="sep">&middot;</span>Also this period</span></div>
+    <h1 class="slide-title">{{WIRE_TITLE}}</h1>
+
+    <div class="wire">
+      <div class="wire-group">
+        <h4>{{WIRE_G1_NAME}}</h4>
+        <div class="wire-item"><a href="{{WIRE_G1_I1_URL}}">{{WIRE_G1_I1_TITLE}}</a> <span class="pub">{{WIRE_G1_I1_PUB}}</span></div>
+        <div class="wire-item"><a href="{{WIRE_G1_I2_URL}}">{{WIRE_G1_I2_TITLE}}</a> <span class="pub">{{WIRE_G1_I2_PUB}}</span></div>
+      </div>
+      <div class="wire-group">
+        <h4>{{WIRE_G2_NAME}}</h4>
+        <div class="wire-item"><a href="{{WIRE_G2_I1_URL}}">{{WIRE_G2_I1_TITLE}}</a> <span class="pub">{{WIRE_G2_I1_PUB}}</span></div>
+        <div class="wire-item"><a href="{{WIRE_G2_I2_URL}}">{{WIRE_G2_I2_TITLE}}</a> <span class="pub">{{WIRE_G2_I2_PUB}}</span></div>
+      </div>
+      <div class="wire-group">
+        <h4>{{WIRE_G3_NAME}}</h4>
+        <div class="wire-item"><a href="{{WIRE_G3_I1_URL}}">{{WIRE_G3_I1_TITLE}}</a> <span class="pub">{{WIRE_G3_I1_PUB}}</span></div>
+        <div class="wire-item"><a href="{{WIRE_G3_I2_URL}}">{{WIRE_G3_I2_TITLE}}</a> <span class="pub">{{WIRE_G3_I2_PUB}}</span></div>
+      </div>
+      <div class="wire-group">
+        <h4>{{WIRE_G4_NAME}}</h4>
+        <div class="wire-item"><a href="{{WIRE_G4_I1_URL}}">{{WIRE_G4_I1_TITLE}}</a> <span class="pub">{{WIRE_G4_I1_PUB}}</span></div>
+        <div class="wire-item"><a href="{{WIRE_G4_I2_URL}}">{{WIRE_G4_I2_TITLE}}</a> <span class="pub">{{WIRE_G4_I2_PUB}}</span></div>
+      </div>
+    </div>
+    <div class="footnotes">A selection of the remaining period coverage not featured above. Full source list on the final slide.</div>
+  </section>
+
+  <!-- ==================================================================================
+       READING LIST - the deconstructions, each with the one takeaway. .wide spans 2 cols.
+       ================================================================================== -->
+  <section class="slide" data-id="reading">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Reads<span class="sep">&middot;</span>Must-read deconstructions</span></div>
+    <h1 class="slide-title">{{READING_TITLE}}</h1>
+    <div class="slide-conclusion" style="margin-bottom: 2px;">{{READING_THESIS}}</div>
+
+    <div class="reads-grid">
+      <!-- GENERATOR: one read-card per long read. Add class "wide" to span both columns. -->
+      <div class="read-card">
+        <a href="{{READ1_URL}}">{{READ1_TITLE}}</a><span class="pub"> &middot; {{READ1_PUB}}</span>
+        <p>{{READ1_TAKEAWAY}}</p>
+      </div>
+      <div class="read-card">
+        <a href="{{READ2_URL}}">{{READ2_TITLE}}</a><span class="pub"> &middot; {{READ2_PUB}}</span>
+        <p>{{READ2_TAKEAWAY}}</p>
+      </div>
+      <div class="read-card">
+        <a href="{{READ3_URL}}">{{READ3_TITLE}}</a><span class="pub"> &middot; {{READ3_PUB}}</span>
+        <p>{{READ3_TAKEAWAY}}</p>
+      </div>
+      <div class="read-card">
+        <a href="{{READ4_URL}}">{{READ4_TITLE}}</a><span class="pub"> &middot; {{READ4_PUB}}</span>
+        <p>{{READ4_TAKEAWAY}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================================
+       METHODOLOGY - how the issue is built + the FACTUAL-INTEGRITY DEEP-DIVE REVIEW (D10).
+       ================================================================================== -->
+  <section class="slide" data-id="method">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Method<span class="sep">&middot;</span>How this issue is built</span></div>
+    <h1 class="slide-title">How Gaming Pulse is made: synthesis, not aggregation</h1>
+    <div class="slide-conclusion">The value is in two things a feed reader cannot do: finding the storylines where independent newsletters converge, and putting InvestGame's own deal and market numbers next to the headline.</div>
+
+    <ul class="slide-bullets">
+      <li><strong>Collect:</strong> {{POST_COUNT}} posts from {{NEWSLETTER_COUNT}} active newsletters over {{DATE_RANGE}}, with full article bodies fetched and stored, not just the feed teaser.</li>
+      <li><strong>Cluster by convergence, not entity:</strong> posts are grouped into the storylines several independent newsletters covered at once. The count of independent newsletters on a story is its importance signal.</li>
+      <li><strong>Read in full and attribute:</strong> the articles driving each storyline are read in full; every claim is attributed to its publication and linked. A source's own analysis appears only with the attribution intact.</li>
+      <li><strong>Overlay proprietary data:</strong> every transaction is cross-checked against the InvestGame deal database and public-markets data, the authoritative source for M&amp;A, financings, offerings and earnings, so figures are proprietary, not press hearsay.</li>
+      <li><strong>Deep-dive review before release:</strong> a dedicated factual-integrity pass. Every fact must be present in its stored source; numbers, names and dates are matched; a devil's-advocate falsifies each headline claim; and the draft is swept for machine artifacts (leaked JSON, placeholder text, duplicate stories). Anything that fails is fixed or dropped.</li>
+      <li><strong>Caveats:</strong> podcast links give show notes, not transcripts, and never lead a story alone; some newsletters are partly paywalled; undisclosed deal sizes are excluded from totals.</li>
+    </ul>
+  </section>
+
+  <!-- ==================================================================================
+       SOURCES - the full publication list (2 columns).
+       ================================================================================== -->
+  <section class="slide" data-id="sources">
+    <div class="slide-meta"><span>{{PAGE}} / {{PAGES}}</span><span class="section-label">Appendix<span class="sep">&middot;</span>Sources</span></div>
+    <h1 class="slide-title">Sources</h1>
+    <div class="slide-conclusion" style="margin-bottom: 4px;">Every storyline in this issue is built from these publications. Figures attributed to InvestGame come from its proprietary deal and public-markets data.</div>
+    <div class="source-list cols-2">
+      <!-- GENERATOR: one entry per source used, plus the InvestGame database line. -->
+      <div><span class="src-num">[1]</span> {{SRC1_PROVIDER}}. {{SRC1_DESC}}. <a href="{{SRC1_URL}}">{{SRC1_DOMAIN}}</a></div>
+      <div><span class="src-num">[2]</span> {{SRC2_PROVIDER}}. {{SRC2_DESC}}. <a href="{{SRC2_URL}}">{{SRC2_DOMAIN}}</a></div>
+      <div><span class="src-num">[3]</span> {{SRC3_PROVIDER}}. {{SRC3_DESC}}. <a href="{{SRC3_URL}}">{{SRC3_DOMAIN}}</a></div>
+      <div><span class="src-num">[4]</span> {{SRC4_PROVIDER}}. {{SRC4_DESC}}. <a href="{{SRC4_URL}}">{{SRC4_DOMAIN}}</a></div>
+      <div><span class="src-num">[{{LAST_SRC_NUM}}]</span> InvestGame Deals &amp; Public-Markets Database (cut {{DB_CUT_DATE}}). Proprietary records.</div>
+    </div>
+  </section>
+
+  </div>
+</div>
+
+<div id="nav-hint">&larr; / &rarr; or PageUp/Down &middot; End/Home &middot; P to print</div>
+
+<script>
+// ============================================================
+// InvestGame chart palette + engine - lifted verbatim from
+// brand-kit/assets/templates/warm-white.html. The sample chart
+// config (chart-story2) is a placeholder the generator replaces.
+// ============================================================
+var IG = {
+  bg: '#F4F3EE', text: '#0B1A2A', muted: '#5F6B7A', soft: '#8E99A6',
+  accent: '#61BFB3',     // PRIMARY teal
+  blue: '#6189D6',       // secondary blue
+  deepTeal: '#00928A',   // positive / deep teal
+  deepBlue: '#2D5BA8',   // deep blue
+  deep: '#3D9B8F',       // accent-deep (line series)
+  warn: '#C07B5A',       // caution rust - never green
+  border: '#E0DFD9', card: '#FFFFFF',
+  palette: ['#61BFB3', '#6189D6', '#00928A', '#2D5BA8', '#83B6CC', '#A0AEC0', '#CBD5E1', '#E8A87C']
+};
+
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = IG.text;
+Chart.defaults.borderColor = IG.border;
+Chart.defaults.animation = false;   // paint immediately so charts export to PDF reliably
+Chart.defaults.plugins.tooltip.backgroundColor = '#0B1A2A';
+Chart.defaults.plugins.tooltip.titleColor = '#FFFFFF';
+Chart.defaults.plugins.tooltip.bodyColor = '#FFFFFF';
+Chart.defaults.plugins.tooltip.borderColor = IG.accent;
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.padding = 10;
+Chart.defaults.interaction = { mode: 'index', intersect: false };
+
+if (typeof ChartDataLabels !== 'undefined') Chart.register(ChartDataLabels);
+Chart.defaults.set('plugins.datalabels', { display: false });
+
+function mk(id, cfg) {
+  var el = document.getElementById(id);
+  if (!el) return;   // null-safe: a removed canvas (text-only story) makes this a harmless no-op
+  cfg.type = cfg.type || 'bar';
+  cfg.options = cfg.options || {};
+  cfg.options.maintainAspectRatio = false;
+  cfg.options.responsive = true;
+  if (!cfg.options.plugins) cfg.options.plugins = {};
+  if (!cfg.options.plugins.legend) cfg.options.plugins.legend = { position: 'bottom', align: 'start' };
+  return new Chart(el, cfg);
+}
+
+// ---- Big Story variant B sample chart (chart-story2) ----
+// GENERATOR: replace labels + data with the story's real series, or remove this block
+// (and the matching <canvas>) for a text-only / image-only story.
+mk('chart-story2', {
+  type: 'bar',
+  data: {
+    labels: ['{{S2_X1}}', '{{S2_X2}}', '{{S2_X3}}', '{{S2_X4}}'],
+    datasets: [{
+      label: '{{S2_SERIES_LABEL}}',
+      data: [],   // generator MUST fill from sourced data, e.g. [25.3, 31.0]; never invent numbers. Empty by default so an unfilled template stays valid JS (not a SyntaxError) and simply renders no chart.
+      backgroundColor: IG.accent, borderWidth: 0, barPercentage: 0.7, categoryPercentage: 0.7,
+      datalabels: { display: true, anchor: 'end', align: 'top', offset: 2, color: IG.text, font: { size: 10, weight: 700 }, formatter: function(v) { return v + '{{S2_UNIT}}'; } }
+    }]
+  },
+  options: {
+    layout: { padding: { top: 16, right: 6 } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: IG.muted, font: { size: 11 } } },
+      y: { beginAtZero: true, grid: { color: IG.border }, ticks: { color: IG.muted, font: { size: 11 } } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ---- Slide pagination + chart resize-on-show ----
+var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+var idx = 0;
+function show(i) {
+  if (i < 0) i = 0;
+  if (i >= slides.length) i = slides.length - 1;
+  idx = i;
+  slides.forEach(function(s, k) { s.classList.toggle('active', k === i); });
+  var s = slides[i];
+  if (s) {
+    history.replaceState(null, '', '#s' + (s.dataset.id || (i + 1)));
+    s.classList.remove('fade-in'); void s.offsetWidth; s.classList.add('fade-in');
+    // CRITICAL: resize every chart on the shown slide so it does not paint at 0px width.
+    if (typeof Chart !== 'undefined' && Chart.getChart) {
+      s.querySelectorAll('canvas').forEach(function(c) {
+        var inst = Chart.getChart(c);
+        if (inst) inst.resize();
+      });
+    }
+  }
+}
+function gotoHash() {
+  var m = location.hash.match(/^#s(\w+)$/);
+  if (!m) return;
+  var found = -1;
+  for (var i = 0; i < slides.length; i++) { if (slides[i].dataset.id === m[1]) { found = i; break; } }
+  if (found >= 0) show(found);
+}
+window.addEventListener('hashchange', gotoHash);
+window.addEventListener('keydown', function(e) {
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { show(idx + 1); e.preventDefault(); }
+  if (e.key === 'ArrowLeft'  || e.key === 'PageUp')                    { show(idx - 1); e.preventDefault(); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End')  show(slides.length - 1);
+  if (e.key === 'p' || e.key === 'P') document.body.classList.toggle('print');
+});
+function fit() {
+  if (document.body.classList.contains('print')) return;
+  var w = window.innerWidth, h = window.innerHeight;
+  document.getElementById('stage-inner').style.transform = 'scale(' + (Math.min(w / 1280, h / 720) * 0.96) + ')';
+}
+window.addEventListener('resize', fit);
+
+// Resize EVERY chart before printing. Charts created inside a hidden slide measure a 0px container,
+// so without this they export to PDF blank. Covers Chrome (--print-to-pdf fires beforeprint) and
+// Playwright (emulating print media fires the matchMedia 'change'), which is how render_pdf.py from
+// investgame-format's brand-kit/scripts/ renders. NOTE: the Pulse fork stripped this and charts came
+// out blank - it is restored here.
+function resizeAllCharts() {
+  if (typeof Chart === 'undefined' || !Chart.getChart) return;
+  slides.forEach(function(s) {
+    s.querySelectorAll('canvas').forEach(function(c) {
+      var inst = Chart.getChart(c);
+      if (inst) inst.resize();
+    });
+  });
+}
+window.addEventListener('beforeprint', resizeAllCharts);
+if (window.matchMedia) {
+  var mqPrint = window.matchMedia('print');
+  var onPrintChange = function(e) { if (e.matches) resizeAllCharts(); };
+  if (mqPrint.addEventListener) mqPrint.addEventListener('change', onPrintChange);
+  else if (mqPrint.addListener) mqPrint.addListener(onPrintChange);
+}
+if (new URLSearchParams(location.search).get('print') === '1') document.body.classList.add('print');
+fit();
+if (location.hash) gotoHash(); else show(0);
+</script>
+</body>
+</html>

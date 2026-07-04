@@ -1,0 +1,31 @@
+{
+  "name": "investgame",
+  "owner": {
+    "name": "InvestGame Ltd",
+    "email": "app@investgame.net"
+  },
+  "description": "InvestGame analyst skills for gaming M&A and investment intelligence",
+  "plugins": [
+    {
+      "name": "investgame-skills",
+      "source": "./",
+      "version": "0.6.3",
+      "description": "InvestGame analyst skills: gaming deal taxonomy, valuation methodology, public markets, research, press digests and on-brand reporting",
+      "author": {
+        "name": "InvestGame Ltd",
+        "email": "app@investgame.net"
+      },
+      "homepage": "https://app.investgame.net",
+      "license": "Proprietary",
+      "strict": false,
+      "skills": [
+        "./skills/investgame-gaming-data",
+        "./skills/investgame-analysis",
+        "./skills/investgame-public-markets",
+        "./skills/investgame-format",
+        "./skills/investgame-research",
+        "./skills/investgame-press"
+      ]
+    }
+  ]
+}
