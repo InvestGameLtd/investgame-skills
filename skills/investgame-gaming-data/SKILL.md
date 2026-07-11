@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.6.3
+version: 0.6.6
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -63,7 +63,9 @@ this skill makes the answer reliable.
    verbatim (offering any `suggestions`), then call again with their answer; do not reformulate the
    question yourself — or
    `{"mode":"data","tables":[{name,columns,rows}],"entities":[{type,id,url}]}` — read the tables and
-   answer, linking the entities.
+   answer, linking each entity via its `url` (always on `https://app.investgame.net` — the `app.`
+   subdomain; the bare `investgame.net` host 404s). Deal → `/deals/{id}`, company → `/companies/{id}`,
+   index → `/market-indices/{slug}`. Presentation detail lives in `investgame-format`.
 
 ## 1 · The taxonomy — the only allowed vocabulary
 
@@ -96,6 +98,12 @@ game — engines/tools) · `INFRASTRUCTURE_SERVICES` (helps *run/scale* — clou
 **Deal category:** `MA` (types `MA_CONTROL`, `MA_MINORITY`) · `EARLY_STAGE_INVESTMENT`
 (Seed, Series A, accelerator, undisclosed-early) · `LATE_STAGE_INVESTMENT` (Series B–H, growth,
 undisclosed-late) · `PUBLIC_OFFERING` (IPO/SPAC/listing) · `OTHER` (always excluded).
+
+**Deal type → display label** (a deal's `type` comes back as a raw code — render its InvestGame label, never
+the code): `MA_CONTROL`→"M&A control (incl. LBO/MBO)" · `MA_MINORITY`→"M&A minority" · `SEED`→"Pre-Seed/Seed" ·
+`SERIES_A`…`SERIES_H`→"Series A"…"Series H" · `GROWTH_OR_EXPANSION`→"Growth / Expansion" ·
+`ACCELERATOR_GRANT`→"Accelerator / Grant" · `LISTING`→"Listing (IPO/SPAC)" · `PIPE`→"PIPE" ·
+`FIXED_INCOME`→"Fixed Income" · `UA_FINANCING`→"UA Financing" · `OTHER_MISC`→"Other".
 
 **Region maps** (use the country lists, not granular sub-regions):
 - Europe → GB, DE, FR, SE, NO, DK, FI, CH, NL, BE, AT, IT, ES, PT, PL, IE, CZ, RO

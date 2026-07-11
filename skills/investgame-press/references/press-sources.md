@@ -21,12 +21,18 @@ them and never let one lead a Big Story alone.
 | MIDiA Research | Market data, trends, consumer |
 | Griffin Gaming Partners (and other VC weeklies) | VC, funding, market data, AI, web3 |
 | GameDev Reports · Game Makers · Alinea Analytics · Niko News · others | Analyst / data + dev |
-| InvestGame (own) | Our own deal / market commentary |
+| InvestGame (own) | Our own deal / market commentary (the site's news feed) |
+| InvestGame Weekly Digest (own) | Our weekly newsletter: the week's Notable Transactions, grouped M&A / Venture / Public Offerings / UA Financing / Fundraising / Earnings, plus the feature article |
+
+The two InvestGame rows are different feeds, not duplicates: `investgame` is the site's news feed
+(it carries the digest's feature articles republished standalone), `investgame-digest` is the
+Weekly Digest itself. For "what did InvestGame write about this deal", the digest is the one that
+lists every transaction of the week.
 
 ## Podcasts (show-notes only — down-weight, never lead)
 
 The Game Business Show · Gamecraft · Two & a Half Gamers · Naavik Gaming Podcast ·
-Deconstructor of Fun Podcast · Mobile Dev Memo Podcast.
+Deconstructor of Fun Podcast · Mobile Dev Memo Podcast · The Business of Video Games Podcast.
 
 These carry show notes, not transcripts. Use them to corroborate a story or in the Wire, never as
 the sole source of a Big Story. They are flagged `live_media_source.is_podcast = true`.

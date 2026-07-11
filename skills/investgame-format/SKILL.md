@@ -1,6 +1,6 @@
 ---
 name: investgame-format
-version: 0.6.3
+version: 0.6.6
 description: >
   Presentation layer for every InvestGame answer — decide how to show it and, when asked, render it
   on-brand. Use on ANY answer that benefits from being presented well, not only file requests: whenever
@@ -73,8 +73,15 @@ Analysis chooses the comps and the fields; you make them read like a comp set.
 - Flags for countries. Show the country flag alongside (or in place of) the ISO code. In branded HTML use
   flag-icon SVGs, not Unicode flag emoji (emoji flags render as bare letters on some platforms, e.g.
   Windows); in chat, the built-in rendering is fine.
-- Links for entities. Render a company or deal name as a clickable link to its page on the InvestGame app
-  (app.investgame.net) whenever the data provides the link, so the reader can click through to the source.
+- Links for entities — link every named deal, company and index to its InvestGame page, so the reader can
+  click any name and land on the record. Base URL: `https://app.investgame.net` (always the `app.` subdomain).
+  - Deal → `https://app.investgame.net/deals/{deal_id}`
+  - Company → `https://app.investgame.net/companies/{company_id}`
+  - Index → `https://app.investgame.net/market-indices/{slug}`
+  The ids come from the response's `entities` array (`{type, id, url}`) — that `url` is authoritative, use it
+  directly. When you only have an id (a table cell), build the URL from the pattern above. Never link the bare
+  `investgame.net/...` host (it 404s), and never invent a link from a name — if there is no id, leave the name
+  unlinked rather than guess.
 - Numbers right-aligned, USD millions unless stated, consistent decimals; lead the eye to the takeaway.
 
 ## Start from a template — don't rebuild (deliverables)
