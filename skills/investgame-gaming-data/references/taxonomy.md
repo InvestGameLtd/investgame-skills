@@ -19,10 +19,16 @@ is the authoritative term set the database is built on.*
 orgs and gaming infrastructure/tools/adtech with a genuine gaming use-case; B2C non-game apps with real
 game mechanics (Consumer Apps — §7).
 
-**Out of scope:** real-money gambling / iGaming **operators**; physical toys & merchandise (unless
-licensed game IP); generic PR / brand / marketing; adjacent tech with no gaming use-case.
+**Out of the gaming sectors:** real-money gambling / iGaming **operators**; physical toys & merchandise
+(unless licensed game IP); generic PR / brand / marketing; adjacent tech with no gaming use-case.
 
-The line analysts apply most: **a casino game is content; a casino operator is out.**
+These are still TRACKED companies: they carry the sector `OTHER` ("Other (non-covered sector)") with
+no gaming-gated fields, and several are listed companies whose earnings InvestGame follows
+(DraftKings, MGM Resorts, Entain). They are EXCLUDED from gaming sector totals — so they are
+answerable, but they never inflate a gaming number.
+
+The line analysts apply most: **a casino game is content; a casino operator is out of the gaming
+sectors** — tracked, but under sector `OTHER`.
 
 ## 2 · Deal-inclusion gate (is it a tracked deal?)
 
@@ -56,7 +62,13 @@ the queryable set at all, and `OTHER` is excluded from analytics totals.
 
 ## 4 · Sector (a company can carry several) and its gated fields
 
-`GAMING_CONTENT` · `GAMING_ECOSYSTEM` · `CONSUMER_APPS`. Sector gates which fields are populated.
+`GAMING_CONTENT` · `GAMING_ECOSYSTEM` · `CONSUMER_APPS` · `OTHER`. Sector gates which fields are populated.
+
+`OTHER` = "Other (non-covered sector)": a company InvestGame tracks that sits outside every covered
+sector (a real-money gambling operator, a large non-gaming AI or hardware firm). It is **exclusive**
+(never combined with another sector), carries **no** gaming-gated fields, and is excluded from gaming
+sector totals. Distinct from `gamified_subsegment.OTHER` and `ecosystem_segment.OTHER`, which are
+filler values INSIDE a covered sector.
 **Features**: `AI_OR_ML` · `BLOCKCHAIN_OR_WEB3` · `UGC_MODDING` · `CASH_OR_SKILL_BASED_OR_RMG` are sector-agnostic (any sector). `SHORT_DRAMA` is the exception — short drama is a Consumer Apps content vertical, so it applies only to companies whose sectors include `CONSUMER_APPS`.
 *(Use `BLOCKCHAIN_OR_WEB3` to include/exclude crypto-gaming — 2021–22 data is Web3-heavy.)*
 

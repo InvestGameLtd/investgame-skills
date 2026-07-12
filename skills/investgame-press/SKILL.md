@@ -1,6 +1,6 @@
 ---
 name: investgame-press
-version: 0.6.6
+version: 0.8.0
 description: >
   The gaming-press layer of the InvestGame skills — what the industry's newsletters and shows are
   publishing, and the fortnightly "Gaming Pulse" digest built from them. Use the moment a question is about

@@ -1,6 +1,6 @@
 ---
 name: investgame-research
-version: 0.6.6
+version: 0.8.0
 description: >
   Use for DEEP work — when the user wants more than a quick answer: a report, a market or regional
   landscape, a deep dive, a trend analysis, a company/deal write-up, an investor profile, prep for a call or

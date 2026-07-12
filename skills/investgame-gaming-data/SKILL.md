@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.6.6
+version: 0.8.0
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -65,11 +65,24 @@ this skill makes the answer reliable.
    `{"mode":"data","tables":[{name,columns,rows}],"entities":[{type,id,url}]}` — read the tables and
    answer, linking each entity via its `url` (always on `https://app.investgame.net` — the `app.`
    subdomain; the bare `investgame.net` host 404s). Deal → `/deals/{id}`, company → `/companies/{id}`,
-   index → `/market-indices/{slug}`. Presentation detail lives in `investgame-format`.
+   index → `/market-indices/{slug}`. A `data` reply may also carry a `status` flag: `"failed"` means
+   the lookup could not be completed (tell the user it failed; never present it as "no results found"),
+   `"partial"` means answer with what came back but flag it as incomplete, and no `status` key means the
+   answer is complete. Presentation detail lives in `investgame-format`.
+8. **Always state the `assumptions`.** A `data` reply may carry `"assumptions":[...]`: the scope
+   decisions that shaped the result, above all **which date the period filtered on**. Never drop
+   these: they change what the numbers mean. "Closed in Q2" and "announced in Q2" are different
+   populations, not phrasing. A round is *announced*, and many never record a closed date, so a
+   closed-date window omits deals announced in the period but not yet closed. Ranking a quarter on
+   the closed anchor can understate the top deal several-fold. If the user wants "the deals of Q2",
+   they almost always mean **announced**: say which anchor you used, and offer the other.
 
 ## 1 · The taxonomy — the only allowed vocabulary
 
-**Sectors** (a company can have several): `GAMING_CONTENT` · `GAMING_ECOSYSTEM` · `CONSUMER_APPS`.
+**Sectors** (a company can have several): `GAMING_CONTENT` · `GAMING_ECOSYSTEM` · `CONSUMER_APPS` · `OTHER`.
+`OTHER` = tracked, but outside every covered gaming sector (real-money gambling operators such as
+DraftKings, MGM Resorts, Entain). Exclusive, carries no gaming fields, and is EXCLUDED from gaming
+sector totals — pull it only when the user asks about those companies specifically.
 
 **Platform** (GAMING_CONTENT only): `MOBILE` · `PC_CONSOLE` · `BROWSER` · `VR_AR`.
 - "mobile" → `MOBILE`; "PC / console / AAA" → `PC_CONSOLE`; "browser/HTML5" → `BROWSER`; "VR/AR/XR" → `VR_AR`.
