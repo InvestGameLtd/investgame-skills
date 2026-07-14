@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.8.1
+version: 0.8.2
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or

@@ -9,7 +9,7 @@
     {
       "name": "investgame-skills",
       "source": "./",
-      "version": "0.8.1",
+      "version": "0.8.2",
       "description": "InvestGame analyst skills: gaming deal taxonomy, valuation methodology, public markets, research, press digests and on-brand reporting",
       "author": {
         "name": "InvestGame Ltd",
