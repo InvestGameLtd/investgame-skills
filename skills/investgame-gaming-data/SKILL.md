@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.8.0
+version: 0.8.1
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -201,7 +201,7 @@ The sections above are the always-on core. Pull a reference file when you need t
 
 | Load this | When |
 |-----------|------|
-| `references/taxonomy.md` | Classifying a **company** or any boundary call (is X gaming? which segment? mobile IAP vs IAA?) — full enums + the analyst (Fira) decision rules incl. monetization×platform |
+| `references/taxonomy.md` | Classifying a **company** or any boundary call (is X gaming? which segment? mobile IAP vs IAA?) — full enums + InvestGame's analyst decision rules incl. monetization×platform |
 | `references/deal-taxonomy.md` | Classifying a **deal** (M&A vs growth vs listing), or interpreting deal terms / multiples / size |
 | `references/definitions.md` | Any counting/sizing/multiple question — the canonical buckets that keep numbers consistent |
 | `references/output-and-brand.md` | Formatting an answer or producing a report/chart — columns, methodology line, InvestGame brand |

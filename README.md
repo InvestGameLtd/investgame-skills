@@ -15,6 +15,22 @@ connector (`https://app.investgame.net/mcp`).
 
 Full per-surface guide: <https://app.investgame.net/setup>
 
+## Updating
+
+Claude keeps a local copy of this marketplace and, for third-party marketplaces,
+does **not** refresh it on its own. Installing or reinstalling the plugin reads
+that local copy, so reinstalling alone will not move you to a newer version.
+
+To update, refresh the marketplace first, then the plugin:
+
+```
+claude plugin marketplace update investgame
+claude plugin update investgame-skills@investgame
+```
+
+To refresh automatically from now on: `/plugin` > Marketplaces > investgame >
+Enable auto-update.
+
 This repository is generated from InvestGame's skill sources on each release.
 Issues and PRs are not monitored here - contact app@investgame.net.
 

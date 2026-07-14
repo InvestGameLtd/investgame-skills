@@ -16,7 +16,7 @@ deals). This skill removes the guessing: it is the InvestGame "house brain" runn
 | File | Purpose |
 |------|---------|
 | `SKILL.md` | The orchestrator Claude loads — golden rules + pointers to the references below |
-| `references/taxonomy.md` | Company classification — closed vocabulary + the analyst (Fira) decision rules (gaming-gate, every enum, monetization×platform logic) |
+| `references/taxonomy.md` | Company classification — closed vocabulary + InvestGame's analyst decision rules (gaming-gate, every enum, monetization×platform logic) |
 | `references/deal-taxonomy.md` | Deal classification — Type→Category derivation, edge cases, size/EV/multiple conventions |
 | `references/definitions.md` | Canonical metric buckets — the consistency layer (M&A vs fundraising, "recent", EV basis) |
 | `references/output-and-brand.md` | Answer structure, default columns, methodology line, InvestGame brand |

@@ -4,8 +4,8 @@ The closed vocabulary and the decision rules behind every InvestGame company rec
 reformulates questions into these terms and **never invents categories**. If a concept is outside this
 taxonomy, say "InvestGame doesn't track that" rather than fabricating a field.
 
-*Grounded in the InvestGame analyst ("Fira") classification rules + the production schema enums — this
-is the authoritative term set the database is built on.*
+*Grounded in InvestGame's analyst classification rules: this is the authoritative term set behind
+every InvestGame company record.*
 
 ## Contents
 1. Gaming-inclusion test · 2. Deal-inclusion gate · 3. Company type · 4. Sector & gated fields · 5. Monetization × platform

@@ -1,6 +1,6 @@
 ---
 name: investgame-analysis
-version: 0.8.0
+version: 0.8.1
 description: >
   Use whenever a request needs more than a plain data pull — anything analytical about gaming companies,
   deals, or investors: valuation and precedent multiples, deal benchmarking, comps and peer sets, premiums,

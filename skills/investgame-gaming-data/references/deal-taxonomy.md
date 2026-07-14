@@ -1,7 +1,7 @@
 # InvestGame Deal Taxonomy — deal classification & terms
 
 How a transaction maps to InvestGame's deal **Type** (specific) and **Category** (general, auto-derived
-from Type), plus the commercial-terms conventions. Grounded in the analyst ("Fira") deal-extraction rules.
+from Type), plus the commercial-terms conventions. Grounded in InvestGame's analyst deal-extraction rules.
 
 ## Type → Category
 
