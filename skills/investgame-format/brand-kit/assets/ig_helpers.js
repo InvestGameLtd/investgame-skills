@@ -36,7 +36,7 @@ const IG = {
 
 /* Chart.js global defaults. Call once after Chart.js loads, before creating
  * charts. Pass dark:true for the Dark Navy skin. Tooltips and hover are ON by
- * default in Chart.js — keep them, the on-screen deck is meant to be explored.
+ * default in Chart.js - keep them, the on-screen deck is meant to be explored.
  * IMPORTANT: every Chart.js chart on a slide that is shown/hidden must call
  * chart.resize() when its slide becomes visible (and on beforeprint) or it
  * renders at 0px on first paint / exports blank to PDF. */

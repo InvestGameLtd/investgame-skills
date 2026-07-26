@@ -1,4 +1,4 @@
-# InvestGame Gaming-Data Skill — client package
+# InvestGame Gaming-Data Skill - client package
 
 A drop-in skill that makes Claude answer gaming-investment questions at **InvestGame quality**, every
 time, from a short prompt. It pairs with the InvestGame MCP connector: the **MCP** fetches the data,
@@ -7,7 +7,7 @@ scoped and formatted instead of guessed.
 
 ## Why it exists
 
-Out of the box, an AI agent invents what it doesn't know — wrong categories ("Investment Funds"),
+Out of the box, an AI agent invents what it doesn't know - wrong categories ("Investment Funds"),
 arbitrary scope ("recent = 6 months"), inconsistent buckets (the same year returning 181 vs 104 M&A
 deals). This skill removes the guessing: it is the InvestGame "house brain" running on your side.
 
@@ -15,10 +15,10 @@ deals). This skill removes the guessing: it is the InvestGame "house brain" runn
 
 | File | Purpose |
 |------|---------|
-| `SKILL.md` | The orchestrator Claude loads — golden rules + pointers to the references below |
-| `references/taxonomy.md` | Company classification — closed vocabulary + InvestGame's analyst decision rules (gaming-gate, every enum, monetization×platform logic) |
-| `references/deal-taxonomy.md` | Deal classification — Type→Category derivation, edge cases, size/EV/multiple conventions |
-| `references/definitions.md` | Canonical metric buckets — the consistency layer (M&A vs fundraising, "recent", EV basis) |
+| `SKILL.md` | The orchestrator Claude loads - golden rules + pointers to the references below |
+| `references/taxonomy.md` | Company classification - closed vocabulary + InvestGame's analyst decision rules (gaming-gate, every enum, monetization×platform logic) |
+| `references/deal-taxonomy.md` | Deal classification - Type→Category derivation, edge cases, size/EV/multiple conventions |
+| `references/definitions.md` | Canonical metric buckets - the consistency layer (M&A vs fundraising, "recent", EV basis) |
 | `references/output-and-brand.md` | Answer structure, default columns, methodology line, InvestGame brand |
 | `references/ten-shots.md` | The proven query library across the VC workflow |
 
@@ -34,7 +34,7 @@ Your question ─► [ InvestGame skill ]            ─► [ InvestGame MCP ] �
                               (columns + methodology + brand)
 ```
 
-The skill never sees your data and adds no latency to the database — it just shapes the question going
+The skill never sees your data and adds no latency to the database - it just shapes the question going
 in and the answer coming out. When a question falls outside InvestGame's scope or is ambiguous, the MCP
 returns a lean `clarify` result (its `questions`, and sometimes `suggestions`) **instead of any data**,
 and the skill puts those questions to the user rather than guessing; a well-formed question returns the
@@ -54,7 +54,7 @@ any gaming deal / company / investor / valuation question. Connect the InvestGam
 
 ## What it deliberately won't do
 
-It declares — rather than fabricates — the things InvestGame can't self-serve: people/talent-flow,
+It declares - rather than fabricates - the things InvestGame can't self-serve: people/talent-flow,
 headcount-growth, a few advanced cuts (investor stage/geo focus, advisor league tables), and thin
 early-stage Southeast-Asia mobile equity. Those route to InvestGame custom research. Honesty here is
 what keeps the data trusted.

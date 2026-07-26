@@ -1,11 +1,11 @@
-# Ten Shots — the proven InvestGame query library
+# Ten Shots - the proven InvestGame query library
 
 Verified against the live database. Match the user's intent to the closest shot,
 then swap the geography / segment / size band. Always include "use InvestGame" and "think hard".
 
 These mirror the curated views on the InvestGame website (Notable Acquisitions, Mega Transactions,
 First-Time Exits, Most Active Investors, Most-Funded Companies…). There is no one-click "give me view X"
-button — the chat reproduces each view's logic **as a query**, so framing a question the way the data
+button - the chat reproduces each view's logic **as a query**, so framing a question the way the data
 is organised is what gets you the curated result. Reach for these before building something from scratch.
 
 ## Source & monitor
@@ -30,6 +30,6 @@ is organised is what gets you the curated result. Reach for these before buildin
 13. **Fund / LP landscape:** "Largest gaming VC/PE funds by fund size (AUM): fund name, vintage year, size USD, managing firm. Top 15."
 14. **Genre landscape:** "Over the last 3 years, gaming deal count and total disclosed value by game genre for mobile gaming content companies. Rank by deal count."
 
-## Out of scope (do not run — route to custom research)
+## Out of scope (do not run - route to custom research)
 Talent-flow / who-left-X · headcount-growth · clean SEA early-stage mobile equity. (NB: UA-financing,
-exits and any country/region geography ARE queryable — don't route those out.)
+exits and any country/region geography ARE queryable - don't route those out.)

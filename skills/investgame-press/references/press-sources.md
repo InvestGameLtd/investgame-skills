@@ -1,10 +1,10 @@
-# Press sources — the curated corpus
+# Press sources - the curated corpus
 
 The gaming-press corpus `InvestGame_press_query` reads. Filter by source name or slug
 ("only Naavik", "just Mobile Dev Memo and Game File"). Podcasts are show-notes-only: down-weight
 them and never let one lead a Big Story alone.
 
-> The LIVE roster is whatever `live_media_source` has `is_active = true` — query the table for the
+> The LIVE roster is whatever `live_media_source` has `is_active = true` - query the table for the
 > current set. The lists below are orientation, not an exhaustive registry.
 
 ## Text newsletters / blogs (lead-worthy)
@@ -29,7 +29,7 @@ The two InvestGame rows are different feeds, not duplicates: `investgame` is the
 Weekly Digest itself. For "what did InvestGame write about this deal", the digest is the one that
 lists every transaction of the week.
 
-## Podcasts (show-notes only — down-weight, never lead)
+## Podcasts (show-notes only - down-weight, never lead)
 
 The Game Business Show · Gamecraft · Two & a Half Gamers · Naavik Gaming Podcast ·
 Deconstructor of Fun Podcast · Mobile Dev Memo Podcast · The Business of Video Games Podcast.

@@ -24,8 +24,7 @@
   * Run the DEEP-DIVE REVIEW before render (sourced, anti-hallucination, devil's advocate, no machine
     artifacts: no leaked JSON, no "corrupted item" placeholders, no duplicate stories).
   * LOGO: place ig-logo-navy.png in a sibling logos/ folder next to the rendered HTML before render
-    (canonical file: ../../../investgame-format/brand-kit/assets/logos/ig-logo-navy.png). The kit's
-    default ig-logo.png has a WHITE wordmark and is invisible on the warm background - do not use it.
+    (canonical file: ../../../investgame-format/brand-kit/assets/logos/ig-logo-navy.png).
   * If a slide overflows, add class "slide-medium" or "slide-dense" to that <section> (helpers below).
   * Render with render_pdf.py from investgame-format's brand-kit/scripts/ (explicit 1280x720, zero margin).
   ===========================================================================
@@ -95,9 +94,9 @@
   sup.fn { font-family: "Inter", sans-serif; font-size: 9px; font-weight: 600; color: var(--ig-accent-deep); vertical-align: super; line-height: 0; margin-left: 1px; }
   .footnotes { position: absolute; left: 60px; right: 170px; bottom: 18px; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 9.5px; color: var(--ig-text-muted); letter-spacing: 0.01em; line-height: 1.35; }
 
-  /* InvestGame logo in the corner of every content slide. NAVY local logo: the brand-kit default
-     ig-logo.png has a white wordmark that vanishes on the warm background, so the digest points at a
-     sibling logos/ig-logo-navy.png (the render step provides it). This is the only theme deviation. */
+  /* InvestGame logo in the corner of every content slide. Navy wordmark, because the background is
+     light: that is the brand rule, not a deviation (see investgame-format brand-kit/references/logos.md).
+     Points at a sibling logos/ig-logo-navy.png, which the render step provides. */
   .slide:not(.cover-slide)::after { content: ""; position: absolute; right: 56px; bottom: 18px; width: 96px; height: 20px; background: url("logos/ig-logo-navy.png") right bottom / contain no-repeat; opacity: .9; pointer-events: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .footnotes .fn-mark { color: var(--ig-accent-deep); font-weight: 600; margin-right: 3px; font-variant-numeric: tabular-nums; }
 

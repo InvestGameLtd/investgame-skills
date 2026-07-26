@@ -1,20 +1,20 @@
 """InvestGame brand constants for programmatic builds (PowerPoint / Excel).
 
-Import these instead of re-typing hex codes — referring to colours by name is
+Import these instead of re-typing hex codes - referring to colours by name is
 how you keep a deck on-brand and avoid silent drift. Hex values are stored
 WITHOUT the leading '#'; python-pptx wants RGBColor(0x..), pptxgenjs wants the
 bare 6-char string.
 
 Two skins share one teal/navy core:
-  IG_DARK   — Dark Navy deck   (slide 13.33in x 7.5in / 16:9)
-  IG_WHITE  — Warm White deck   (slide 13.33in x 7.5in / 16:9)
+  IG_DARK   - Dark Navy deck   (slide 13.33in x 7.5in / 16:9)
+  IG_WHITE  - Warm White deck   (slide 13.33in x 7.5in / 16:9)
 Both carry the InvestGame logo. See references/pptx-and-pdf.md for the
 copy-the-template workflow.
 """
 
 # --- Shared brand core --------------------------------------------------------
 IG = {
-    "teal": "61BFB3",  # PRIMARY brand teal — both skins
+    "teal": "61BFB3",  # PRIMARY brand teal - both skins
     "teal_bright": "1ECABA",
     "teal_deep": "00928A",
     "blue": "6189D6",
@@ -61,8 +61,8 @@ IG_WHITE = {
 # never red except the rust caution tone. See references/charts.md.
 CHART_COLORS = ["61BFB3", "6189D6", "00928A", "2D5BA8", "8A95A4", "1ECABA", "8FA1B5"]
 
-POSITIVE = "00928A"  # teal-deep — "up"
-NEGATIVE = "C07B5A"  # rust — "down" / caution
+POSITIVE = "00928A"  # teal-deep - "up"
+NEGATIVE = "C07B5A"  # rust - "down" / caution
 
 # --- Typography ---------------------------------------------------------------
 # Dark Navy skin:   Helvetica Neue (Arial fallback) throughout.

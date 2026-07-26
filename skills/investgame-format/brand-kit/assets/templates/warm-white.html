@@ -1,5 +1,5 @@
 <!--
-  InvestGame — Warm White template (warm off-white, 1280x720).
+  InvestGame - Warm White template (warm off-white, 1280x720).
   COPY this file, replace placeholders in place, keep class names.
   Charts: call chart.resize() when a slide is shown.
   Render to PDF with scripts/render_pdf.py. Brand tokens: assets/ig_brand.css.
@@ -9,7 +9,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=1280, initial-scale=1">
-<title>[Region] — Warm White · InvestGame</title>
+<title>[Region] - Warm White · InvestGame</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,7 +64,7 @@
   .footnotes { position: absolute; left: 60px; right: 170px; bottom: 18px; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 9.5px; color: var(--ig-text-muted); letter-spacing: 0.01em; line-height: 1.35; }
 
   /* InvestGame logo in the corner of every content slide (colour mark on warm bg). */
-  .slide:not(.cover-slide)::after { content: ""; position: absolute; right: 56px; bottom: 18px; width: 96px; height: 20px; background: url("../logos/ig-logo.png") right bottom / contain no-repeat; opacity: .9; pointer-events: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .slide:not(.cover-slide)::after { content: ""; position: absolute; right: 56px; bottom: 18px; width: 96px; height: 20px; background: url("../logos/ig-logo-navy.png") right bottom / contain no-repeat; opacity: .9; pointer-events: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .footnotes .fn-mark { color: var(--ig-accent-deep); font-weight: 600; margin-right: 3px; font-variant-numeric: tabular-nums; }
 
   /* Visual block: ONE per slide, KPI row OR table OR chart */
@@ -167,11 +167,11 @@
   <section class="slide active cover-slide" data-id="cover">
     <div style="display:flex; flex-direction:column; height:100%; justify-content:space-between; padding-top: 8px;">
       <div style="display:flex; justify-content:space-between; align-items: baseline; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; color: var(--ig-text-muted); text-transform: uppercase; border-bottom: 1px solid var(--ig-border); padding-bottom: 12px;">
-        <img src="../logos/ig-logo.png" alt="InvestGame" style="height:26px; display:block;">
+        <img src="../logos/ig-logo-navy.png" alt="InvestGame" style="height:26px; display:block;">
         <span>[Month Year]</span>
       </div>
       <div style="text-align:left; padding-bottom: 100px;">
-        <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 60px; font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; color: var(--ig-text); margin: 0; max-width: 1080px;">[Region] — current state<br>of the gaming market</h1>
+        <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 60px; font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; color: var(--ig-text); margin: 0; max-width: 1080px;">[Region] - current state<br>of the gaming market</h1>
       </div>
       <div style="display:flex; justify-content:flex-end; align-items: baseline; font-size: 10.5px; color: var(--ig-text-muted); border-top: 1px solid var(--ig-border); padding-top: 14px; letter-spacing: 0.08em;">
         <span style="font-style: italic; letter-spacing: 0.04em;">Overview based on public sources</span>
@@ -182,58 +182,58 @@
   <!-- ============== S01 · TL;DR ============== -->
   <section class="slide" data-id="1">
     <div class="slide-meta"><span>01 / 07</span><span class="section-label">Part 1<span class="sep">·</span>Market picture</span></div>
-    <h1 class="slide-title">[Insight title — one-sentence headline takeaway for this slide]</h1>
-    <div class="slide-conclusion">[Conclusion callout — the single most important statement of the slide, with the key figure $X.X bn and the range $X.X–X.X bn across the cited sources. Keep this to two or three sentences of plain prose.]</div>
+    <h1 class="slide-title">[Insight title - one-sentence headline takeaway for this slide]</h1>
+    <div class="slide-conclusion">[Conclusion callout - the single most important statement of the slide, with the key figure $X.X bn and the range $X.X–X.X bn across the cited sources. Keep this to two or three sentences of plain prose.]</div>
 
     <div class="visual">
       <div class="kpi-row">
-        <div class="kpi hero"><div class="kpi-label">[KPI label one]<sup class="fn">1</sup></div><div class="kpi-value tabular">~XXX<span class="unit">m</span></div><div class="kpi-note">[supporting note — average across N sources; forecast ~YYY m by 20XX]</div></div>
-        <div class="kpi"><div class="kpi-label">[KPI label two]<sup class="fn">2</sup></div><div class="kpi-value tabular">$X.X<span class="unit">bn</span></div><div class="kpi-note">[supporting note — methodology and split]</div></div>
-        <div class="kpi warn"><div class="kpi-label">[KPI label three — caution metric]<sup class="fn">3</sup></div><div class="kpi-value tabular">X–Y<span class="unit">m</span></div><div class="kpi-note">[supporting note — InvestGame estimate, basis of calculation]</div></div>
+        <div class="kpi hero"><div class="kpi-label">[KPI label one]<sup class="fn">1</sup></div><div class="kpi-value tabular">~XXX<span class="unit">m</span></div><div class="kpi-note">[supporting note - average across N sources; forecast ~YYY m by 20XX]</div></div>
+        <div class="kpi"><div class="kpi-label">[KPI label two]<sup class="fn">2</sup></div><div class="kpi-value tabular">$X.X<span class="unit">bn</span></div><div class="kpi-note">[supporting note - methodology and split]</div></div>
+        <div class="kpi warn"><div class="kpi-label">[KPI label three - caution metric]<sup class="fn">3</sup></div><div class="kpi-value tabular">X–Y<span class="unit">m</span></div><div class="kpi-note">[supporting note - InvestGame estimate, basis of calculation]</div></div>
       </div>
     </div>
 
     <ul class="slide-bullets">
-      <li>[Bullet one — supporting detail with a <strong>highlighted figure</strong> and the source range across N providers.<sup class="fn">1</sup>]</li>
-      <li>[Bullet two — second supporting point with figures and an InvestGame estimate where relevant.<sup class="fn">3</sup>]</li>
-      <li>[Bullet three — methodology note explaining why the cited sources differ in scope, with the blended figure ~$X.X bn.<sup class="fn">2</sup>]</li>
+      <li>[Bullet one - supporting detail with a <strong>highlighted figure</strong> and the source range across N providers.<sup class="fn">1</sup>]</li>
+      <li>[Bullet two - second supporting point with figures and an InvestGame estimate where relevant.<sup class="fn">3</sup>]</li>
+      <li>[Bullet three - methodology note explaining why the cited sources differ in scope, with the blended figure ~$X.X bn.<sup class="fn">2</sup>]</li>
     </ul>
 
     <div class="footnotes">
-      <span><span class="fn-mark">(1)</span>Source (1) — provider, report title, date</span>
-      <span><span class="fn-mark">(2)</span>Source (2) — provider, report title, date; scope note</span>
-      <span><span class="fn-mark">(3)</span>Source (3) — InvestGame estimate; describe basis of calculation and assumptions</span>
+      <span><span class="fn-mark">(1)</span>Source (1) - provider, report title, date</span>
+      <span><span class="fn-mark">(2)</span>Source (2) - provider, report title, date; scope note</span>
+      <span><span class="fn-mark">(3)</span>Source (3) - InvestGame estimate; describe basis of calculation and assumptions</span>
     </div>
   </section>
 
   <!-- ============== S02 · Chart slide ============== -->
   <section class="slide" data-id="2">
     <div class="slide-meta"><span>02 / 07</span><span class="section-label">Part 1<span class="sep">·</span>Market picture</span></div>
-    <h1 class="slide-title">[Insight title — headline for the trend shown in the chart]</h1>
-    <div class="slide-conclusion">[Conclusion callout — interpret the chart in plain prose. All providers project a return to double-digit growth, but estimates diverge: Source A reaches $X.X bn (NN% CAGR), Source B $X.X bn (NN% CAGR), Source C ~$X.X bn (NN% CAGR). The spread reflects differences in scope.]</div>
+    <h1 class="slide-title">[Insight title - headline for the trend shown in the chart]</h1>
+    <div class="slide-conclusion">[Conclusion callout - interpret the chart in plain prose. All providers project a return to double-digit growth, but estimates diverge: Source A reaches $X.X bn (NN% CAGR), Source B $X.X bn (NN% CAGR), Source C ~$X.X bn (NN% CAGR). The spread reflects differences in scope.]</div>
 
     <div class="visual">
-      <div class="chart-wrap"><canvas id="chart-market-size"></canvas><div class="chart-caption">[Chart caption — what is plotted and the unit, e.g. market size $ bn, 20XX–20XX.]<sup class="fn">1</sup></div></div>
+      <div class="chart-wrap"><canvas id="chart-market-size"></canvas><div class="chart-caption">[Chart caption - what is plotted and the unit, e.g. market size $ bn, 20XX–20XX.]<sup class="fn">1</sup></div></div>
     </div>
 
     <ul class="slide-bullets">
-      <li>[Bullet one — read one trend line off the chart with a <strong>$X.X bn</strong> endpoint and NN% CAGR.<sup class="fn">1</sup>]</li>
-      <li>[Bullet two — read the second series, explaining its different scope.<sup class="fn">2</sup>]</li>
-      <li>[Bullet three — read the third series and note why the spread is structural.<sup class="fn">3</sup>]</li>
+      <li>[Bullet one - read one trend line off the chart with a <strong>$X.X bn</strong> endpoint and NN% CAGR.<sup class="fn">1</sup>]</li>
+      <li>[Bullet two - read the second series, explaining its different scope.<sup class="fn">2</sup>]</li>
+      <li>[Bullet three - read the third series and note why the spread is structural.<sup class="fn">3</sup>]</li>
     </ul>
 
     <div class="footnotes">
-      <span><span class="fn-mark">(1)</span>Source (1) — provider, report title, date; methodology / period convention</span>
-      <span><span class="fn-mark">(2)</span>Source (2) — provider, report title, date; scope note</span>
-      <span><span class="fn-mark">(3)</span>Source (3) — provider, report title, date; extrapolation note</span>
+      <span><span class="fn-mark">(1)</span>Source (1) - provider, report title, date; methodology / period convention</span>
+      <span><span class="fn-mark">(2)</span>Source (2) - provider, report title, date; scope note</span>
+      <span><span class="fn-mark">(3)</span>Source (3) - provider, report title, date; extrapolation note</span>
     </div>
   </section>
 
   <!-- ============== S03 · Two-column (chart left + side callout right) ============== -->
   <section class="slide" data-id="3">
     <div class="slide-meta"><span>03 / 07</span><span class="section-label">Part 2<span class="sep">·</span>Audience</span></div>
-    <h1 class="slide-title">[Insight title — headline for the two-column comparison]</h1>
-    <div class="slide-conclusion">[Conclusion callout — summarise what the chart and the side note together show, in plain prose.]</div>
+    <h1 class="slide-title">[Insight title - headline for the two-column comparison]</h1>
+    <div class="slide-conclusion">[Conclusion callout - summarise what the chart and the side note together show, in plain prose.]</div>
 
     <div style="flex: 1; display: flex; gap: 24px; min-height: 0; margin-top: 16px; width: 100%; max-width: 1160px; align-self: center; padding-bottom: 36px;">
       <div style="flex: 4; position: relative; min-height: 0;">
@@ -254,16 +254,16 @@
     </div>
 
     <div class="footnotes">
-      <span><span class="fn-mark">(1)</span>Source (1) — provider, report title, date</span>
-      <span><span class="fn-mark">(2)</span>Source (2) — provider, report title, date</span>
+      <span><span class="fn-mark">(1)</span>Source (1) - provider, report title, date</span>
+      <span><span class="fn-mark">(2)</span>Source (2) - provider, report title, date</span>
     </div>
   </section>
 
   <!-- ============== S04 · KPI + bullets ============== -->
   <section class="slide" data-id="4">
     <div class="slide-meta"><span>04 / 07</span><span class="section-label">Part 3<span class="sep">·</span>Platform mix</span></div>
-    <h1 class="slide-title">[Insight title — headline for the platform / segment KPIs]</h1>
-    <div class="slide-conclusion">[Conclusion callout — the headline figure in context, plain prose.]</div>
+    <h1 class="slide-title">[Insight title - headline for the platform / segment KPIs]</h1>
+    <div class="slide-conclusion">[Conclusion callout - the headline figure in context, plain prose.]</div>
 
     <div class="visual">
       <div class="kpi-row">
@@ -274,28 +274,28 @@
     </div>
 
     <ul class="slide-bullets">
-      <li>[Bullet one — supporting detail with figures.<sup class="fn">1</sup>]</li>
-      <li>[Bullet two — supporting detail.]</li>
-      <li>[Bullet three — supporting detail with figures.<sup class="fn">2</sup>]</li>
+      <li>[Bullet one - supporting detail with figures.<sup class="fn">1</sup>]</li>
+      <li>[Bullet two - supporting detail.]</li>
+      <li>[Bullet three - supporting detail with figures.<sup class="fn">2</sup>]</li>
     </ul>
 
     <div class="footnotes">
-      <span><span class="fn-mark">(1)</span>Source (1) — provider, report title, date</span>
-      <span><span class="fn-mark">(2)</span>Source (2) — provider, report title, date</span>
+      <span><span class="fn-mark">(1)</span>Source (1) - provider, report title, date</span>
+      <span><span class="fn-mark">(2)</span>Source (2) - provider, report title, date</span>
     </div>
   </section>
 
   <!-- ============== S05 · Matrix table ============== -->
   <section class="slide" data-id="5">
     <div class="slide-meta"><span>05 / 07</span><span class="section-label">Part 4<span class="sep">·</span>Infrastructure</span></div>
-    <h1 class="slide-title">[Insight title — headline for the table comparison]</h1>
-    <div class="slide-conclusion">[Conclusion callout — the single takeaway the table supports, plain prose.]</div>
+    <h1 class="slide-title">[Insight title - headline for the table comparison]</h1>
+    <div class="slide-conclusion">[Conclusion callout - the single takeaway the table supports, plain prose.]</div>
 
     <div class="visual" style="margin-top: 10px;">
       <table class="matrix">
         <thead><tr><th>[Row label]</th><th style="text-align:right">[Metric A]</th><th style="text-align:right">[Metric B]</th><th>[Note column]</th></tr></thead>
         <tbody>
-          <tr class="hilite"><td>[Leading row — highlighted]</td><td class="num">~XXX</td><td class="num">~XXX</td><td>[note]</td></tr>
+          <tr class="hilite"><td>[Leading row - highlighted]</td><td class="num">~XXX</td><td class="num">~XXX</td><td>[note]</td></tr>
           <tr><td>[Row two]</td><td class="num">~XX</td><td class="num">~XXX</td><td>[note]</td></tr>
           <tr><td>[Row three]</td><td class="num">~XX</td><td class="num">n/a</td><td>[note]</td></tr>
           <tr><td>[Row four]</td><td class="num">~XXX</td><td class="num">n/a</td><td>[note]</td></tr>
@@ -304,15 +304,15 @@
     </div>
 
     <ul class="slide-bullets" style="gap: 8px; margin-top: 12px;">
-      <li>[Bullet one — interpret a row of the table with figures.<sup class="fn">1</sup>]</li>
-      <li>[Bullet two — interpret another row.<sup class="fn">2</sup>]</li>
-      <li>[Bullet three — supporting context.<sup class="fn">3</sup>]</li>
+      <li>[Bullet one - interpret a row of the table with figures.<sup class="fn">1</sup>]</li>
+      <li>[Bullet two - interpret another row.<sup class="fn">2</sup>]</li>
+      <li>[Bullet three - supporting context.<sup class="fn">3</sup>]</li>
     </ul>
 
     <div class="footnotes">
-      <span><span class="fn-mark">(1)</span>Source (1) — provider, report title, date</span>
-      <span><span class="fn-mark">(2)</span>Source (2) — provider, report title, date</span>
-      <span><span class="fn-mark">(3)</span>Source (3) — provider, report title, date</span>
+      <span><span class="fn-mark">(1)</span>Source (1) - provider, report title, date</span>
+      <span><span class="fn-mark">(2)</span>Source (2) - provider, report title, date</span>
+      <span><span class="fn-mark">(3)</span>Source (3) - provider, report title, date</span>
     </div>
   </section>
 
@@ -354,7 +354,7 @@
 <div id="nav-hint">← / → or PageUp/Down · End/Home · P to print</div>
 
 <script>
-// InvestGame chart palette — teal primary, blue secondary, deep teal/blue accents.
+// InvestGame chart palette - teal primary, blue secondary, deep teal/blue accents.
 var IG = {
   bg: '#F4F3EE', text: '#0B1A2A', muted: '#5F6B7A', soft: '#8E99A6',
   accent: '#61BFB3',     // PRIMARY teal
@@ -362,7 +362,7 @@ var IG = {
   deepTeal: '#00928A',   // positive / deep teal
   deepBlue: '#2D5BA8',   // deep blue
   deep: '#3D9B8F',       // accent-deep (cover wordmark / line series)
-  warn: '#C07B5A',       // caution rust — never green
+  warn: '#C07B5A',       // caution rust - never green
   border: '#E0DFD9', card: '#FFFFFF',
   palette: ['#61BFB3', '#6189D6', '#00928A', '#2D5BA8', '#83B6CC', '#A0AEC0', '#CBD5E1', '#E8A87C']
 };
@@ -371,7 +371,7 @@ Chart.defaults.font.family = 'Inter, sans-serif';
 Chart.defaults.color = IG.text;
 Chart.defaults.borderColor = IG.border;
 Chart.defaults.animation = false;   // paint immediately so charts export to PDF reliably
-// On-brand hover tooltips, interactive on screen — hovering a category shows all series.
+// On-brand hover tooltips, interactive on screen - hovering a category shows all series.
 Chart.defaults.plugins.tooltip.backgroundColor = '#0B1A2A';
 Chart.defaults.plugins.tooltip.titleColor = '#FFFFFF';
 Chart.defaults.plugins.tooltip.bodyColor = '#FFFFFF';

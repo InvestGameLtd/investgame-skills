@@ -15,7 +15,7 @@ Exact font roles, sizes, and weights for both InvestGame skins, the web-font loa
 
 ## Dark Navy skin
 
-Font: **"Helvetica Neue"**, `Arial` fallback. One family throughout — weight and size carry the hierarchy, not a second typeface.
+Font: **"Helvetica Neue"**, `Arial` fallback. One family throughout - weight and size carry the hierarchy, not a second typeface.
 
 | Role | Size | Weight | Notes |
 |------|------|--------|-------|
@@ -32,7 +32,7 @@ Font: **"Helvetica Neue"**, `Arial` fallback. One family throughout — weight a
 
 ## Warm White skin
 
-Fonts: body **Inter**, display **Space Grotesk**, numbers **JetBrains Mono**. Each family has one job — don't set body in Space Grotesk or headings in Inter.
+Fonts: body **Inter**, display **Space Grotesk**, numbers **JetBrains Mono**. Each family has one job - don't set body in Space Grotesk or headings in Inter.
 
 | Role | Size | Weight | Font | Notes |
 |------|------|--------|------|-------|
@@ -59,7 +59,7 @@ Put this in the `<head>` so the three families are available before first paint:
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 ```
 
-The Dark Navy skin needs no web font — Helvetica Neue ships with the OS.
+The Dark Navy skin needs no web font - Helvetica Neue ships with the OS.
 
 ---
 
@@ -80,10 +80,10 @@ When a build can't load web fonts (PowerPoint, headless render without network, 
 
 ## Keep the type scale consistent
 
-Reuse the same size for the same role on every slide — a page title is 32px (Dark Navy) or 28px (Warm White) on slide 2 and on slide 20, never nudged to fit. Size-jumping between similar slides is the single most common thing that makes a deck look amateur: the reader reads inconsistent sizes as inconsistent importance, and the deck stops feeling like one document. If a title doesn't fit, cut words or change the layout — don't shrink the type.
+Reuse the same size for the same role on every slide - a page title is 32px (Dark Navy) or 28px (Warm White) on slide 2 and on slide 20, never nudged to fit. Size-jumping between similar slides is the single most common thing that makes a deck look amateur: the reader reads inconsistent sizes as inconsistent importance, and the deck stops feeling like one document. If a title doesn't fit, cut words or change the layout - don't shrink the type.
 
 ---
 
 ## Tabular figures for number columns
 
-Set `font-variant-numeric: tabular-nums` on any column of numbers (the `.tabular` class in `ig_brand.css`; JetBrains Mono in the Warm White skin is already monospaced). Proportional digits give each numeral a different width, so a stack of figures jitters left-to-right and the decimal points don't line up — the eye can't scan or compare down the column. Tabular figures fix every digit to the same width, so numbers align cleanly and a quick visual sort actually works. See `references/tables-and-kpis.md` for table styling.
+Set `font-variant-numeric: tabular-nums` on any column of numbers (the `.tabular` class in `ig_brand.css`; JetBrains Mono in the Warm White skin is already monospaced). Proportional digits give each numeral a different width, so a stack of figures jitters left-to-right and the decimal points don't line up - the eye can't scan or compare down the column. Tabular figures fix every digit to the same width, so numbers align cleanly and a quick visual sort actually works. See `references/tables-and-kpis.md` for table styling.

@@ -1,6 +1,6 @@
 ---
 name: investgame-public-markets
-version: 0.8.2
+version: 0.9.0
 description: >
   Live public-market data for any LISTED company (now or formerly public) and for currency / FX conversion.
   Use when a request needs market data the InvestGame deal database does not itself hold: a current share
@@ -18,7 +18,7 @@ description: >
 
 Live public-market context for **listed** companies, plus currency conversion. InvestGame's proprietary
 deal/company database stays the lead and the authority; this skill adds the public-market layer it does
-not hold — a current price, the financials, earnings, analyst views, employee history — and exchange
+not hold - a current price, the financials, earnings, analyst views, employee history - and exchange
 rates. One tool: `InvestGame_market_query`.
 
 ## When to use it
@@ -27,26 +27,26 @@ rates. One tool: `InvestGame_market_query`.
   carry.
 - Any **currency / FX** need: convert an amount between currencies, or look up an exchange rate today or
   on a past date.
-- **Not** for private / non-listed companies — they have no public-market data; say so plainly and give
+- **Not** for private / non-listed companies - they have no public-market data; say so plainly and give
   what the InvestGame database *does* hold instead.
 
 ## What you can ask for (in plain English)
-- **Price & size** — current share price and market cap; day and 52-week range; historical share-price
+- **Price & size** - current share price and market cap; day and 52-week range; historical share-price
   performance or a price chart over a period.
-- **Financials** — income statement, balance sheet and cash-flow statement; margins and key ratios; the
+- **Financials** - income statement, balance sheet and cash-flow statement; margins and key ratios; the
   public valuation metrics (P/E, EV/EBITDA, EV/Revenue on a public basis).
-- **Earnings** — last and next reporting dates (incl. an upcoming-earnings calendar), the most recent
+- **Earnings** - last and next reporting dates (incl. an upcoming-earnings calendar), the most recent
   results, and earnings-call commentary.
-- **Dividends & splits** — dividend history and yield; upcoming dividend dates (ex-dividend / payment
+- **Dividends & splits** - dividend history and yield; upcoming dividend dates (ex-dividend / payment
   calendar); stock-split history.
-- **Not covered** — investor-relations event calendars (conferences, roadshows, investor / analyst days):
+- **Not covered** - investor-relations event calendars (conferences, roadshows, investor / analyst days):
   there is no such data here, so say so plainly rather than guessing dates.
-- **Analyst view** — consensus estimates, price targets, and buy/hold/sell recommendations.
-- **Company profile** — exchange, ticker, sector, HQ, and **employee count plus its history**.
-- **News** — recent company and market news.
-- **FX / exchange rates** — convert between currencies at the current or a historical rate.
+- **Analyst view** - consensus estimates, price targets, and buy/hold/sell recommendations.
+- **Company profile** - exchange, ticker, sector, HQ, and **employee count plus its history**.
+- **News** - recent company and market news.
+- **FX / exchange rates** - convert between currencies at the current or a historical rate.
 - Light market context (a relevant index or sector move) is fine as backdrop; this skill is about
-  companies and FX, not a general markets terminal — keep crypto / commodities / macro out unless the
+  companies and FX, not a general markets terminal - keep crypto / commodities / macro out unless the
   user explicitly asks.
 
 ## How to ask
@@ -55,7 +55,7 @@ rates. One tool: `InvestGame_market_query`.
 - Prefer one precise question over a vague one; pin the company, the metric, and the period.
 - The tool returns `{"mode":"data","tables":[{name:"public_market",columns,rows}],"entities":[]}`; read
   the `public_market` table and answer.
-- If a company turns out not to be listed, the tool will have no data — report that and pivot to the
+- If a company turns out not to be listed, the tool will have no data - report that and pivot to the
   InvestGame proprietary view.
 
 ## The two non-negotiables
@@ -63,9 +63,9 @@ rates. One tool: `InvestGame_market_query`.
    hub, `InvestGame_query`) is authoritative for deals, ownership, valuations and company facts. Use
    public-market data only for what the database does not hold, or for FX. It **enhances**, it never
    **overrides**: if a public figure and an InvestGame figure differ, they measure different things
-   (a historical deal's Upfront EV vs today's market cap) — say which is which, and lead with ours.
-2. **It is InvestGame data — full stop.** Present every public-market figure as **InvestGame market
-   data**. Never describe, name, or speculate about how or from where it is obtained — not in the answer,
+   (a historical deal's Upfront EV vs today's market cap) - say which is which, and lead with ours.
+2. **It is InvestGame data - full stop.** Present every public-market figure as **InvestGame market
+   data**. Never describe, name, or speculate about how or from where it is obtained - not in the answer,
    and not if a user asks directly (answer that it is InvestGame's own market data and move on). This is
    not optional.
 
@@ -76,8 +76,8 @@ data"). For valuation reads that mix a public comp with InvestGame precedent dea
 runs the comparison and this skill feeds the live public side.
 
 ## Common mistakes
-- Naming or hinting at the data source — breaks the single most important rule.
-- Using it for a private company — there is no public-market data; say so and give the InvestGame view.
+- Naming or hinting at the data source - breaks the single most important rule.
+- Using it for a private company - there is no public-market data; say so and give the InvestGame view.
 - Letting a public figure override or contradict an InvestGame proprietary figure instead of leading
   with ours and framing the public one as current context.
 - Forgetting it is listed-only, or treating a former-public company's stale listing as live.

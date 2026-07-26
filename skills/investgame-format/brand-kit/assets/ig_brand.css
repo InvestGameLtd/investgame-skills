@@ -1,21 +1,21 @@
 /* ============================================================================
-   InvestGame Brand — canonical CSS token sheet
+   InvestGame Brand - canonical CSS token sheet
    ----------------------------------------------------------------------------
    Single source of truth for InvestGame colours and type. Two skins share one
-   teal/navy core — pick one per artifact:
-     • .ig-dark   — Dark Navy deck    (canvas 1456x820)
-     • .ig-white  — Warm White deck    (canvas 1280x720)
+   teal/navy core - pick one per artifact:
+     • .ig-dark   - Dark Navy deck    (canvas 1456x820)
+     • .ig-white  - Warm White deck    (canvas 1280x720)
 
    Both skins carry the InvestGame logo. The bundled templates
    (assets/templates/dark-navy.html, assets/templates/warm-white.html) inline
    their own copy of the relevant block so they render standalone. Use THIS file
    as the reference when building from scratch, and never hand-pick a hex that is
-   not defined here — off-palette colours are the fastest way to look un-branded.
+   not defined here - off-palette colours are the fastest way to look un-branded.
    ============================================================================ */
 
 /* ---- Shared brand core (present in every InvestGame artifact) ------------ */
 :root {
-  --ig-teal:        #61BFB3;   /* PRIMARY brand teal — the one colour both skins share */
+  --ig-teal:        #61BFB3;   /* PRIMARY brand teal - the one colour both skins share */
   --ig-teal-bright: #1ECABA;   /* brighter teal, big stat numerals on dark */
   --ig-teal-deep:   #00928A;   /* deep teal, emphasis / chips / positive deltas */
   --ig-blue:        #6189D6;   /* secondary blue */
@@ -23,7 +23,7 @@
 }
 
 /* ============================================================================
-   SKIN 1 — DARK NAVY  (bold, editorial; features, pitches, recaps)
+   SKIN 1 - DARK NAVY  (bold, editorial; features, pitches, recaps)
    Canvas 1456 x 820 px (16:9). Helvetica Neue. Cover + dark/light content pages.
    ============================================================================ */
 .ig-dark {
@@ -31,7 +31,7 @@
   --navy-2:    #142A44;   /* secondary dark / gradient stop */
   --teal:      #61BFB3;   /* primary brand teal */
   --teal-2:    #1ECABA;   /* brighter teal accent (big numerals) */
-  --teal-dark: #00928A;   /* deep teal — chips, emphasis, positive */
+  --teal-dark: #00928A;   /* deep teal - chips, emphasis, positive */
   --blue:      #6189D6;
   --blue-dark: #2D5BA8;
   --slate:     #8A95A4;   /* muted slate text */
@@ -48,7 +48,7 @@
 }
 
 /* ============================================================================
-   SKIN 2 — WARM WHITE  (calm, scholarly; data-dense reports, many charts/tables)
+   SKIN 2 - WARM WHITE  (calm, scholarly; data-dense reports, many charts/tables)
    Canvas 1280 x 720 px (16:9). Inter / Space Grotesk / JetBrains Mono.
    ============================================================================ */
 .ig-white {
@@ -60,9 +60,9 @@
   --ig-text-soft:     #8E99A6;   /* tertiary text, separators */
   --ig-accent:        #61BFB3;   /* primary brand teal */
   --ig-accent-hover:  #4CA89C;
-  --ig-accent-deep:   #3D9B8F;   /* deep teal — kickers, footnote marks, accents */
+  --ig-accent-deep:   #3D9B8F;   /* deep teal - kickers, footnote marks, accents */
   --ig-accent-soft:   #E6F4F2;   /* teal-tinted callout / highlighted row */
-  --ig-warn:          #C07B5A;   /* rust accent — caution / negative */
+  --ig-warn:          #C07B5A;   /* rust accent - caution / negative */
   --ig-warn-soft:     #F5E6DD;   /* rust-tinted panel */
   --ig-border:        #E0DFD9;   /* hairline border */
   --ig-border-strong: #C7C6C0;   /* stronger divider */
@@ -87,6 +87,6 @@
    1 teal #61BFB3 · 2 blue #6189D6 · 3 deep teal #00928A · 4 deep blue #2D5BA8
    5 slate #8A95A4 · 6 bright teal #1ECABA · 7 gray #8FA1B5
    Positive delta = teal #00928A. Negative / caution = rust #C07B5A.
-   Never use green — teal is the InvestGame "positive". Never use red except as
+   Never use green - teal is the InvestGame "positive". Never use red except as
    the rust caution tone above.
    --------------------------------------------------------------------------- */

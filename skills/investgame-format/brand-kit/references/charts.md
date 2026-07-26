@@ -9,16 +9,16 @@ Default to bar/column · Chart type → data shape · Palette & the two delta co
 - [Default to bar/column](#default-to-barcolumn)
 - [Chart type → data shape](#chart-type--data-shape)
 - [Palette and the two delta colours](#palette-and-the-two-delta-colours)
-- [Warm White skin — Chart.js recipe](#warm-white-skin--chartjs-recipe)
+- [Warm White skin - Chart.js recipe](#warm-white-skin--chartjs-recipe)
 - [The chart.resize() rule](#the-chartresize-rule)
-- [Dark Navy skin — no-JS CSS/HTML bars](#dark-navy-skin--no-js-csshtml-bars)
+- [Dark Navy skin - no-JS CSS/HTML bars](#dark-navy-skin--no-js-csshtml-bars)
 - [PowerPoint charts](#powerpoint-charts)
 
 ---
 
 ## Default to bar/column
 
-Reach for a bar or column chart first, and only switch when the data clearly calls for something else. Bars are the most legible encoding for the work InvestGame ships — readers compare lengths along a shared baseline far more reliably than they judge angles, areas, or slopes — and a clean column chart is the most on-brand look in either skin. A slide that paginates well and reads in two seconds beats a clever encoding that needs a caption to decode. When in doubt, bar it.
+Reach for a bar or column chart first, and only switch when the data clearly calls for something else. Bars are the most legible encoding for the work InvestGame ships - readers compare lengths along a shared baseline far more reliably than they judge angles, areas, or slopes - and a clean column chart is the most on-brand look in either skin. A slide that paginates well and reads in two seconds beats a clever encoding that needs a caption to decode. When in doubt, bar it.
 
 ---
 
@@ -26,7 +26,7 @@ Reach for a bar or column chart first, and only switch when the data clearly cal
 
 | The data is… | Use | Notes |
 |---|---|---|
-| A trend over time | **Column** (one bar per period) | Add a delta or CAGR callout — the chart shows the shape, the callout states the so-what. |
+| A trend over time | **Column** (one bar per period) | Add a delta or CAGR callout - the chart shows the shape, the callout states the so-what. |
 | Share of a single total | **Doughnut** | Preferred over pie: the centre hole carries the total or headline figure, and the thinner ring makes small slices easier to read. Keep to ≤5 slices; beyond that switch to a ranked bar. |
 | Comparison across categories | **Horizontal or vertical bar** | Horizontal when labels are long or there are many categories; vertical for a handful of short labels. Sort by value unless a natural order (time, size tier) applies. |
 | A range or valuation spread | **Range bars** (floating bars min→max) | One bar per item spanning low to high; mark the midpoint. Reads as "where the number could land", not a single point. |
@@ -49,16 +49,16 @@ Apply chart series in this fixed order so two charts never disagree on which seg
 | 6 | Teal-bright | `#1ECABA` |
 | 7 | Gray | `#8FA1B5` |
 
-This is `IG.chartColors` in `assets/ig_helpers.js` and `CHART_COLORS` in `assets/ig_helpers.py`. Take colours from the array in order — do not hand-pick.
+This is `IG.chartColors` in `assets/ig_helpers.js` and `CHART_COLORS` in `assets/ig_helpers.py`. Take colours from the array in order - do not hand-pick.
 
 Two semantic colours sit outside the series order:
 
-- **Positive delta / "up" → teal-deep `#00928A`.** Never green — green reads as generic finance-dashboard noise and dilutes the brand teal.
+- **Positive delta / "up" → teal-deep `#00928A`.** Never green - green reads as generic finance-dashboard noise and dilutes the brand teal.
 - **Negative / caution / "down" / banned → rust `#C07B5A`, used sparingly.** InvestGame charts are not red-and-green dashboards; rust is an occasional flag, not a second primary.
 
 ---
 
-## Warm White skin — Chart.js recipe
+## Warm White skin - Chart.js recipe
 
 Copy-pasteable single-series bar. Loads `igChartDefaults()` from `assets/ig_helpers.js` (sets the Inter font, muted axis labels, no tick marks, no axis border), applies the palette, turns datalabels on for the one series, draws gridlines on the value axis only, and hides the legend because a single series needs no key.
 
@@ -78,7 +78,7 @@ Copy-pasteable single-series bar. Loads `igChartDefaults()` from `assets/ig_help
       labels: ['[Cat A]', '[Cat B]', '[Cat C]', '[Cat D]'],
       datasets: [{
         data: [42, 31, 18, 9],
-        backgroundColor: IG.chartColors[0],   // teal — series 1; add more series in array order
+        backgroundColor: IG.chartColors[0],   // teal - series 1; add more series in array order
         borderWidth: 0,
         barPercentage: 0.7,
         categoryPercentage: 0.7,
@@ -107,9 +107,9 @@ To add series, append objects to `datasets` and take their `backgroundColor` fro
 
 ## The chart.resize() rule
 
-**Any Chart.js chart on a slide that is shown/hidden must call `chart.resize()` the moment its slide becomes visible.** The Warm White template paginates by toggling `.slide.active` (display none → flex), so a chart created while its slide is hidden measures a **0px container** and paints blank or as a one-pixel sliver on first view — and never recovers on its own. Resizing on show forces Chart.js to re-measure the now-visible container and lay the chart out correctly.
+**Any Chart.js chart on a slide that is shown/hidden must call `chart.resize()` the moment its slide becomes visible.** The Warm White template paginates by toggling `.slide.active` (display none → flex), so a chart created while its slide is hidden measures a **0px container** and paints blank or as a one-pixel sliver on first view - and never recovers on its own. Resizing on show forces Chart.js to re-measure the now-visible container and lay the chart out correctly.
 
-The template's pagination already does this — keep it intact when you add slides:
+The template's pagination already does this - keep it intact when you add slides:
 
 ```javascript
 function show(i) {
@@ -125,13 +125,13 @@ function show(i) {
 }
 ```
 
-If you build pagination from scratch, replicate this — every show handler iterates the slide's canvases and calls `resize()`. Symptom that you forgot: charts on the first slide look fine, charts on every later slide render blank or tiny until you nudge the window.
+If you build pagination from scratch, replicate this - every show handler iterates the slide's canvases and calls `resize()`. Symptom that you forgot: charts on the first slide look fine, charts on every later slide render blank or tiny until you nudge the window.
 
 ---
 
-## Dark Navy skin — no-JS CSS/HTML bars
+## Dark Navy skin - no-JS CSS/HTML bars
 
-The Dark Navy deck draws bars in pure CSS — no Chart.js, no canvas, nothing to resize, and it prints to PDF identically every time. A `.chart-card` (white panel, hairline border, navy header bar) holds a `.bars` grid; each `.bar-col` stacks a `.bar-total` over a `.bar-stack` whose `.bar-seg` segments are sized in pixels. The three stack classes map to the series palette:
+The Dark Navy deck draws bars in pure CSS - no Chart.js, no canvas, nothing to resize, and it prints to PDF identically every time. A `.chart-card` (white panel, hairline border, navy header bar) holds a `.bars` grid; each `.bar-col` stacks a `.bar-total` over a `.bar-stack` whose `.bar-seg` segments are sized in pixels. The three stack classes map to the series palette:
 
 - `.bar-seg.c` → teal `#61BFB3` (series 1)
 - `.bar-seg.d` → blue `#6189D6` (series 2)
@@ -177,4 +177,4 @@ Use this for the Dark Navy skin; reach for Chart.js there only when you genuinel
 
 ## PowerPoint charts
 
-PowerPoint will not pick on-brand colours — beyond the first few series it auto-assigns its own off-brand defaults — so set every series colour by hand from `CHART_COLORS` in `assets/ig_helpers.py` (hex stored **without** the leading `#`). Walk the array in order, exactly as in HTML. Prefer a doughnut over a pie for the same legibility reasons as on the web. Use `POSITIVE` (`00928A`) and `NEGATIVE` (`C07B5A`) for delta bars; never green, never a red/green dashboard. Full PowerPoint chart wiring, `hex_to_rgbcolor()` usage, and slide sizing are in **references/pptx-and-pdf.md**.
+PowerPoint will not pick on-brand colours - beyond the first few series it auto-assigns its own off-brand defaults - so set every series colour by hand from `CHART_COLORS` in `assets/ig_helpers.py` (hex stored **without** the leading `#`). Walk the array in order, exactly as in HTML. Prefer a doughnut over a pie for the same legibility reasons as on the web. Use `POSITIVE` (`00928A`) and `NEGATIVE` (`C07B5A`) for delta bars; never green, never a red/green dashboard. Full PowerPoint chart wiring, `hex_to_rgbcolor()` usage, and slide sizing are in **references/pptx-and-pdf.md**.

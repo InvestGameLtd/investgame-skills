@@ -17,19 +17,26 @@ Full per-surface guide: <https://app.investgame.net/setup>
 
 ## Updating
 
-Claude keeps a local copy of this marketplace and, for third-party marketplaces,
-does **not** refresh it on its own. Installing or reinstalling the plugin reads
-that local copy, so reinstalling alone will not move you to a newer version.
+Reinstalling does **not** update the plugin, on any surface: `install` does
+nothing when the plugin is already there. How you actually update depends on
+where you run Claude.
 
-To update, refresh the marketplace first, then the plugin:
+**Claude Code.** Refresh the catalogue, then the plugin. Both are needed: without
+the first, the second can report you are already current when you are not.
 
 ```
 claude plugin marketplace update investgame
 claude plugin update investgame-skills@investgame
 ```
 
-To refresh automatically from now on: `/plugin` > Marketplaces > investgame >
-Enable auto-update.
+To keep it current automatically: `/plugin` > Marketplaces > investgame > Enable
+auto-update. It is off by default for third-party marketplaces.
+
+**Claude.ai, Desktop and Cowork.** These serve plugins from your account rather
+than from your machine, and can keep serving an older version than the one
+published here. No command forces a refresh. If you need to be certain you are on
+the current skills, install them directly from <https://app.investgame.net/setup>,
+which are rebuilt from our live deployment on every download.
 
 This repository is generated from InvestGame's skill sources on each release.
 Issues and PRs are not monitored here - contact app@investgame.net.

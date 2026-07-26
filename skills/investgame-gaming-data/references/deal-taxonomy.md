@@ -1,4 +1,4 @@
-# InvestGame Deal Taxonomy — deal classification & terms
+# InvestGame Deal Taxonomy - deal classification & terms
 
 How a transaction maps to InvestGame's deal **Type** (specific) and **Category** (general, auto-derived
 from Type), plus the commercial-terms conventions. Grounded in InvestGame's analyst deal-extraction rules.
@@ -22,20 +22,20 @@ from Type), plus the commercial-terms conventions. Grounded in InvestGame's anal
 - Pre-existing stake + acquisition of the rest → `MA_CONTROL` for the new transaction (note prior stake).
 - de-SPAC / SPAC merger / direct listing / ATM / secondary listing → `LISTING`.
 - MBO → `MA_CONTROL` (note in description).
-- **UA-financing** (`UA_FINANCING`) is a real, queryable deal type — ask for it directly when you want
-  it — but by InvestGame methodology it is **excluded from headline fundraising/M&A totals** (not
+- **UA-financing** (`UA_FINANCING`) is a real, queryable deal type - ask for it directly when you want
+  it - but by InvestGame methodology it is **excluded from headline fundraising/M&A totals** (not
   comparable to equity or M&A). `OTHER`, dev-financing and licensing are excluded from analytics and
-  aren't part of the queryable set — never count them.
+  aren't part of the queryable set - never count them.
 
 ## Exit path (control M&A and listings)
 
-Control acquisitions and listings carry an **exit path** — how founders or earlier owners cashed out.
+Control acquisitions and listings carry an **exit path** - how founders or earlier owners cashed out.
 It is a derived filter you can query (ask for "exits" or "first-time exits"):
-- `FIRST_TIME_EXIT_MA` — founders/early backers cash out for the first time by selling control.
-- `FIRST_TIME_EXIT_IPO_SPAC` — the first exit is by going public.
-- `PUBLIC_TAKEOVER` — an already-public company is taken private.
-- `CARVE_OUT` — a parent sells a division/asset, or a JV is unwound.
-- `SECONDARY_EXIT` — a repeat exit (one financial owner sells to another, a re-sale or re-listing).
+- `FIRST_TIME_EXIT_MA` - founders/early backers cash out for the first time by selling control.
+- `FIRST_TIME_EXIT_IPO_SPAC` - the first exit is by going public.
+- `PUBLIC_TAKEOVER` - an already-public company is taken private.
+- `CARVE_OUT` - a parent sells a division/asset, or a JV is unwound.
+- `SECONDARY_EXIT` - a repeat exit (one financial owner sells to another, a re-sale or re-listing).
 The First-Time Exits and Public-to-Private question patterns are built on these.
 
 ## Participants
@@ -56,8 +56,7 @@ All monetary values are **millions, reported currency**; `Size, $M` = Size / FX 
 units of reported currency per 1 USD** (USD deal → 1.0).
 
 ## Valuation & multiples conventions
-- **Upfront Enterprise Value** (100%-basis) is the anchor for all EV/Revenue & EV/EBITDA multiples —
-  **never** the transaction/Max EV.
+- **Upfront Enterprise Value** (100%-basis) is the anchor for all EV/Revenue & EV/EBITDA multiples -  **never** the transaction/Max EV.
 - Distinguish **deferred** (fixed, delayed payment) from **earn-out** (contingent, performance-based).
 - **Earn-out 0 vs "-":** `0` = source confirms no earn-out; `"-"` = unknown/undisclosed. Never use "-"
   when the source confirms there is none.
@@ -67,6 +66,6 @@ units of reported currency per 1 USD** (USD deal → 1.0).
 
 ## For querying (what this means for the agent)
 - "M&A" → category `MA`; "fundraising/VC" → early + late stage; "raised capital" → all except `OTHER`.
-- "growth round" spans `SERIES_B+`, `GROWTH_OR_EXPANSION`, and `UNDISCLOSED_LATE_STAGE` — confirm scope.
+- "growth round" spans `SERIES_B+`, `GROWTH_OR_EXPANSION`, and `UNDISCLOSED_LATE_STAGE` - confirm scope.
 - For valuation questions, default to **EV/Revenue (LTM)** on the Upfront EV basis and state it in the
   methodology line. Exclude undisclosed sizes from totals; include all deals in counts/trends.
