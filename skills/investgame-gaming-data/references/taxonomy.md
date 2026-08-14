@@ -23,20 +23,33 @@ game mechanics (Consumer Apps - §7).
 (unless licensed game IP); generic PR / brand / marketing; adjacent tech with no gaming use-case.
 
 These are still TRACKED companies: they carry the sector `OTHER` ("Other (non-covered sector)") with
-no gaming-gated fields, and several are listed companies whose earnings InvestGame follows
-(DraftKings, MGM Resorts, Entain). They are EXCLUDED from gaming sector totals - so they are
-answerable, but they never inflate a gaming number.
+no gaming-gated fields, and several are listed companies whose earnings InvestGame follows. They are
+EXCLUDED from gaming sector totals - so they are answerable, but they never inflate a gaming number.
 
 The line analysts apply most: **a casino game is content; a casino operator is out of the gaming
-sectors** - tracked, but under sector `OTHER`.
+sectors** - tracked, but under sector `OTHER`. A studio that *makes* casino games is Gaming Content
+even when those games pay out real money and its customers are operators, because it produces games
+rather than taking wagers.
+
+**AI and ML companies.** AI is horizontal, so "uses AI" or "could be used for games" is not enough.
+A company is **IN** when gaming or interactive media is a real market it serves **and there is
+evidence of that connection**: gaming is a declared market with a real product; the product is sold
+into game-making (assets, audio, dev tools, SDKs, engines, distribution); or the output is itself
+game or playable content. The served market decides it, not the media type: a generative video or
+audio tool marketed to game studios is in, while the same technology sold only to film or advertising
+creators is out. Evidence means gaming customers, gaming use, or a gaming-specific product - not a
+TAM line, a single logo, a gaming investor on the cap table, or training data. Without it the company
+is generic AI: tracked under sector `OTHER`, outside every gaming sector. Borderline cases are
+editorial decisions, made case by case.
 
 ## 2 · Deal-inclusion gate (is it a tracked deal?)
 
 Tracked: equity rounds (early & late), M&A (control & minority), IPOs/listings, VC/PE fund raises,
-and **UA-financing** (`UA_FINANCING` - a real, queryable deal type, just kept out of headline
-fundraising/M&A totals by methodology). Not tracked: buybacks, partnerships, sponsorships,
-restructurings with no new capital, internal reorganisations; dev-financing and licensing are not in
-the queryable set at all, and `OTHER` is excluded from analytics totals.
+and **UA-financing** (`UA_FINANCING` - its own first-class visible deal category, counted in general
+analytics and held out only of the quarterly report; it is neither fundraising nor M&A, so it never
+sat inside those buckets). Not tracked: buybacks, partnerships, sponsorships, restructurings with no
+new capital, internal reorganisations. Development financing, licensing and `OTHER_MISC` are hidden
+from the data entirely and are not queryable.
 *(Full deal classification → `deal-taxonomy.md`.)*
 
 ## 3 · Company type (pick exactly one)
@@ -69,11 +82,13 @@ sector (a real-money gambling operator, a large non-gaming AI or hardware firm).
 (never combined with another sector), carries **no** gaming-gated fields, and is excluded from gaming
 sector totals. Distinct from `gamified_subsegment.OTHER` and `ecosystem_segment.OTHER`, which are
 filler values INSIDE a covered sector.
-**Features**: `AI_OR_ML` · `BLOCKCHAIN_OR_WEB3` · `UGC_MODDING` · `CASH_OR_SKILL_BASED_OR_RMG` are sector-agnostic (any sector). `SHORT_DRAMA` is the exception - short drama is a Consumer Apps content vertical, so it applies only to companies whose sectors include `CONSUMER_APPS`.
+**Features** (six values): `AI_OR_ML` · `BLOCKCHAIN_OR_WEB3` · `UGC_MODDING` · `CASH_OR_SKILL_BASED_OR_RMG` · `UA_FINANCING` are sector-agnostic (any sector). `SHORT_DRAMA` is the exception - short drama is a Consumer Apps content vertical, so it applies only to companies whose sectors include `CONSUMER_APPS`.
+
+`UA_FINANCING` as a **feature** marks an investor that provides non-dilutive user-acquisition capital; it is an investor-role tag, not an attribute of a studio's product. It is distinct from the `UA_FINANCING` **deal type and deal category** (`deal-taxonomy.md`). To find UA-financing providers, filter companies on this feature rather than counting deals.
 *(Use `BLOCKCHAIN_OR_WEB3` to include/exclude crypto-gaming - 2021–22 data is Web3-heavy.)*
 
 What each feature flag means (it tags a product capability, NOT a company category):
-- `AI_OR_ML` - the product uses AI/ML *inside the game or tooling*. **It does NOT mean "an AI-focused company"**: it is a capability flag and also catches large publishers using AI internally. To build the "AI in gaming" set, apply the gaming-inclusion AI gate (three triggers: a declared gaming market, building into the game pipeline, or a playable real-time output; general-purpose AI like OpenAI and linear media generation like Suno / Luma are out), then read `AI_OR_ML` as the in-set capability flag, not as the inclusion filter on its own.
+- `AI_OR_ML` - the product uses AI/ML *inside the game or tooling*. **It does NOT mean "an AI-focused company"**: it is a capability flag and also catches large publishers using AI internally. To build the "AI in gaming" set, first apply the gaming-inclusion AI gate (§1: gaming must be a real market the company serves, with evidence of that connection), then read `AI_OR_ML` as the in-set capability flag, not as the inclusion filter on its own.
 - `UGC_MODDING` - the product centres on user-generated content or modding (creation/sharing by players).
 - `CASH_OR_SKILL_BASED_OR_RMG` - real-money or skill-based wagering mechanics *inside a game*; this tags content, it is not the casino-operator exclusion (see §1).
 
@@ -146,9 +161,10 @@ The deciding test for the top two is **build vs operate.**
 | `HARDWARE` | - | peripherals, consoles, controllers, VR/AR headsets, gaming PCs |
 | `OTHER` | - | ecosystem firms fitting nothing above (retail/merch) |
 
-`ecosystem_type` = `B2C` (gamers) or `B2B` (companies). *(Note: UA-financing **companies** are
-`INFRASTRUCTURE_SERVICES` ecosystem; UA-financing **deals** are queryable but excluded from headline
-fundraising/M&A totals.)*
+`ecosystem_type` = `B2C` (gamers) or `B2B` (companies). *(Note: to find UA-financing **providers**,
+filter on the company feature `UA_FINANCING` (§4). It is valid on VC, PE and Strategic/CVC companies,
+so the ecosystem segment alone undercounts the roster. UA-financing **deals** are their own visible
+deal category, counted in general analytics and held out only of the quarterly report.)*
 
 ## 8 · Consumer Apps (gamified, non-game B2C)
 

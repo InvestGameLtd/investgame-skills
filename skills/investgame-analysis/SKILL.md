@@ -1,6 +1,6 @@
 ---
 name: investgame-analysis
-version: 0.9.0
+version: 0.9.1
 description: >
   Use whenever a request needs more than a plain data pull - anything analytical about gaming companies,
   deals, or investors: valuation and precedent multiples, deal benchmarking, comps and peer sets, premiums,
@@ -53,7 +53,8 @@ execute - don't keep asking. Be helpful, not annoying.
 - The never-break-silently rule. Gaming deals usually disclose only ONE profit metric. If the one asked for
   isn't there, show the next available one WITH A NOTE - don't return nothing. For profit multiples, prefer
   EBITDA, then EBIT, then Cash-EBITDA (by how often it's disclosed) unless the user asked for a specific one.
-  For periods, prefer LTM (trailing), then CYO (current-year), then NTM (forward). Example note: "Mostly
+  For periods, prefer LTM (trailing twelve months), then CY0 (the calendar year OF THE ANNOUNCEMENT,
+  not the current year, written with a zero), then NTM (forward). Example note: "Mostly
   EV/EBITDA LTM; for a few deals only EV/EBIT was disclosed, flagged in the table." Silently dropping a deal
   because the exact metric is missing is worse than showing the nearest one with a note.
 - Same idea for connected fields. If the exact field is blank but a related one is present, show the related

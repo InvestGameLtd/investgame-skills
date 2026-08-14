@@ -16,7 +16,7 @@ How every answer should look so it reads as InvestGame, not as a raw database du
 
 3. **Always append a methodology line** - period, geography, included/excluded. Example:
    *"M&A = category MA; mobile = MOBILE platform; sizes USD m, undisclosed excluded from totals;
-   last 18 months by announcement date."*
+   last 18 months by effective date."* Name the anchor the `assumptions` actually report.
 4. **Flag gaps, never fill them:** "undisclosed", "n/d", "insufficient public data". Never invent a figure.
 5. **Numbers tabular, right-aligned, USD millions** unless asked otherwise. Link entities to their
    InvestGame pages when the tool returns URLs.

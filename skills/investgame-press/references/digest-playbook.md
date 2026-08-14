@@ -58,7 +58,7 @@ padded.**
 | 1 | **Executive Brief** | fixed | scan+narrative | 5-7 bullets, each a sourced fact + computed counts (posts, sources, deals, movers) + the clickable TOC |
 | 2 | **Big Stories** | fixed (>=1) | narrative | 3-6 convergence-ranked clusters; each = what-happened + DB overlay + attributed source take + source links |
 | 3 | **Deals desk** | body | narrative | M&A + fundraising in the window from `InvestGame_query` (DB-authoritative); optional Content / Ecosystem split |
-| 4 | **Public-Markets desk** | body | narrative | Movers by segment + AdTech, earnings, and public offerings / IPOs from `InvestGame_market_query` |
+| 4 | **Public-Markets desk** | body | narrative | Movers by index segment and earnings from `InvestGame_press_query`; public offerings / IPOs from `InvestGame_query` |
 | 5 | **Coverage Sweep** | fixed | scan | The 5 by-nature facets, each a short sourced list |
 | 6 | **The Wire** | fixed | scan | The long tail, link-only, one line each |
 | 7 | **Reading List** | body | scan | Notable long-form / essays / teardowns worth the click |
@@ -105,7 +105,7 @@ the importance signal.
       deep-dive review (Stage 6) is told to hunt for.
 - [ ] **A transactions-tagged cluster is a routing signal, not a desk.** Posts tagged `transactions` flag
       a deal the press is discussing; the **deal itself is owned by the Deals or Public-Markets desk**
-      (the DB is authoritative, ~95% coverage). The press cluster becomes attributed *commentary* overlaid
+      (the DB is the authoritative record). The press cluster becomes attributed *commentary* overlaid
       on the DB deal, never the source of the deal figures. See Stage 4.
 
 ---
@@ -144,7 +144,7 @@ press. The press only overlays attributed commentary.
 
 ### Deals desk (via `InvestGame_query`)
 - [ ] Pull **M&A and fundraising deals in the window** from `InvestGame_query` (the deal database is the
-      authoritative record, ~95% coverage of gaming M&A / funding / IPO). Date by **effective date**
+      authoritative record for gaming M&A, funding and IPOs). Date by **effective date**
       (the close date, or the announcement date when not yet closed), matching the InvestGame quarterly
       convention.
 - [ ] Default deal-list columns (mirror the app): target, country, deal type, size USD, date, lead investor;

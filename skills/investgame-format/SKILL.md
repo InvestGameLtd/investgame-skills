@@ -1,6 +1,6 @@
 ---
 name: investgame-format
-version: 0.9.0
+version: 0.9.1
 description: >
   Presentation layer for every InvestGame answer - decide how to show it and, when asked, render it
   on-brand. Use on ANY answer that benefits from being presented well, not only file requests: whenever
@@ -61,7 +61,9 @@ Multiples and comps have a standard, recognisable look - use it whenever you sho
 - Colour the bars by a meaningful category (monetization, platform, or deal type), with a short legend, so
   the pattern is visible at a glance.
 - Below the chart, a table of the deals: date · target · acquirer/investor · EV ($M) · the multiple · the
-  period (LTM/CYO/NTM) and metric (EV/EBITDA vs EV/EBIT) · the category as a tag.
+  period (LTM / CY0 / NTM, CY0 with a zero) and metric (EV/Revenue, EV/EBITDA, EV/EBIT or
+  EV/Cash EBITDA) · the category as a tag. Label the EV column with its basis when the set mixes
+  categories: M&A is Upfront EV, a round is post-money, a listing is market cap.
 - A one-line source note ("Source: InvestGame") and any caveat (e.g. which metric/period mix was used, per
   the never-break-silently rule in investgame-analysis).
 Analysis chooses the comps and the fields; you make them read like a comp set.
@@ -77,10 +79,11 @@ Analysis chooses the comps and the fields; you make them read like a comp set.
   click any name and land on the record. Base URL: `https://app.investgame.net` (always the `app.` subdomain).
   - Deal → `https://app.investgame.net/deals/{deal_id}`
   - Company → `https://app.investgame.net/companies/{company_id}`
-  - Index → `https://app.investgame.net/market-indices/{slug}`
-  The ids come from the response's `entities` array (`{type, id, url}`) - that `url` is authoritative, use it
-  directly. When you only have an id (a table cell), build the URL from the pattern above. Never link the bare
-  `investgame.net/...` host (it 404s), and never invent a link from a name - if there is no id, leave the name
+  - Index → `https://app.investgame.net/market-indices/{index_code}`
+  Deal and company ids come from the response's `entities` array (`{type, id, url}`) - that `url` is
+  authoritative, use it directly. Those are the only two entity kinds the tool emits; an index link is
+  built by hand. When you only have an id (a table cell), build the URL from the pattern above. Always
+  use the `app.` subdomain, and never invent a link from a name - if there is no id, leave the name
   unlinked rather than guess.
 - Numbers right-aligned, USD millions unless stated, consistent decimals; lead the eye to the takeaway.
 

@@ -1,6 +1,6 @@
 ---
 name: investgame-press
-version: 0.9.0
+version: 0.9.1
 description: >
   The gaming-press layer of the InvestGame skills - what the industry's newsletters and shows are
   publishing, and the fortnightly "Gaming Pulse" digest built from them. Use the moment a question is about
@@ -59,7 +59,7 @@ within-item "X-based" tag):
 5. **Industry & platform trends** - policy, regulation, platform shifts, market reports & data.
 
 A sixth tag, **Transactions** (M&A / fundraising / IPO), is only a *routing tag*: those facts come from
-the **authoritative InvestGame deal & market data (~95% coverage)**, never from the editorial sweep.
+the **authoritative InvestGame deal & market data**, never from the editorial sweep.
 When a press item discusses a deal, overlay it onto the DB deal - don't count it from the press.
 
 ## The tool - `InvestGame_press_query` (this skill owns it)
@@ -82,8 +82,8 @@ by this one tool, and nothing else routes here.
 
 ## The two non-negotiables
 
-1. **Transactions are DB-authoritative, never press-counted.** The InvestGame deal database covers ~95%
-   of M&A, fundraising and IPOs. Press deal-commentary is *overlay only* - attributed context on top of
+1. **Transactions are DB-authoritative, never press-counted.** The InvestGame deal database is the
+   authoritative record for M&A, fundraising and IPOs. Press deal-commentary is *overlay only* - attributed context on top of
    the DB figure, never the figure itself. For any transaction count, size, or multiple, the number
    comes from `InvestGame_query` (hub); public offerings, movers and earnings come from the
    Public-Markets desk. The press never overrides a proprietary figure.
@@ -115,8 +115,11 @@ clickable TOC) · **≥1 Big Story** · Coverage Sweep · The Wire · Methodolog
 - **Press desk** (this skill, `InvestGame_press_query`) - the Big Stories + the Coverage Sweep.
 - **Deals desk** (`investgame-gaming-data`, `InvestGame_query`) - M&A + fundraising from the DB,
   optionally split Content vs Ecosystem by our sector tags. DB-authoritative.
-- **Public-Markets desk** (`investgame-public-markets`, `InvestGame_market_query`; IPOs from the hub) -  weekly share-price **movers bucketed by the five content segments + AdTech**; latest **earnings**
-  (EPS surprise / revenue / market reaction); and **public offerings / IPOs / listings**.
+- **Public-Markets desk** - **movers and earnings come from `InvestGame_press_query`** (this skill), the
+  tool that reads InvestGame's recorded price signals, earnings releases and index membership. Movers are
+  the threshold-breaching share-price moves recorded in the window, bucketed by index segment, not a
+  recomputed weekly change. **Public offerings / IPOs / listings come from the hub** (`InvestGame_query`).
+  Use `investgame-public-markets` only for a live quote or a full financial statement on one company.
 
 **Cluster by CONVERGENCE, not entity.** Group posts that describe the *same story*; the count of
 independent newsletters covering it is its importance signal. (The old system clustered on *entity* and

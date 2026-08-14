@@ -74,7 +74,9 @@ When a build can't load web fonts (PowerPoint, headless render without network, 
 | JetBrains Mono | Consolas |
 | Helvetica Neue | Arial |
 
-(`FONTS_FEATURE` and `FONTS_REPORT` in `ig_helpers.py` carry these for python-pptx / openpyxl builds.)
+(`FONTS_DARK` and `FONTS_WHITE` in `ig_helpers.py` carry the brand faces for python-pptx / openpyxl
+builds. They hold the brand faces themselves, not the fallback table above: `FONTS_DARK` carries a
+`fallback` key, `FONTS_WHITE` does not.)
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.9.0
+version: 0.9.1
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -36,9 +36,10 @@ this skill makes the answer reliable.
    as "no data found", and never fill the gap from memory. When every dimension is pinned in the
    question, proceed and state the methodology (§4).
 4. **Call the InvestGame connector's `InvestGame_query` tool** (your host may show it fully-qualified,
-   e.g. `InvestGame:InvestGame_query`) with a natural-language prompt, and **always pass `use InvestGame`
-   and `think hard`**. Prefer one precise prompt over a vague one - vague prompts are the main cause of
-   weak answers. If a well-formed query returns no rows, re-ask once naming the company/entity explicitly
+   e.g. `InvestGame:InvestGame_query`) with a natural-language prompt. What matters is precision, not
+   any magic words: a phrase like "use InvestGame" is ignored, and it never acts as a company-name
+   filter. Prefer one precise prompt over a vague one - vague prompts are the main cause of weak
+   answers. If a well-formed query returns no rows, re-ask once naming the company/entity explicitly
    before concluding the data isn't there.
 5. **Never present a number without its scope.** Every data answer ends with a one-line methodology
    note (§4).
@@ -57,37 +58,47 @@ this skill makes the answer reliable.
    conversely, transactions in a digest are DB-authoritative and come back from this hub, never counted
    from the press.
 7. **Handle the two response modes.** `InvestGame_query` returns exactly one of two lean shapes:
-   `{"mode":"clarify","questions":[...],"suggestions"?,"reason"?}` - ask the user those `questions`
-   verbatim (offering any `suggestions`), then call again with their answer; do not reformulate the
-   question yourself - or
+   `{"mode":"clarify","reason_code":"out_of_scope"|"needs_clarification","questions":[...],"suggestions"?,"reason"?}`
+   - ask the user those `questions` verbatim (offering any `suggestions`), then call again with their
+   answer; do not reformulate the question yourself. `reason_code` is always present and tells you what
+   to do next: `out_of_scope` means InvestGame does not track this, so stop retrying;
+   `needs_clarification` means the question is underspecified, so ask and call again. Or
    `{"mode":"data","tables":[{name,columns,rows}],"entities":[{type,id,url}]}` - read the tables and
-   answer, linking each entity via its `url` (always on `https://app.investgame.net` - the `app.`
-   subdomain; the bare `investgame.net` host 404s). Deal → `/deals/{id}`, company → `/companies/{id}`,
-   index → `/market-indices/{slug}`. A `data` reply may also carry a `status` flag: `"failed"` means
+   answer, linking each entity via its `url` (always on `https://app.investgame.net`, the `app.`
+   subdomain). The tool emits two entity kinds only: company → `/companies/{id}` and deal →
+   `/deals/{id}`. A `data` reply may also carry a `status` flag: `"failed"` means
    the lookup could not be completed (tell the user it failed; never present it as "no results found"),
    `"partial"` means answer with what came back but flag it as incomplete, and no `status` key means the
    answer is complete. Presentation detail lives in `investgame-format`.
 8. **Always state the `assumptions`.** A `data` reply may carry `"assumptions":[...]`: the scope
    decisions that shaped the result, above all **which date the period filtered on**. Never drop
-   these: they change what the numbers mean. "Closed in Q2" and "announced in Q2" are different
-   populations, not phrasing. A round is *announced*, and many never record a closed date, so a
-   closed-date window omits deals announced in the period but not yet closed. Ranking a quarter on
-   the closed anchor can understate the top deal several-fold. If the user wants "the deals of Q2",
-   they almost always mean **announced**: say which anchor you used, and offer the other.
+   these: they change what the numbers mean. There are two anchors and they select different
+   populations, not different phrasings of one:
+   - **Effective date** (`closed_date` falling back to `announcement_date`) is the **default**, and
+     it is what the site filter, the curated views and the quarterly reports all use.
+   - **Announcement date** is used when the user asks for it explicitly.
+
+   A closed-date window omits deals announced in the period but not yet closed, and many rounds never
+   record a close date at all. So report which anchor the `assumptions` name, and offer the other when
+   the difference could matter.
 
 ## 1 · The taxonomy - the only allowed vocabulary
 
 **Sectors** (a company can have several): `GAMING_CONTENT` · `GAMING_ECOSYSTEM` · `CONSUMER_APPS` · `OTHER`.
-`OTHER` = tracked, but outside every covered gaming sector (real-money gambling operators such as
-DraftKings, MGM Resorts, Entain). Exclusive, carries no gaming fields, and is EXCLUDED from gaming
-sector totals - pull it only when the user asks about those companies specifically.
+`OTHER` = tracked, but outside every covered gaming sector: real-money gambling and betting operators,
+generic AI companies with no evidenced gaming market, and other adjacent firms we follow without
+counting them as gaming. Exclusive (never combined with another sector), carries no gaming fields, and
+is EXCLUDED from gaming sector totals - pull it only when the user asks about those companies
+specifically. Note the line: a studio that *makes* casino games is `GAMING_CONTENT` (genre `CASINO`),
+even when the games pay out real money; only the operator taking the wagers sits in `OTHER`.
 
 **Platform** (GAMING_CONTENT only): `MOBILE` · `PC_CONSOLE` · `BROWSER` · `VR_AR`.
 - "mobile" → `MOBILE`; "PC / console / AAA" → `PC_CONSOLE`; "browser/HTML5" → `BROWSER`; "VR/AR/XR" → `VR_AR`.
 
-**Game genre** (GAMING_CONTENT): `PUZZLE` (incl. match-3/merge/word) · `SHOOTER` · `ACTION_RPG` ·
-`STRATEGY_MOBA` · `CASINO` (casino *games*, not operators) · `SIMULATION_SANDBOX` · `SPORTS_RACING` ·
-`ARCADE` (incl. hypercasual) · `TABLETOP` (card/board).
+**Game genre** (GAMING_CONTENT, ten values): `PUZZLE` (incl. match-3/merge/word) · `SHOOTER` ·
+`ACTION_RPG` · `STRATEGY_MOBA` · `CASINO` (casino *games*, not operators) · `SIMULATION_SANDBOX` ·
+`SPORTS_RACING` · `ARCADE` (incl. hypercasual) · `TABLETOP` (card/board) · `OTHER` (nothing else
+fits; a genre breakdown will return `OTHER` rows, so name it rather than dropping them).
 
 **Monetization** (GAMING_CONTENT): `IAP` (F2P/in-app purchases) · `IAA` (ad-supported) ·
 `GAAS` (live service - *not* mobile-specific) · `UPFRONT_SALE` (premium/buy-to-play) ·
@@ -106,21 +117,27 @@ game - engines/tools) · `INFRASTRUCTURE_SERVICES` (helps *run/scale* - cloud, a
 **Company type:** `ANGELS_INDIVIDUALS` · `VENTURE_CAPITAL_AND_ACC` · `PRIVATE_EQUITY_AND_INST` ·
 `STRATEGIC_OR_CVC` · `SERVICE_PROVIDERS` (banks/advisors/law firms) · `ASSET` (IP/franchise) · `OTHER`.
 
-**Deal category:** `MA` (types `MA_CONTROL`, `MA_MINORITY`) · `EARLY_STAGE_INVESTMENT`
-(Seed, Series A, accelerator, undisclosed-early) · `LATE_STAGE_INVESTMENT` (Series B–H, growth,
-undisclosed-late) · `PUBLIC_OFFERING` (IPO/SPAC/listing) · `OTHER` (always excluded).
+**Deal category** (five visible): `MA` (types `MA_CONTROL`, `MA_MINORITY`) · `EARLY_STAGE_INVESTMENT`
+(accelerator/grant, Seed, Series A, undisclosed-early) · `LATE_STAGE_INVESTMENT` (Series B to H,
+growth/expansion, undisclosed-late) · `PUBLIC_OFFERING` (`LISTING`, `PIPE`, `FIXED_INCOME`) ·
+`UA_FINANCING` (its own first-class category, counted in general analytics and held out only of the
+quarterly report). A sixth category, `OTHER`, holds only the three hidden types and is never
+queryable: **19 visible types across 5 visible categories**.
 
 **Deal type → display label** (a deal's `type` comes back as a raw code - render its InvestGame label, never
 the code): `MA_CONTROL`→"M&A control (incl. LBO/MBO)" · `MA_MINORITY`→"M&A minority" · `SEED`→"Pre-Seed/Seed" ·
 `SERIES_A`…`SERIES_H`→"Series A"…"Series H" · `GROWTH_OR_EXPANSION`→"Growth / Expansion" ·
-`ACCELERATOR_GRANT`→"Accelerator / Grant" · `LISTING`→"Listing (IPO/SPAC)" · `PIPE`→"PIPE" ·
-`FIXED_INCOME`→"Fixed Income" · `UA_FINANCING`→"UA Financing" · `OTHER_MISC`→"Other".
+`ACCELERATOR_GRANT`→"Accelerator / Grant" · `UNDISCLOSED_EARLY_STAGE`→"Undisclosed Early-stage" ·
+`UNDISCLOSED_LATE_STAGE`→"Undisclosed Late-stage" · `LISTING`→"Listing (IPO/SPAC)" · `PIPE`→"PIPE" ·
+`FIXED_INCOME`→"Fixed Income" · `UA_FINANCING`→"UA Financing". Development financing, licensing and
+`OTHER_MISC` are hidden and never come back from a query.
 
 **Region maps** (use the country lists, not granular sub-regions):
 - Europe → GB, DE, FR, SE, NO, DK, FI, CH, NL, BE, AT, IT, ES, PT, PL, IE, CZ, RO
 - Asia/APAC → JP, KR, CN, SG, AU, NZ, IN, TW, HK, TH, ID, VN, MY, PH
 - North America → US, CA · LATAM → BR, MX, AR, CO, CL, PE
-- MENA (gaming-relevant) → SA, AE, JO, EG, TR is treated as its own hub, often paired with MENA.
+- MENA (gaming-relevant) → SA, AE, JO, EG. Turkey (TR) is **not** in MENA: it is its own hub, often
+  reported alongside it.
 
 ## 2 · Canonical definitions - pin these every time (consistency)
 
@@ -131,14 +148,15 @@ These are the difference between "181 M&A in 2025" and "104 M&A in 2025" for the
 | **"M&A"** | deal category `MA` only |
 | **"fundraising" / "VC funding"** | `EARLY_STAGE_INVESTMENT` + `LATE_STAGE_INVESTMENT` |
 | **"most funded companies" / "top raisers"** | VC rounds only (Most Funded Companies view) |
-| **"raised capital" (any event)** | all categories **except** `OTHER` |
-| **exclude from headline totals** | `OTHER`; and UA-financing - a real, queryable category (`UA_FINANCING`), but kept out of fundraising/M&A totals by methodology (ask for it explicitly). Dev-financing & licensing aren't in the queryable set at all. |
+| **"raised capital" (any event)** | all **five visible categories**, `UA_FINANCING` included. Flag it when it is in a total, since it is non-dilutive |
+| **UA-financing** | its own first-class visible category, neither fundraising nor M&A. Counted in general analytics; held out only of the quarterly report |
+| **never in the data at all** | development financing, licensing and `OTHER_MISC`: hidden types, never queryable |
 | **"recent / latest / new"** | last **18 months** by effective date (`closed_date` ?? `announcement_date`) |
 | **no time word at all** | no date filter - whole database |
-| **deal size** | USD millions; undisclosed = NULL → excluded from sums, shown as "n/d" in lists |
-| **enterprise value for multiples** | **Upfront EV** (100%-basis). Never use Max/transaction EV for multiples. |
-| **multiples** | shown as "2.6x"; **"NM"** = not meaningful (negative or out of range); blank = no data |
-| **date** | period analysis uses the effective date `closed_date` ?? `announcement_date` (a deal counts in the period it CLOSED, matching the product and quarterly reports); `announcement_date` is the fallback when there's no close date |
+| **deal size** | USD millions; undisclosed = no value recorded → excluded from sums, shown as "n/d" in lists. Control and minority M&A use different Size formulas: see `deal-taxonomy.md` |
+| **enterprise value for multiples** | by category: M&A → **Upfront EV** at 100%; early/late rounds → **post-money EV**; public offerings → **listing market cap**. Never the Max/transaction EV |
+| **multiples** | shown as "2.6x". **"NM"** = negative or outside the band (EV/Revenue 0.1x to 20x; EV/EBITDA, EV/EBIT, EV/Cash EBITDA 0.25x to 50x). Blank = no data, which is not NM. Neither is zero |
+| **date** | the **effective date** (`closed_date` ?? `announcement_date`) is the default anchor and matches the site filter, the curated views and the quarterly reports. The announcement date is used only when asked for. State which anchor the `assumptions` report |
 
 When a sum and a count appear together, restrict to disclosed sizes so the two reconcile.
 
@@ -162,7 +180,8 @@ then adjust the geography/segment/size band. Examples of well-formed asks:
    - *Investor/acquirer rankings:* name · distinct deal count · total disclosed USD.
    - *Company profile:* each round (type, size, date, investors) · disclosed valuation/EV · summary.
 3. **Always append a methodology line:** period, geography, what's included/excluded (e.g. *"M&A =
-   category MA; sizes USD m; undisclosed excluded from totals; last 18 months by announcement date."*).
+   category MA; sizes USD m; undisclosed excluded from totals; last 18 months by effective date."*).
+   Name the anchor the `assumptions` actually report, not the one you expected.
 4. **Flag, never hide, gaps:** "undisclosed", "n/d", "insufficient public data" - never invent a figure.
 5. **Numbers are tabular and right-aligned;** currency in USD millions unless asked otherwise.
 
@@ -186,9 +205,9 @@ Render in the **InvestGame** look (two themes, never mixed):
 - **Southeast-Asia early-stage mobile equity** - sparse and dated; widen the lens or flag the gap.
 
 Note what IS in scope (don't mistakenly decline it): **UA-financing** is a real, queryable deal type
-(`UA_FINANCING`) - only excluded from headline fundraising/M&A totals; **exit paths** (first-time
-exits, public-to-private, carve-outs) are a derived filter you can ask for; and **geography** by any
-country or region is fully supported.
+**and its own visible category** (`UA_FINANCING`), counted in general analytics and held out only of
+the quarterly report; **exit paths** (first-time exits, public-to-private, carve-outs) are a derived
+filter you can ask for; and **geography** by any country or region is fully supported.
 
 When asked for any of these: state the limit, give the closest thing the data *can* answer, and offer
 custom research. Honesty here is what keeps the database trusted.

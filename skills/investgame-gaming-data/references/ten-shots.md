@@ -1,7 +1,8 @@
 # Ten Shots - the proven InvestGame query library
 
 Verified against the live database. Match the user's intent to the closest shot,
-then swap the geography / segment / size band. Always include "use InvestGame" and "think hard".
+then swap the geography / segment / size band. Precision in the prompt is what matters: there are no
+required magic words, and a phrase like "use InvestGame" is ignored.
 
 These mirror the curated views on the InvestGame website (Notable Acquisitions, Mega Transactions,
 First-Time Exits, Most Active Investors, Most-Funded Companies…). There is no one-click "give me view X"

@@ -10,9 +10,9 @@ weren't fixed. This file is the fix.)
 | **M&A** | deal category `MA` (control + minority) |
 | **Fundraising / VC funding** | `EARLY_STAGE_INVESTMENT` + `LATE_STAGE_INVESTMENT` |
 | **Most funded companies / top raisers** | VC rounds only - matches Most Funded Companies view (`funding_size_in_period`); excludes M&A/IPO |
-| **Raised capital (any event)** | every category **except** `OTHER` |
-| **UA-financing** | a real, queryable deal type (`UA_FINANCING`) - ask for it directly, but it is kept **out of headline fundraising/M&A totals** by methodology |
-| **Always excluded** | `OTHER` from totals; dev-financing + licensing are hidden from the data entirely |
+| **Raised capital (any event)** | all **five visible categories**, which includes `UA_FINANCING`. Say so when it is in a total |
+| **UA-financing** | its own first-class visible category (`UA_FINANCING`). Non-dilutive, so neither fundraising nor M&A and never inside those buckets. Counted in general analytics; held out only of the quarterly report |
+| **Always excluded** | development financing, licensing and `OTHER_MISC` are hidden from the data entirely and are never queryable. They are the whole of the non-visible `OTHER` category |
 
 ## Time
 | Term | Definition |
@@ -24,14 +24,19 @@ weren't fixed. This file is the fix.)
 
 ## Money & valuation
 - **Sizes** are USD millions. **Undisclosed = excluded** from sums/averages, shown as **"n/d"** in lists.
-- **Enterprise value for multiples = Upfront EV** (100%-basis). Never use the transaction/Max EV for
-  multiples. Private-investment EV = post-money; listings = market cap.
+- **The EV basis for multiples depends on the deal category:** M&A → **Upfront EV** at 100%;
+  early/late-stage rounds → **post-money EV**; public offerings → **listing market cap**. Fixed income
+  carries no meaningful EV. Never use the transaction/Max EV for a multiple in any category.
 - When a **sum and a count appear together**, restrict to disclosed sizes so the two reconcile.
 
 ## Multiples
-- Displayed as **"2.6x"**. **"NM"** = not meaningful (negative or out of range). Blank = no data.
+- Displayed as **"2.6x"**. **"NM"** = not meaningful: negative, or outside the band. EV/Revenue is NM
+  below 0.1x or above 20x; EV/EBITDA, EV/EBIT and EV/Cash EBITDA are NM below 0.25x or above 50x.
+  **Blank = no data**, which is a different thing from NM. Neither is ever zero.
 - For averaging/sorting, parse to a number and drop NM/blank; for display, show as stored.
-- Periods: **LTM** (trailing 12m, default) · **NTM** (forward) · **CYO** (current calendar year).
+- Periods: **LTM** (trailing 12m, the default) · **CY0** (the calendar year OF THE ANNOUNCEMENT, not
+  the current year) · **NTM** (forward). Single-value fallback order: LTM, then CY0, then NTM. Always
+  write **CY0 with a zero**, never with a letter O.
 
 ## Counting
 - Count distinct deals (`COUNT(DISTINCT deal)`) - a deal with several investors must not be counted

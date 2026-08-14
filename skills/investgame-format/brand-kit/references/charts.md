@@ -66,7 +66,7 @@ Copy-pasteable single-series bar. Loads `igChartDefaults()` from `assets/ig_help
 <canvas id="chart-share"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<script src="../assets/ig_helpers.js"></script>
+<script src="../ig_helpers.js"></script>   <!-- from assets/templates/; use assets/ig_helpers.js from the brand-kit root -->
 <script>
   Chart.register(ChartDataLabels);
   Chart.defaults.set('plugins.datalabels', { display: false }); // default OFF, enable per-dataset
@@ -84,7 +84,7 @@ Copy-pasteable single-series bar. Loads `igChartDefaults()` from `assets/ig_help
         categoryPercentage: 0.7,
         datalabels: {
           display: true, anchor: 'end', align: 'top', offset: 2,
-          color: IG.report.text, font: { size: 11, weight: 700 },
+          color: IG.white_skin.text, font: { size: 11, weight: 700 },   // IG.dark.light for Dark Navy
           formatter: v => v + '%'
         }
       }]
