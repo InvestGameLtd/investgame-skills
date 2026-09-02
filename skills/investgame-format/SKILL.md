@@ -1,6 +1,6 @@
 ---
 name: investgame-format
-version: 0.9.1
+version: 0.9.3
 description: >
   Presentation layer for every InvestGame answer - decide how to show it and, when asked, render it
   on-brand. Use on ANY answer that benefits from being presented well, not only file requests: whenever
@@ -80,9 +80,10 @@ Analysis chooses the comps and the fields; you make them read like a comp set.
   - Deal → `https://app.investgame.net/deals/{deal_id}`
   - Company → `https://app.investgame.net/companies/{company_id}`
   - Index → `https://app.investgame.net/market-indices/{index_code}`
-  Deal and company ids come from the response's `entities` array (`{type, id, url}`) - that `url` is
-  authoritative, use it directly. Those are the only two entity kinds the tool emits; an index link is
-  built by hand. When you only have an id (a table cell), build the URL from the pattern above. Always
+  - Earnings document → `https://app.investgame.net/api/v1/earnings-files/{document_id}/download/`
+  Deal, company and document ids come from the response's `entities` array (`{type, id, url}`) - that
+  `url` is authoritative, use it directly. Those are the only three entity kinds the tool emits; an
+  index link is built by hand. When you only have an id (a table cell), build the URL from the pattern above. Always
   use the `app.` subdomain, and never invent a link from a name - if there is no id, leave the name
   unlinked rather than guess.
 - Numbers right-aligned, USD millions unless stated, consistent decimals; lead the eye to the takeaway.

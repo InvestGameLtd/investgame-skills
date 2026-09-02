@@ -1,6 +1,6 @@
 ---
 name: investgame-public-markets
-version: 0.9.1
+version: 0.9.3
 description: >
   Live public-market data for any LISTED company (now or formerly public) and for currency / FX conversion.
   Use when a request needs market data the InvestGame deal database does not itself hold: a current share
@@ -41,6 +41,12 @@ question needs a live quote, a full statement, an analyst view or an FX rate.)
   public valuation metrics (P/E, EV/EBITDA, EV/Revenue on a public basis).
 - **Earnings** - last and next reporting dates (incl. an upcoming-earnings calendar), the most recent
   results, and earnings-call commentary.
+- **Earnings documents are NOT here** - the filed interim / annual report, the investor slide deck,
+  the press release, the financial tables and the full earnings-call transcript are held by InvestGame
+  and reached through `InvestGame_query` (ask for "<company>'s earnings documents", optionally for a
+  fiscal period). Each stored document comes back as a `document` entry in `entities` whose `url` is
+  a download link: offer those links whenever a user wants the source behind a figure or a transcript
+  longer than the commentary excerpt.
 - **Dividends & splits** - dividend history and yield; upcoming dividend dates (ex-dividend / payment
   calendar); stock-split history.
 - **Not covered** - investor-relations event calendars (conferences, roadshows, investor / analyst days):

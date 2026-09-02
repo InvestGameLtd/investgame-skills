@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.9.1
+version: 0.9.3
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -44,7 +44,9 @@ this skill makes the answer reliable.
 5. **Never present a number without its scope.** Every data answer ends with a one-line methodology
    note (§4).
 6. **Two tools - route the question.** This hub answers proprietary InvestGame questions (deals,
-   companies, investors, valuations, taxonomy) via `InvestGame_query`. For a **listed** company's live
+   companies, investors, valuations, taxonomy) via `InvestGame_query` - and that same tool holds the
+   stored **earnings documents** (filed reports, slide decks, press releases, call transcripts), each
+   returned as a `document` download link in `entities`. For a **listed** company's live
    public-market data (price, market cap, financials, earnings, dividends, analyst view, employee count)
    or any **FX / currency conversion**, hand off to `investgame-public-markets` (it owns the
    `InvestGame_market_query` tool). If a question needs both - e.g. benchmark a deal against the peer's
@@ -65,8 +67,9 @@ this skill makes the answer reliable.
    `needs_clarification` means the question is underspecified, so ask and call again. Or
    `{"mode":"data","tables":[{name,columns,rows}],"entities":[{type,id,url}]}` - read the tables and
    answer, linking each entity via its `url` (always on `https://app.investgame.net`, the `app.`
-   subdomain). The tool emits two entity kinds only: company → `/companies/{id}` and deal →
-   `/deals/{id}`. A `data` reply may also carry a `status` flag: `"failed"` means
+   subdomain). The tool emits three entity kinds: company → `/companies/{id}`, deal →
+   `/deals/{id}`, and document → `/api/v1/earnings-files/{id}/download/` (a stored earnings document;
+   the link downloads it). A `data` reply may also carry a `status` flag: `"failed"` means
    the lookup could not be completed (tell the user it failed; never present it as "no results found"),
    `"partial"` means answer with what came back but flag it as incomplete, and no `status` key means the
    answer is complete. Presentation detail lives in `investgame-format`.

@@ -20,11 +20,28 @@ orgs and gaming infrastructure/tools/adtech with a genuine gaming use-case; B2C 
 game mechanics (Consumer Apps - §7).
 
 **Out of the gaming sectors:** real-money gambling / iGaming **operators**; physical toys & merchandise
-(unless licensed game IP); generic PR / brand / marketing; adjacent tech with no gaming use-case.
+(unless licensed game IP); generic PR / brand / marketing that is **not games-specific** and merely
+counts game companies among its clients; adjacent tech with no gaming use-case.
 
 These are still TRACKED companies: they carry the sector `OTHER` ("Other (non-covered sector)") with
 no gaming-gated fields, and several are listed companies whose earnings InvestGame follows. They are
 EXCLUDED from gaming sector totals - so they are answerable, but they never inflate a gaming number.
+
+**Three service categories that fall between those rules**, none of which makes games of its own.
+That decides their SECTOR, not whether they are in scope: a company whose customers are game
+companies and whose output is game work is an outsourcing gaming business, and it is IN.
+
+- **Infrastructure, backend, tooling and engines** - game-server hosting and orchestration,
+  matchmaking, build pipelines, SDKs, engine vendors. The gaming use-case is exclusive and real, but
+  the company makes no games: `GAMING_ECOSYSTEM`, never `GAMING_CONTENT`.
+- **Gaming-specialised creative and marketing studios** - trailer houses, key art, cinematics and
+  in-engine production, influencer and events agencies working for publishers. IN as
+  `GAMING_CONTENT` / `OUTSOURCING_WFH`: being gaming-only is what puts a studio in scope, not what
+  keeps it out.
+- **Film and TV services vendors** - VFX, animation, virtual production, motion capture. Often
+  outsourcing for games too, so they need **confirmation**: named game titles worked on, or games
+  named among the services or sectors served. Confirmed, they are IN as `GAMING_CONTENT` /
+  `OUTSOURCING_WFH` however large the film business beside them; unconfirmed, empty sector.
 
 The line analysts apply most: **a casino game is content; a casino operator is out of the gaming
 sectors** - tracked, but under sector `OTHER`. A studio that *makes* casino games is Gaming Content
@@ -59,10 +76,10 @@ from the data entirely and are not queryable.
 | `STRATEGIC_OR_CVC` | Operating companies, corporates, corporate-VC arms | **Default for a gaming company.** A CVC arm (e.g. "Sony Interactive Ventures") is classified via its **parent** → STRATEGIC. |
 | `VENTURE_CAPITAL_AND_ACC` | VC firms, accelerators | name has "Ventures/Capital/Partners" + fund structure |
 | `PRIVATE_EQUITY_AND_INST` | PE firms, sovereign wealth, pension, family offices | |
-| `SERVICE_PROVIDERS` | Banks, advisory, law, accounting firms | participate as **advisors**, not targets/investors |
+| `SERVICE_PROVIDERS` | Banks, advisory, law, accounting firms, gaming research/consulting/market-analysis firms selling insight AS A SERVICE to industry clients | participate as **advisors**, not targets/investors. Not a gaming news/press/video media business monetizing an audience - that's `STRATEGIC_OR_CVC` + `GAMING_ECOSYSTEM`/`STREAMING_ENTERTAINMENT` (§6), any format |
 | `ANGELS_INDIVIDUALS` | Individuals investing personally (not via a fund) | |
 | `ASSET` | A game title / franchise / division sold as an asset | **requires a parent company** |
-| `OTHER` | Government, non-profit, unclassifiable | visible - do **not** exclude from company queries |
+| `OTHER` | Government, non-profit, unclassifiable | visible - do **not** exclude from company queries. Not for a research/consulting/advisory firm either - selling insight for a fee is operating a business, so it is `SERVICE_PROVIDERS` (a gaming news/press/video media business is `STRATEGIC_OR_CVC` instead - see §4) |
 
 **Field applicability (what each type carries):**
 - `STRATEGIC_OR_CVC` → sector + sector-gated fields (below); never investor fields.
@@ -95,7 +112,11 @@ What each feature flag means (it tags a product capability, NOT a company catego
 - **GAMING_CONTENT** → `content_type` (`DEVELOPER_1P_PUBLISHER` / `PUBLISHER_3P` / `OUTSOURCING_WFH`),
   plus `platform`, `monetization_type`, `game_genre`, `top_games` (the last three not required for
   pure outsourcing).
-- **GAMING_ECOSYSTEM** → `ecosystem_type` (`B2C`/`B2B`) + `ecosystem_segment` (§6).
+- **GAMING_ECOSYSTEM** → `ecosystem_type` (`B2C`/`B2B`) + `ecosystem_segment` (§6). Includes a company
+  selling gaming-licensed merchandise, apparel or physical goods, or reselling game keys, e-pins,
+  gift cards or in-game currency, that does not develop games itself
+  (`ecosystem_segment = OTHER`, "retail/merch") - it is never `GAMING_CONTENT`, which requires the
+  company to actually develop or publish a game.
 - **CONSUMER_APPS** → `gamified_subsegment` + ≥2 visible mechanics (§7).
 - **platform:** `MOBILE` · `PC_CONSOLE` (incl. cloud gaming) · `BROWSER` · `VR_AR`.
 
