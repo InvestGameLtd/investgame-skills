@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.9.3
+version: 0.9.4
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -30,60 +30,42 @@ this skill makes the answer reliable.
 2. **Pin every scope dimension before querying.** "Recent", "mobile", "M&A vs fundraising",
    deal scope, time window, and participant role each need an explicit reading (§2). If a request is
    broad, unclear, or could be read several ways under the taxonomy, confirm with the user first -   offer a couple of concrete options - rather than guessing.
-3. **A `clarify` result means no query ran.** When `InvestGame_query` returns `mode:"clarify"`, the
-   tool answered with `questions` (and sometimes `suggestions`) **instead of running anything** - the
-   result carries no data. Present those `questions` to the user and stop. Never read the empty result
-   as "no data found", and never fill the gap from memory. When every dimension is pinned in the
-   question, proceed and state the methodology (§4).
-4. **Call the InvestGame connector's `InvestGame_query` tool** (your host may show it fully-qualified,
-   e.g. `InvestGame:InvestGame_query`) with a natural-language prompt. What matters is precision, not
-   any magic words: a phrase like "use InvestGame" is ignored, and it never acts as a company-name
-   filter. Prefer one precise prompt over a vague one - vague prompts are the main cause of weak
-   answers. If a well-formed query returns no rows, re-ask once naming the company/entity explicitly
-   before concluding the data isn't there.
+3. **A `clarify` result means no query ran.** Present its `questions` to the user and stop; never
+   read it as "no data found" and never fill the gap from memory. When every dimension is pinned,
+   proceed and state the methodology (§4).
+4. **Ask precisely.** One precise natural-language prompt beats a vague one; magic words ("use
+   InvestGame") do nothing. If a well-formed query returns no rows, re-ask once naming the
+   company/entity explicitly before concluding the data isn't there.
 5. **Never present a number without its scope.** Every data answer ends with a one-line methodology
-   note (§4).
-6. **Two tools - route the question.** This hub answers proprietary InvestGame questions (deals,
-   companies, investors, valuations, taxonomy) via `InvestGame_query` - and that same tool holds the
-   stored **earnings documents** (filed reports, slide decks, press releases, call transcripts), each
-   returned as a `document` download link in `entities`. For a **listed** company's live
-   public-market data (price, market cap, financials, earnings, dividends, analyst view, employee count)
-   or any **FX / currency conversion**, hand off to `investgame-public-markets` (it owns the
-   `InvestGame_market_query` tool). If a question needs both - e.g. benchmark a deal against the peer's
-   current public value - use both, but **lead with InvestGame**. Public-market data is a **companion,
-   not a substitute**: it only enhances and must never override or contradict an InvestGame figure;
-   when they look different they measure different things (a historical deal EV vs today's market cap) -   state what each is. The public-market source is never named - it is "InvestGame market data".
-   For the **gaming press itself** - what the newsletters and shows are publishing, a "what's happening
-   / this fortnight in gaming" synthesis, a press brief, or the periodic digest - hand off to
-   `investgame-press` (it owns the `InvestGame_press_query` tool). It reads the press corpus and never
-   answers a deal/company fact (that is this hub) or a live price (that is `investgame-public-markets`);
-   conversely, transactions in a digest are DB-authoritative and come back from this hub, never counted
-   from the press.
-7. **Handle the two response modes.** `InvestGame_query` returns exactly one of two lean shapes:
-   `{"mode":"clarify","reason_code":"out_of_scope"|"needs_clarification","questions":[...],"suggestions"?,"reason"?}`
-   - ask the user those `questions` verbatim (offering any `suggestions`), then call again with their
-   answer; do not reformulate the question yourself. `reason_code` is always present and tells you what
-   to do next: `out_of_scope` means InvestGame does not track this, so stop retrying;
-   `needs_clarification` means the question is underspecified, so ask and call again. Or
-   `{"mode":"data","tables":[{name,columns,rows}],"entities":[{type,id,url}]}` - read the tables and
-   answer, linking each entity via its `url` (always on `https://app.investgame.net`, the `app.`
-   subdomain). The tool emits three entity kinds: company → `/companies/{id}`, deal →
-   `/deals/{id}`, and document → `/api/v1/earnings-files/{id}/download/` (a stored earnings document;
-   the link downloads it). A `data` reply may also carry a `status` flag: `"failed"` means
-   the lookup could not be completed (tell the user it failed; never present it as "no results found"),
-   `"partial"` means answer with what came back but flag it as incomplete, and no `status` key means the
-   answer is complete. Presentation detail lives in `investgame-format`.
-8. **Always state the `assumptions`.** A `data` reply may carry `"assumptions":[...]`: the scope
-   decisions that shaped the result, above all **which date the period filtered on**. Never drop
-   these: they change what the numbers mean. There are two anchors and they select different
-   populations, not different phrasings of one:
-   - **Effective date** (`closed_date` falling back to `announcement_date`) is the **default**, and
-     it is what the site filter, the curated views and the quarterly reports all use.
-   - **Announcement date** is used when the user asks for it explicitly.
+   note (§4), naming the date anchor the reply's `assumptions` report: the **effective date**
+   (closed date, falling back to announcement date) is the default and matches the site, the curated
+   views and the quarterly reports; the **announcement date** is used only when asked for. The two
+   select different populations, so offer the other when the difference could matter.
+6. **Four tools - route by what the question is about.** The connector describes each tool's
+   response shape itself; this table is about which one to call.
 
-   A closed-date window omits deals announced in the period but not yet closed, and many rounds never
-   record a close date at all. So report which anchor the `assumptions` name, and offer the other when
-   the difference could matter.
+   | The question is about | Tool | Notes |
+   |---|---|---|
+   | Deals, investors, rankings, counts and totals across companies, taxonomy, earnings documents | `InvestGame_query` | Documents come back as `document` download links in `entities` |
+   | **One company's own profile**: headcount and its history, size band, followers, key people, filed periods, ownership tree, portfolio and exits, its own deal totals | `InvestGame_company_query` | Returns the company page's resolved figures, which a rebuild from raw tables can contradict; uncharged |
+   | A **listed** company's live price, market cap, financials, earnings, or any FX conversion | `InvestGame_market_query` via `investgame-public-markets` | A companion, never a substitute: it enhances an InvestGame figure and never overrides one; the source is "InvestGame market data" |
+   | What the **gaming press** is publishing, a press brief, the periodic digest | `InvestGame_press_query` via `investgame-press` | Transactions in a digest are DB-authoritative and come from `InvestGame_query`, never counted from the press |
+
+7. **Read what the connector does not spell out.**
+   - **At most 20 entities per answer carry a link** (and a charge), however many rows the tables
+     hold (up to 300). Rows past the cap arrive unlinked: say so rather than inventing a URL.
+   - A `coverage` table (`matched`, `with_size`, `total_size_usd_m`, `basis`) rides along with a
+     deal list: when `with_size` is below `matched`, the total covers the disclosed subset only. Say
+     it. A `notices` table is the tool talking about the result, never data.
+   - **Price.** Each newly linked deal or company costs 1 credit, deduplicated within the month; a
+     market query costs 0.3; a press query 1; the company card 0. Ask for the cut you need, not a
+     wide list you will trim by hand.
+   - **Point lookups** by id ("deal id 22492", "company #678") answer deterministically, without
+     the planner, and fail honestly on an unknown id.
+   - A company's **founders** come back as a list of profiles, not the first one; ask for "the
+     founders" and you get all of them.
+   - "**exclude secondary**" / "**secondary only**" are recognised phrases that filter on the exit
+     path deterministically.
 
 ## 1 · The taxonomy - the only allowed vocabulary
 
@@ -200,9 +182,9 @@ Render in the **InvestGame** look (two themes, never mixed):
 
 ## 6 · Boundaries - what InvestGame cannot answer (say so; do not invent)
 
-- **People / talent-flow** ("who left Peak to start a new studio") - no person-level data in the
-  queryable set. Route to InvestGame custom research.
-- **Headcount / growth signals** ("studios scaling fastest by headcount") - no headcount history.
+- **Talent flow across companies** ("who left Peak to start a new studio") - key people are on
+  each company's card (`InvestGame_company_query`), but there is no cross-company people query.
+  Route the flow question to InvestGame custom research.
 - **Some advanced cuts** (an investor's stage or geography focus, an advisor league table) aren't
   directly tracked - answerable only as a custom query, if at all.
 - **Southeast-Asia early-stage mobile equity** - sparse and dated; widen the lens or flag the gap.
@@ -210,7 +192,9 @@ Render in the **InvestGame** look (two themes, never mixed):
 Note what IS in scope (don't mistakenly decline it): **UA-financing** is a real, queryable deal type
 **and its own visible category** (`UA_FINANCING`), counted in general analytics and held out only of
 the quarterly report; **exit paths** (first-time exits, public-to-private, carve-outs) are a derived
-filter you can ask for; and **geography** by any country or region is fully supported.
+filter you can ask for; **geography** by any country or region is fully supported; and **headcount
+history** is queryable: a company's headcount series sits on its card, and a monthly members series
+across companies answers "which studios grew fastest by headcount" through `InvestGame_query`.
 
 When asked for any of these: state the limit, give the closest thing the data *can* answer, and offer
 custom research. Honesty here is what keeps the database trusted.
@@ -234,6 +218,7 @@ This skill is the data hub. For these jobs, use the matching companion skill (wh
 
 | If the user wants… | Use |
 |--------------------|-----|
+| One company's own profile figures (headcount, people, followers, ownership, exits) | `InvestGame_company_query`, directly from this hub |
 | A valuation, comps, precedent-multiples, benchmarking or trend read | `investgame-analysis` |
 | Live public-market data on a listed company (price, financials, earnings, analyst, employees) or an FX conversion | `investgame-public-markets` |
 | The gaming press / newsletters - a "what's happening" or this-fortnight read, a press brief, or the "Gaming Pulse" digest | `investgame-press` |

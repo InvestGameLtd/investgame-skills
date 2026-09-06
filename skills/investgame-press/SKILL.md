@@ -1,6 +1,6 @@
 ---
 name: investgame-press
-version: 0.9.3
+version: 0.9.4
 description: >
   The gaming-press layer of the InvestGame skills - what the industry's newsletters and shows are
   publishing, and the fortnightly "Gaming Pulse" digest built from them. Use the moment a question is about
@@ -69,14 +69,15 @@ by this one tool, and nothing else routes here.
 
 - **Call** `InvestGame_press_query` with a plain-English question that pins the cut(s): the source(s),
   the topic facet, and the window. Prefer one precise prompt over a vague one.
-- The corpus holds, per post: title, the teaser summary, the **full article `body_markdown`** (≈15× the
-  teaser), the topic facets, the published date, the source, and the URL - so it can answer richly, not
-  just list headlines.
-- **Two response modes** (same envelope as the other tools):
-  `{"mode":"clarify","questions":[...]}` - the ask is underspecified or out of scope; put those
-  `questions` to the user verbatim and stop (no data ran), then call again with the answer - or
-  `{"mode":"data","tables":[{name,columns,rows}],"entities":[...]}` - read the tables and answer,
-  linking the sources.
+- The corpus holds, per post: title, the teaser summary, the **full article body** (page furniture
+  such as images, subscribe lines and navigation stripped out), the topic facets, the published date,
+  the source, and the URL - so it can answer richly, not just list headlines.
+- **Name the facet in the question** ("UA and monetization", "people moves") so the tool filters on
+  the tags rather than on a keyword; posts are tagged at ingest, so a facet catches synonyms.
+- **Bodies have a budget.** One article is served whole up to a per-article cap; an answer holds
+  roughly two whole articles before later rows fall back to a preview: a cell shaped
+  `{"_truncated": true, "chars": N, "preview": "..."}`. A preview is not the article: to read one
+  story, ask for that story alone ("go deeper on the Scopely piece") and the body comes back whole.
 - **Podcasts are show-notes-only** (D11): they can corroborate a story or appear in the Wire, but they
   never *lead* a story on thin show-notes alone.
 

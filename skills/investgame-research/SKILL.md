@@ -1,6 +1,6 @@
 ---
 name: investgame-research
-version: 0.9.3
+version: 0.9.4
 description: >
   Use for DEEP work - when the user wants more than a quick answer: a report, a market or regional
   landscape, a deep dive, a trend analysis, a company/deal write-up, an investor profile, prep for a call or
@@ -58,8 +58,7 @@ be absent; say so rather than quietly dropping or inventing it.
 ## Read, benchmark, present
 - Read & benchmark via investgame-analysis - never describe a market or company in isolation; put it in
   context (peers, the global total, prior years). The comparison is the value. Analysis's rules carry over
-  (multiples, never-break-silently, footnote assumptions, objective-not-opinionated, the critical-thinking
-  pass before you finish).
+  (multiples, never-break-silently, footnote assumptions, objective-not-opinionated).
 - Present via investgame-format - on-brand, in the theme the user picked. Format owns the look and the form:
   a deck/PDF for a full report, a one-pager or a written brief for lighter prep. For market-size figures
   InvestGame doesn't hold, cite third-party sources separately, average and show the range, and never blend

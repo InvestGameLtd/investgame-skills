@@ -1,6 +1,6 @@
 ---
 name: investgame-public-markets
-version: 0.9.3
+version: 0.9.4
 description: >
   Live public-market data for any LISTED company (now or formerly public) and for currency / FX conversion.
   Use when a request needs market data the InvestGame deal database does not itself hold: a current share
@@ -63,8 +63,10 @@ question needs a live quote, a full statement, an analyst view or an FX rate.)
 - Call `InvestGame_market_query` with a plain-English question that names the **company or ticker** (or
   the **currencies and date** for FX). If you only have a name, the tool resolves the ticker itself.
 - Prefer one precise question over a vague one; pin the company, the metric, and the period.
-- The tool returns `{"mode":"data","tables":[{name:"public_market",columns,rows}],"entities":[]}`; read
-  the `public_market` table and answer.
+- The `public_market` table is long-format: one row per figure, with `symbol`, `dataset` (quote,
+  income statement, profile, and so on), `date` (the statement or trading date, blank for a live
+  quote), `field` and `value`. Pivot the rows you need into your answer; never echo the table as it
+  is. A `notices` row says when the figures were capped: narrow the period or the dataset.
 - If a company turns out not to be listed, the tool will have no data - report that and pivot to the
   InvestGame proprietary view.
 

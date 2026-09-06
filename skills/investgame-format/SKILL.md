@@ -1,6 +1,6 @@
 ---
 name: investgame-format
-version: 0.9.3
+version: 0.9.4
 description: >
   Presentation layer for every InvestGame answer - decide how to show it and, when asked, render it
   on-brand. Use on ANY answer that benefits from being presented well, not only file requests: whenever

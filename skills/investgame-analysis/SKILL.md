@@ -1,6 +1,6 @@
 ---
 name: investgame-analysis
-version: 0.9.3
+version: 0.9.4
 description: >
   Use whenever a request needs more than a plain data pull - anything analytical about gaming companies,
   deals, or investors: valuation and precedent multiples, deal benchmarking, comps and peer sets, premiums,
@@ -114,12 +114,6 @@ Most of the time the user wants the information; give it cleanly and let it spea
 you to analyse, or for your read, go deeper and offer a fair, evidence-based view of what the numbers show
 (a premium or discount to peers, and why), without overclaiming - frame it as what the data indicates, not a
 verdict.
-
-## Always run a critical-thinking pass before you answer
-Before returning anything, re-check it from a different angle - devil's advocate on your own work. Did I
-scope it the way the user meant? Did I pick the right peer set, metric and period? Are there deals I wrongly
-included or excluded? Is the sample thin enough that I should caveat it? Have I footnoted every assumption
-and scope choice? Think harder, then answer.
 
 ## Footnote your work
 Whenever you make an assumption or a scope choice, state it: which platform definition you used, which deal
