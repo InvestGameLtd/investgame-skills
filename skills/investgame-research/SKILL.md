@@ -1,6 +1,6 @@
 ---
 name: investgame-research
-version: 0.9.4
+version: 0.9.6
 description: >
   Use for DEEP work - when the user wants more than a quick answer: a report, a market or regional
   landscape, a deep dive, a trend analysis, a company/deal write-up, an investor profile, prep for a call or
@@ -67,7 +67,10 @@ be absent; say so rather than quietly dropping or inventing it.
 ## What you can produce (instances of the same workflow)
 - A market / regional / segment report - activity, sizing, leaders, outlook, benchmarked.
 - A deep dive / trend research - a theme over time, grounded in the data.
-- A company or deal research write-up; an investor / fund profile.
+- A company or deal research write-up; an investor / fund profile. For a company or fund profile
+  document the layout is fixed: the matching sample from the Reports tab shelf "MCP & Skills build
+  examples" (the user downloads it; the MCP cannot fetch it), filled from the company card and the deal
+  queries, as investgame-format describes.
 - A meeting or call preparation brief - a focused, deep profile to walk in ready.
 - Structured notes / a recap from a call or meeting transcript - topic-organised, decision-focused, with
   single-owner action items, enriched with InvestGame context (see the notes mode below).

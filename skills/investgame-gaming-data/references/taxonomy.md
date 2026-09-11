@@ -19,7 +19,7 @@ every InvestGame company record.*
 orgs and gaming infrastructure/tools/adtech with a genuine gaming use-case; B2C non-game apps with real
 game mechanics (Consumer Apps - §7).
 
-**Out of the gaming sectors:** real-money gambling / iGaming **operators**; physical toys & merchandise
+**Out of the gaming sectors:** real-money gambling / iGaming **operators** and the **apparatus** they run on (casino / sportsbook / iLottery platforms, remote game servers, betting terminals, lottery systems); physical toys & merchandise
 (unless licensed game IP); generic PR / brand / marketing that is **not games-specific** and merely
 counts game companies among its clients; adjacent tech with no gaming use-case.
 
@@ -43,10 +43,16 @@ companies and whose output is game work is an outsourcing gaming business, and i
   named among the services or sectors served. Confirmed, they are IN as `GAMING_CONTENT` /
   `OUTSOURCING_WFH` however large the film business beside them; unconfirmed, empty sector.
 
-The line analysts apply most: **a casino game is content; a casino operator is out of the gaming
-sectors** - tracked, but under sector `OTHER`. A studio that *makes* casino games is Gaming Content
-even when those games pay out real money and its customers are operators, because it produces games
-rather than taking wagers.
+The line analysts apply most: **a casino game is content; a casino operator, and the apparatus it
+runs on, are out of the gaming sectors** - tracked, but under sector `OTHER`. A studio that *makes*
+casino games is Gaming Content even when those games pay out real money and its customers are
+operators, because it produces games rather than taking wagers (Light & Wonder, Aristocrat,
+Microgaming). A company that supplies the machinery of wagering - casino / sportsbook / iLottery
+platforms, remote game servers, betting terminals, VLT and retail lottery systems - is `OTHER`
+alongside the operator. A skill-based mobile game that pays cash out to players (Skillz, Papaya,
+Avia Games, Mobile Premier League, Underdog) is Gaming Content with `CASH_OR_SKILL_BASED_OR_RMG`.
+A gambling-side company never carries `GAMING_ECOSYSTEM`: those segments describe services sold to
+the games industry, not to gambling operators.
 
 **AI and ML companies.** AI is horizontal, so "uses AI" or "could be used for games" is not enough.
 A company is **IN** when gaming or interactive media is a real market it serves **and there is

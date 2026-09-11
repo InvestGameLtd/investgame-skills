@@ -1,6 +1,6 @@
 ---
 name: investgame-format
-version: 0.9.4
+version: 0.9.6
 description: >
   Presentation layer for every InvestGame answer - decide how to show it and, when asked, render it
   on-brand. Use on ANY answer that benefits from being presented well, not only file requests: whenever
@@ -98,6 +98,13 @@ file. Bundled:
 - brand-kit/assets/ig_helpers.py - colour/type constants for PowerPoint & Excel · brand-kit/assets/
   ig_helpers.js - colour tokens + Chart.js defaults for HTML.
 - brand-kit/scripts/render_pdf.py - headless HTML→PDF at the exact canvas (cross-platform).
+- Exception: a company or fund profile document (one to three pages on one company) is not built
+  from the deck templates. Four finished examples sit on the Reports tab of app.investgame.net, shelf
+  "MCP & Skills build examples": Company Profile Short, Company Profile Extended (two variants, an
+  operator that was acquired and an acquirer with a portfolio), Fund Profile. The MCP has no tool that
+  reads that shelf, so ask the user to download the closest sample there (the HTML button) and attach
+  it. The comment at the top of the file names the connector call for every field: change only the
+  data block marked profile-data, and keep the stylesheet and the renderer exactly as they are.
 
 ## Pick the theme (never mix them in one file)
 | Theme | Use for | Canvas / fonts |

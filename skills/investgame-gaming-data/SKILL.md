@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.9.4
+version: 0.9.6
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -47,7 +47,7 @@ this skill makes the answer reliable.
    | The question is about | Tool | Notes |
    |---|---|---|
    | Deals, investors, rankings, counts and totals across companies, taxonomy, earnings documents | `InvestGame_query` | Documents come back as `document` download links in `entities` |
-   | **One company's own profile**: headcount and its history, size band, followers, key people, filed periods, ownership tree, portfolio and exits, its own deal totals | `InvestGame_company_query` | Returns the company page's resolved figures, which a rebuild from raw tables can contradict; uncharged |
+   | **One company's own profile**: headcount and its history, followers, key people, filed periods, ownership tree, portfolio and exits, its own deal totals | `InvestGame_company_query` | Returns the company page's resolved figures, which a rebuild from raw tables can contradict; only what that page displays, so a field absent from the reply is one its card withholds, not a missing value; uncharged |
    | A **listed** company's live price, market cap, financials, earnings, or any FX conversion | `InvestGame_market_query` via `investgame-public-markets` | A companion, never a substitute: it enhances an InvestGame figure and never overrides one; the source is "InvestGame market data" |
    | What the **gaming press** is publishing, a press brief, the periodic digest | `InvestGame_press_query` via `investgame-press` | Transactions in a digest are DB-authoritative and come from `InvestGame_query`, never counted from the press |
 
@@ -179,6 +179,11 @@ Render in the **InvestGame** look (two themes, never mixed):
   **caution = rust `#C07B5A`** (sparingly). Logo present; one idea per slide; titles carry the insight.
 - Charts: bar/column by default, interactive, palette teal → blue → deep teal. Every data slide cites
   its source line.
+- A **company or fund profile document** is the one deliverable with a fixed layout: the user
+  downloads the matching sample from the Reports tab shelf "MCP & Skills build examples" (the MCP has
+  no tool that reads that shelf) and you fill only its data block, with figures from
+  `InvestGame_company_query` and `InvestGame_query`. "Profile" in section 2 means the company card's
+  figures; this is the document built from them.
 
 ## 6 · Boundaries - what InvestGame cannot answer (say so; do not invent)
 
