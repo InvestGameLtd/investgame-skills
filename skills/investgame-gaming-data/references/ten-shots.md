@@ -32,5 +32,6 @@ is organised is what gets you the curated result. Reach for these before buildin
 14. **Genre landscape:** "Over the last 3 years, gaming deal count and total disclosed value by game genre for mobile gaming content companies. Rank by deal count."
 
 ## Out of scope (do not run - route to custom research)
-Talent-flow / who-left-X · headcount-growth · clean SEA early-stage mobile equity. (NB: UA-financing,
-exits and any country/region geography ARE queryable - don't route those out.)
+Talent-flow / who-left-X · headcount-growth · clean SEA early-stage mobile equity. (NB: non-dilutive
+financing - UA financing, private debt, project financing - exits and any country/region geography ARE
+queryable - don't route those out.)

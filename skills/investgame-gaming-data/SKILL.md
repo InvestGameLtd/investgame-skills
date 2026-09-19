@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.9.6
+version: 0.10.0
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -75,7 +75,8 @@ generic AI companies with no evidenced gaming market, and other adjacent firms w
 counting them as gaming. Exclusive (never combined with another sector), carries no gaming fields, and
 is EXCLUDED from gaming sector totals - pull it only when the user asks about those companies
 specifically. Note the line: a studio that *makes* casino games is `GAMING_CONTENT` (genre `CASINO`),
-even when the games pay out real money; only the operator taking the wagers sits in `OTHER`.
+even when the games pay out real money; the operator taking the wagers, and the supplier of the
+wagering platform it runs on, sit in `OTHER`.
 
 **Platform** (GAMING_CONTENT only): `MOBILE` · `PC_CONSOLE` · `BROWSER` · `VR_AR`.
 - "mobile" → `MOBILE`; "PC / console / AAA" → `PC_CONSOLE`; "browser/HTML5" → `BROWSER`; "VR/AR/XR" → `VR_AR`.
@@ -104,18 +105,20 @@ game - engines/tools) · `INFRASTRUCTURE_SERVICES` (helps *run/scale* - cloud, a
 
 **Deal category** (five visible): `MA` (types `MA_CONTROL`, `MA_MINORITY`) · `EARLY_STAGE_INVESTMENT`
 (accelerator/grant, Seed, Series A, undisclosed-early) · `LATE_STAGE_INVESTMENT` (Series B to H,
-growth/expansion, undisclosed-late) · `PUBLIC_OFFERING` (`LISTING`, `PIPE`, `FIXED_INCOME`) ·
-`UA_FINANCING` (its own first-class category, counted in general analytics and held out only of the
-quarterly report). A sixth category, `OTHER`, holds only the three hidden types and is never
-queryable: **19 visible types across 5 visible categories**.
+growth/expansion, undisclosed-late) · `PUBLIC_OFFERING` (`LISTING`, `PIPE`, `SECONDARY_OFFERING`,
+`FIXED_INCOME`) · `UA_FINANCING` (label "Non-dilutive Financing": `UA_FINANCING`, `PRIVATE_DEBT`,
+`DEVELOPMENT_FINANCING` labelled "Project Financing", publishing financing included; counted in general
+analytics, not in funding raised). A sixth category, `OTHER`, holds `OTHER_MISC`,
+hidden and never queryable: **22 visible types across 5 visible categories**.
 
 **Deal type → display label** (a deal's `type` comes back as a raw code - render its InvestGame label, never
 the code): `MA_CONTROL`→"M&A control (incl. LBO/MBO)" · `MA_MINORITY`→"M&A minority" · `SEED`→"Pre-Seed/Seed" ·
 `SERIES_A`…`SERIES_H`→"Series A"…"Series H" · `GROWTH_OR_EXPANSION`→"Growth / Expansion" ·
 `ACCELERATOR_GRANT`→"Accelerator / Grant" · `UNDISCLOSED_EARLY_STAGE`→"Undisclosed Early-stage" ·
 `UNDISCLOSED_LATE_STAGE`→"Undisclosed Late-stage" · `LISTING`→"Listing (IPO/SPAC)" · `PIPE`→"PIPE" ·
-`FIXED_INCOME`→"Fixed Income" · `UA_FINANCING`→"UA Financing". Development financing, licensing and
-`OTHER_MISC` are hidden and never come back from a query.
+`SECONDARY_OFFERING`→"Secondary Offering" · `FIXED_INCOME`→"Fixed Income" · `UA_FINANCING`→"UA Financing" ·
+`PRIVATE_DEBT`→"Private Debt" ·
+`DEVELOPMENT_FINANCING`→"Project Financing". `OTHER_MISC` is hidden and never comes back from a query.
 
 **Region maps** (use the country lists, not granular sub-regions):
 - Europe → GB, DE, FR, SE, NO, DK, FI, CH, NL, BE, AT, IT, ES, PT, PL, IE, CZ, RO
@@ -133,9 +136,9 @@ These are the difference between "181 M&A in 2025" and "104 M&A in 2025" for the
 | **"M&A"** | deal category `MA` only |
 | **"fundraising" / "VC funding"** | `EARLY_STAGE_INVESTMENT` + `LATE_STAGE_INVESTMENT` |
 | **"most funded companies" / "top raisers"** | VC rounds only (Most Funded Companies view) |
-| **"raised capital" (any event)** | all **five visible categories**, `UA_FINANCING` included. Flag it when it is in a total, since it is non-dilutive |
-| **UA-financing** | its own first-class visible category, neither fundraising nor M&A. Counted in general analytics; held out only of the quarterly report |
-| **never in the data at all** | development financing, licensing and `OTHER_MISC`: hidden types, never queryable |
+| **"raised capital" (any event)** | the four equity and public-offering categories (`MA`, early, late, `PUBLIC_OFFERING`). Non-dilutive financing is **not** funding raised: show it as its own row and say so |
+| **Non-dilutive financing** | the `UA_FINANCING` category (label "Non-dilutive Financing": UA financing, private debt, project financing with publishing financing included), neither fundraising nor M&A. Counted in general analytics; the quarterly report holds out UA financing, project financing and secondary offerings, while private debt stays in |
+| **never in the data at all** | `OTHER_MISC`: a hidden type, never queryable |
 | **"recent / latest / new"** | last **18 months** by effective date (`closed_date` ?? `announcement_date`) |
 | **no time word at all** | no date filter - whole database |
 | **deal size** | USD millions; undisclosed = no value recorded → excluded from sums, shown as "n/d" in lists. Control and minority M&A use different Size formulas: see `deal-taxonomy.md` |
@@ -194,12 +197,13 @@ Render in the **InvestGame** look (two themes, never mixed):
   directly tracked - answerable only as a custom query, if at all.
 - **Southeast-Asia early-stage mobile equity** - sparse and dated; widen the lens or flag the gap.
 
-Note what IS in scope (don't mistakenly decline it): **UA-financing** is a real, queryable deal type
-**and its own visible category** (`UA_FINANCING`), counted in general analytics and held out only of
-the quarterly report; **exit paths** (first-time exits, public-to-private, carve-outs) are a derived
-filter you can ask for; **geography** by any country or region is fully supported; and **headcount
-history** is queryable: a company's headcount series sits on its card, and a monthly members series
-across companies answers "which studios grew fastest by headcount" through `InvestGame_query`.
+Note what IS in scope (don't mistakenly decline it): **non-dilutive financing** is real and
+queryable, **its own visible category** (`UA_FINANCING`, label "Non-dilutive Financing") holding UA
+financing, private debt and project financing, counted in general analytics; **exit paths**
+(first-time exits, public-to-private, carve-outs) are a derived filter you can ask for; **geography**
+by any country or region is fully supported; and **headcount history** is queryable: a company's
+headcount series sits on its card, and a monthly members series across companies answers
+"which studios grew fastest by headcount" through `InvestGame_query`.
 
 When asked for any of these: state the limit, give the closest thing the data *can* answer, and offer
 custom research. Honesty here is what keeps the database trusted.

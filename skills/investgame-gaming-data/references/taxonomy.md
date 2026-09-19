@@ -15,17 +15,22 @@ every InvestGame company record.*
 
 ## 1 · Gaming-inclusion test (is the target even "gaming"?)
 
-**In scope:** game developers & publishers (any platform); casino **games** (genre `CASINO`); esports
-orgs and gaming infrastructure/tools/adtech with a genuine gaming use-case; B2C non-game apps with real
-game mechanics (Consumer Apps - §7).
+**In scope:** game developers & publishers (any platform), physical board and card games and their
+publishers included; casino **games** (genre `CASINO`); skill-based cash-out games and real-money
+fantasy sports; esports orgs and gaming infrastructure/tools/adtech with a genuine gaming use-case;
+sports data, sports media and fan-engagement technology, even when betting brands are among their
+clients or advertisers; B2C non-game apps with real game mechanics (Consumer Apps - §7). A mixed
+business (a media group with a games arm, an agency with a gaming division) is in when the gaming
+part is material: the division decides, not the parent's label.
 
-**Out of the gaming sectors:** real-money gambling / iGaming **operators** and the **apparatus** they run on (casino / sportsbook / iLottery platforms, remote game servers, betting terminals, lottery systems); physical toys & merchandise
+**Out of the gaming sectors:** real-money gambling / iGaming **operators** and the **apparatus** they run on (casino / sportsbook / iLottery platforms, remote game servers, betting terminals, lottery systems); physical toys other than board and card games, and merchandise
 (unless licensed game IP); generic PR / brand / marketing that is **not games-specific** and merely
 counts game companies among its clients; adjacent tech with no gaming use-case.
 
 These are still TRACKED companies: they carry the sector `OTHER` ("Other (non-covered sector)") with
 no gaming-gated fields, and several are listed companies whose earnings InvestGame follows. They are
-EXCLUDED from gaming sector totals - so they are answerable, but they never inflate a gaming number.
+EXCLUDED from gaming sector totals, and their own transactions are not tracked as deals - so they are
+answerable as companies, but they never inflate a gaming number.
 
 **Three service categories that fall between those rules**, none of which makes games of its own.
 That decides their SECTOR, not whether they are in scope: a company whose customers are game
@@ -46,13 +51,19 @@ companies and whose output is game work is an outsourcing gaming business, and i
 The line analysts apply most: **a casino game is content; a casino operator, and the apparatus it
 runs on, are out of the gaming sectors** - tracked, but under sector `OTHER`. A studio that *makes*
 casino games is Gaming Content even when those games pay out real money and its customers are
-operators, because it produces games rather than taking wagers (Light & Wonder, Aristocrat,
-Microgaming). A company that supplies the machinery of wagering - casino / sportsbook / iLottery
-platforms, remote game servers, betting terminals, VLT and retail lottery systems - is `OTHER`
-alongside the operator. A skill-based mobile game that pays cash out to players (Skillz, Papaya,
-Avia Games, Mobile Premier League, Underdog) is Gaming Content with `CASH_OR_SKILL_BASED_OR_RMG`.
-A gambling-side company never carries `GAMING_ECOSYSTEM`: those segments describe services sold to
-the games industry, not to gambling operators.
+operators, because it produces games rather than taking wagers (Light & Wonder, Microgaming).
+Aristocrat is out: it divested its games business and now sells casino machines. A company that
+supplies the machinery of wagering - casino / sportsbook / iLottery platforms, remote game servers,
+betting terminals, VLT and retail lottery systems - is `OTHER` alongside the operator, and that line
+prevails: a company that sells the platform and also makes casino games for it is `OTHER`. Whose
+games the machinery runs decides it: terminals, cabinets or a game server that carry only the
+studio's own titles are how it delivers its games, and it stays Gaming Content. A skill-based mobile
+game that pays cash out to players (Skillz, Papaya, Avia Games, Mobile Premier League) and a
+real-money fantasy sports app (Underdog) are Gaming Content with `CASH_OR_SKILL_BASED_OR_RMG`; only
+sports betting is out. Sports data, sports media and fan-engagement technology (Genius Sports,
+Sportradar) are in even when betting brands are among their clients or advertisers: only the
+operator that takes the bets is out. A gambling-side company never carries `GAMING_ECOSYSTEM`: those
+segments describe services sold to the games industry, not to gambling operators.
 
 **AI and ML companies.** AI is horizontal, so "uses AI" or "could be used for games" is not enough.
 A company is **IN** when gaming or interactive media is a real market it serves **and there is
@@ -67,12 +78,14 @@ editorial decisions, made case by case.
 
 ## 2 · Deal-inclusion gate (is it a tracked deal?)
 
-Tracked: equity rounds (early & late), M&A (control & minority), IPOs/listings, VC/PE fund raises,
-and **UA-financing** (`UA_FINANCING` - its own first-class visible deal category, counted in general
-analytics and held out only of the quarterly report; it is neither fundraising nor M&A, so it never
-sat inside those buckets). Not tracked: buybacks, partnerships, sponsorships, restructurings with no
-new capital, internal reorganisations. Development financing, licensing and `OTHER_MISC` are hidden
-from the data entirely and are not queryable.
+Tracked: equity rounds (early & late), M&A (control & minority, carve-outs included), public
+offerings (IPOs/listings, PIPEs, secondary offerings, fixed income), and **non-dilutive financing**
+(the `UA_FINANCING` category, label "Non-dilutive Financing": UA financing, private debt and project
+financing - its own first-class visible deal category, counted in general analytics but not as
+funding raised; it is neither fundraising nor M&A, so it never sat inside those buckets). A VC/PE
+fund raise is recorded on the fund, not as a deal. Not tracked: buybacks, partnerships, sponsorships,
+restructurings with no new capital, internal reorganisations. `OTHER_MISC` is hidden from the data entirely and is not
+queryable; project financing is a visible non-dilutive type and Licensing no longer exists.
 *(Full deal classification → `deal-taxonomy.md`.)*
 
 ## 3 · Company type (pick exactly one)
@@ -93,12 +106,16 @@ from the data entirely and are not queryable.
   has raised (each fund's vintage year and size/AUM - so "largest gaming funds by AUM" is answerable);
   **never** sector/content fields.
 - `SERVICE_PROVIDERS` → identity only; no sector/investor fields.
-- `ASSET` → parent company + optional platform/genre/monetization; no sector/company-identity fields.
+- `ASSET` → parent company + sectors + the sector bundle (platform, monetization, genre, top games;
+  ecosystem segment), never content type or ecosystem type, which the parent carries; no
+  company-identity fields.
 - `ANGELS_INDIVIDUALS` → identity only.
 
 ## 4 · Sector (a company can carry several) and its gated fields
 
 `GAMING_CONTENT` · `GAMING_ECOSYSTEM` · `CONSUMER_APPS` · `OTHER`. Sector gates which fields are populated.
+**The list is ordered: the first sector is the predominant business** (the quarterly series reads
+it), and each listed sector is a material line of business with its own product or revenue. Up to three.
 
 `OTHER` = "Other (non-covered sector)": a company InvestGame tracks that sits outside every covered
 sector (a real-money gambling operator, a large non-gaming AI or hardware firm). It is **exclusive**
@@ -123,42 +140,41 @@ What each feature flag means (it tags a product capability, NOT a company catego
   gift cards or in-game currency, that does not develop games itself
   (`ecosystem_segment = OTHER`, "retail/merch") - it is never `GAMING_CONTENT`, which requires the
   company to actually develop or publish a game.
-- **CONSUMER_APPS** → `gamified_subsegment` + ≥2 visible mechanics (§7).
+- **CONSUMER_APPS** → `gamified_subsegment` + visible game mechanics (§7).
 - **platform:** `MOBILE` · `PC_CONSOLE` (incl. cloud gaming) · `BROWSER` · `VR_AR`.
 
 ## 5 · Monetization × platform - the decision rules (analyst-critical)
 
-Monetization is **not free choice** - it is dictated by platform. These rules are the difference
-between a defensible classification and a guess.
+**List the predominant model first.** Without a disclosed split, exactly one model, read from the
+signals below; a second model only when a disclosed share gives it 30% or more of revenue, or the
+source says "hybrid" in so many words. A game monetised mainly through purchases with ads as a small part carries `IAP` alone, and
+the reverse carries `IAA` alone.
 
 **Allowed values:** `IAP` · `IAA` · `GAAS` · `UPFRONT_SALE` · `DLC` · `SUBSCRIPTION`.
 
-### Mobile (`MOBILE` + GAMING_CONTENT)
-- Primary monetization is **strictly one of `IAP` or `IAA`** - `GAAS`/HYBRID are **not** valid as
-  mobile primary (HYBRID only as a secondary annotation).
-- **`IAP` = progression economy** - gacha, loot boxes, character/weapon upgrades, energy/stamina
-  gating, meta-progression unlocks (long progression, lower DAU).
-- **`IAA` = attention economy** - short loops (<5 min), frequent inter-level ads, hyper-casual or
-  level-based puzzle, CPI-driven scale (high DAU).
-- **Hyper-casual ⇒ `IAA` primary** (overrides `IAP`, even if IAP exists).
-- **Tiebreaker when both present:** short session + high DAU → IAA; long progression + low DAU → IAP;
-  intent words "hyper-casual / ad-monetized / CPI scaling" → IAA; "meta-progression / collection /
-  gacha" → IAP. If still ambiguous → **flag for senior review, do not guess.**
-- **Mobile `GAAS` is banned** except globally recognised cross-platform live-service titles
-  (e.g. Fortnite mobile). Battle pass → `IAP`; seasonal content → `IAP`/`IAA`; live-ops updates are
-  **not** `GAAS`.
+**The platform matrix decides what is applicable** (every InvestGame record follows it): `IAP` and `IAA` need
+`MOBILE` or `BROWSER`; `GAAS` and `DLC` need `PC_CONSOLE`, `VR_AR` or `BROWSER`; `SUBSCRIPTION` and
+`UPFRONT_SALE` apply on any platform (a paid mobile download with no purchases and no ads is
+`UPFRONT_SALE` on `MOBILE`, rare and verified, never assumed).
 
-### PC / Console (`PC_CONSOLE`)
-- **`IAP`/`IAA` are banned here** (mobile-native). Use only `GAAS` (live-service / battle pass /
-  seasonal), `UPFRONT_SALE` (paid purchase), `DLC` (paid expansions), `SUBSCRIPTION` (Game Pass / PS+).
+| Signal in the source | Model |
+|---|---|
+| Disclosed revenue split | the largest share first; a second only at 30% or more |
+| "hybrid-casual" / "hybrid monetization": ads and purchases roughly equal | `IAA` and `IAP`, the larger first |
+| hyper-casual, short sessions, ad-driven, install-led (CPI) scaling | `IAA` alone |
+| progression economy: gacha, meta-progression, collection, a mobile battle pass; rewarded ads a small part | `IAP` alone |
+| ad-led portfolio with a small purchase store | `IAA` alone |
+| mobile, no signal at all | `IAP` |
+| paid download, no service economy (Early Access included) | `UPFRONT_SALE` |
+| paid expansions or add-ons after launch | add `DLC` |
+| battle pass, seasons, a recurring cosmetic store after launch | `GAAS`, with `UPFRONT_SALE` when the base game is paid |
+| a monthly fee for access | `SUBSCRIPTION` |
+| cross-platform | read by the platform where the revenue is |
 
-### Cross-platform
-- Classify by the **dominant platform by revenue**; IAP/IAA apply only if mobile dominates.
-
-### `GAAS` guardrail
-- Assign `GAAS` only when there is a real **service economy** (battle pass / seasonal systems /
-  structured live-service loop). Ongoing updates alone ≠ GAAS. Never `GAAS` for hyper-casual,
-  ad-driven portfolios, or level-based puzzle games.
+Premium, `DLC` and `GAAS` on PC and console are three separate questions, each answered by its own
+signal. Mobile live operations, seasonal content and a mobile battle pass are `IAP`, never `GAAS`;
+`GAAS` on a mobile entry applies only when the title is a cross-platform live service whose
+platform set includes `PC_CONSOLE`.
 
 ### Time rule
 - Classify monetization **as of the deal announcement date**, not the company's current model.
@@ -190,17 +206,18 @@ The deciding test for the top two is **build vs operate.**
 
 `ecosystem_type` = `B2C` (gamers) or `B2B` (companies). *(Note: to find UA-financing **providers**,
 filter on the company feature `UA_FINANCING` (§4). It is valid on VC, PE and Strategic/CVC companies,
-so the ecosystem segment alone undercounts the roster. UA-financing **deals** are their own visible
-deal category, counted in general analytics and held out only of the quarterly report.)*
+so the ecosystem segment alone undercounts the roster. UA-financing **deals** sit in the visible
+Non-dilutive Financing category with private debt and project financing, counted in general analytics
+but not as funding raised.)*
 
 ## 8 · Consumer Apps (gamified, non-game B2C)
 
 **Qualifies only if ALL hold:** B2C (not B2B/enterprise); not a game (no core gameplay loop as the
-product); **≥2 visible gamification mechanics** in the UI (streaks, levels/XP, leaderboards, progress
-bars, badges, IAP progression, virtual currency, challenges); materially worse without them.
+product); the user-facing experience is built on **visible gamification mechanics** (streaks,
+levels/XP, leaderboards, progress bars, badges, IAP progression, virtual currency, challenges).
 
 **Exclusions:** B2B/enterprise (e.g. Wellhub), gambling/betting apps, pure games (→ `GAMING_CONTENT`),
-apps with ≤1 mechanic.
+apps whose mechanics the user never sees.
 
 **Subsegment (by primary purpose):** `EDTECH` (Duolingo, Kahoot!) · `FITNESS_WELLNESS` (Strava, Calm,
 Zwift) · `ENTERTAINMENT_SOCIAL` (Reddit, Wattpad, short-drama / mini-drama carrying the `SHORT_DRAMA` tag) · `OTHER` (Habitica).

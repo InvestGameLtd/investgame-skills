@@ -10,9 +10,9 @@ weren't fixed. This file is the fix.)
 | **M&A** | deal category `MA` (control + minority) |
 | **Fundraising / VC funding** | `EARLY_STAGE_INVESTMENT` + `LATE_STAGE_INVESTMENT` |
 | **Most funded companies / top raisers** | VC rounds only - matches Most Funded Companies view (`funding_size_in_period`); excludes M&A/IPO |
-| **Raised capital (any event)** | all **five visible categories**, which includes `UA_FINANCING`. Say so when it is in a total |
-| **UA-financing** | its own first-class visible category (`UA_FINANCING`). Non-dilutive, so neither fundraising nor M&A and never inside those buckets. Counted in general analytics; held out only of the quarterly report |
-| **Always excluded** | development financing, licensing and `OTHER_MISC` are hidden from the data entirely and are never queryable. They are the whole of the non-visible `OTHER` category |
+| **Raised capital (any event)** | the four equity and public-offering categories (`MA`, early, late, `PUBLIC_OFFERING`). Non-dilutive financing is **not** funding raised: show it as its own row and say so |
+| **Non-dilutive financing** | its own first-class visible category (`UA_FINANCING`, label "Non-dilutive Financing"): UA financing, private debt and project financing (publishing advances and minimum guarantees included). Repaid from revenue, so neither fundraising nor M&A and never inside those buckets. Counted in general analytics; the quarterly report holds out UA financing, project financing and secondary offerings, while private debt stays in |
+| **Always excluded** | `OTHER_MISC` is hidden from the data entirely and is never queryable; it is the whole of the non-visible `OTHER` category. Project financing (`DEVELOPMENT_FINANCING`) is a visible non-dilutive type; Licensing no longer exists |
 
 ## Time
 | Term | Definition |
@@ -25,8 +25,9 @@ weren't fixed. This file is the fix.)
 ## Money & valuation
 - **Sizes** are USD millions. **Undisclosed = excluded** from sums/averages, shown as **"n/d"** in lists.
 - **The EV basis for multiples depends on the deal category:** M&A → **Upfront EV** at 100%;
-  early/late-stage rounds → **post-money EV**; public offerings → **listing market cap**. Fixed income
-  carries no meaningful EV. Never use the transaction/Max EV for a multiple in any category.
+  early/late-stage rounds → **post-money EV**; public offerings → **listing market cap**. Fixed income,
+  private debt and other non-dilutive money carry no meaningful EV. Never use the transaction/Max EV
+  for a multiple in any category.
 - When a **sum and a count appear together**, restrict to disclosed sizes so the two reconcile.
 
 ## Multiples
