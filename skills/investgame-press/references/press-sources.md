@@ -19,6 +19,8 @@ them and never let one lead a Big Story alone.
 | Deconstructor of Fun | Game-economy design, live-ops, monetization |
 | mobilegamer.biz | Mobile games business: M&A, funding, platform policy, top-grossing data |
 | Mobile Gaming Today | Mobile gaming weekly roundup (also runs paid level-design teardowns, which arrive without a body) |
+| Max Power Gaming | Roblox / UGC business: platform charts, studio financing, publishers entering UGC |
+| Video Games Industry Memo | Weekly industry roundup: top news, job moves, policy (paid issues arrive without a body) |
 | SuperJoost | Strategy, market structure |
 | MIDiA Research | Market data, trends, consumer |
 | Griffin Gaming Partners (and other VC weeklies) | VC, funding, market data, AI, web3 |

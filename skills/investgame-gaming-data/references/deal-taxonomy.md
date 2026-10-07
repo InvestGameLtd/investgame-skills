@@ -7,33 +7,29 @@ from Type), plus the commercial-terms conventions. Grounded in InvestGame's anal
 
 | Category | Type | When |
 |----------|------|------|
-| `MA` | `MA_CONTROL` | More than 50%, full control, the remaining stake, LBO, MBO, take-private |
-| `MA` | `MA_MINORITY` | Existing shares bought from named holders below 50%, whoever the buyer (a fund included) |
-| `EARLY_STAGE_INVESTMENT` | `ACCELERATOR_GRANT` · `SEED` · `SERIES_A` · `UNDISCLOSED_EARLY_STAGE` | New shares, capital to the company; unlabelled → early when no round beyond Series A behind it or under $10M with no late signal |
-| `LATE_STAGE_INVESTMENT` | `SERIES_B`…`SERIES_H` · `GROWTH_OR_EXPANSION` · `UNDISCLOSED_LATE_STAGE` | Unlabelled late round **with a PE participant** → growth; without → undisclosed-late |
-| `PUBLIC_OFFERING` | `LISTING` · `PIPE` · `SECONDARY_OFFERING` · `FIXED_INCOME` | IPO/SPAC/direct, or a secondary listing on a further exchange → listing (a secondary listing is not a secondary offering); a listed company's new shares placed with investors, one or many (private placement, bookbuild, at-the-market, underwritten follow-on) → PIPE; a holder's marketed sale through banks → secondary offering; a listed issuer's notes → fixed income |
-| `UA_FINANCING` (label "Non-dilutive Financing"; the value is kept for the API's category filter) | `UA_FINANCING` · `PRIVATE_DEBT` · `DEVELOPMENT_FINANCING` (label "Project Financing") | Repaid from revenue, not bought with shares; a private borrower's loan is private debt whatever the paper; an advance or minimum guarantee is project financing |
+| `MA` | `MA_CONTROL` | A stake of 50% or more; a smaller stake that takes the buyer's holding to 50% or more, or that the source describes as a change of control (the buyer becomes the controlling shareholder and takes over the board or management); full control, the remaining stake, LBO, MBO, take-private; a private company buying out its investor's stake (an MBO even when the stake is a minority, never a buyback); the purchase of a business, a game, an IP or rights rather than shares (a carve-out, a business transfer) |
+| `MA` | `MA_MINORITY` | Existing shares bought from named holders, below 50% with no change of control, whoever the buyer (a fund included) |
+| `EARLY_STAGE_INVESTMENT` | `ACCELERATOR_GRANT` · `SEED` · `SERIES_A` · `UNDISCLOSED_EARLY_STAGE` | New shares, capital to the company; an unlabelled round is typed by the company's history (below) |
+| `LATE_STAGE_INVESTMENT` | `SERIES_B`…`SERIES_H` · `GROWTH_OR_EXPANSION` · `UNDISCLOSED_LATE_STAGE` | Unlabelled late round **with a PE participant** (below) → growth; without → undisclosed-late |
+| `PUBLIC_OFFERING` | `LISTING` · `PIPE` · `SECONDARY_OFFERING` · `FIXED_INCOME` | IPO/SPAC/direct, a spin-off whose shares are distributed to the parent's shareholders and listed, or a secondary listing on a further exchange → listing (a secondary listing is not a secondary offering); a listed company's new shares placed with investors, one or many (private placement, bookbuild, at-the-market, underwritten follow-on), and new shares of an unlisted subsidiary of a listed group → PIPE; a holder's marketed sale through banks, and a purchase on the exchange by an outside buyer with no named seller → secondary offering; a listed issuer's bonds, notes or convertible loans → fixed income |
+| `NON_DILUTIVE_FINANCING` (label "Non-dilutive Financing") | `UA_FINANCING` · `PRIVATE_DEBT` · `DEVELOPMENT_FINANCING` (label "Project Financing") | Repaid from revenue, not bought with shares; debt of a borrower not listed on the deal date is private debt, wherever the paper trades, and a listed borrower's debt is fixed income; an advance or minimum guarantee is project financing |
 | Hidden | `OTHER_MISC` | Never a card; Licensing is retired, a licence is never a deal |
 
 The money-flow rule decides between a round and M&A: new shares to the company is a round; existing
-shares from named holders is M&A by the stake. A secondary offering is never M&A; a loan is private
-debt or fixed income by the borrower's listing status on the announcement date.
+shares from named holders is M&A, typed by the control test above. A secondary offering is never M&A;
+a loan is private debt or fixed income by the borrower's listing status on the announcement date.
 
 ## Selection rules & edge cases
-- Majority stake or 100% → `MA_CONTROL`; a minority block from named holders → `MA_MINORITY`, whoever the buyer.
-- Explicit "Series X" → that `SERIES_X`; unlabeled → the company's history first (a round beyond Series A behind it → late), and only when the history is unknown, under $10M with no late signal → `UNDISCLOSED_EARLY_STAGE`.
-- An unlabelled late round with a **PE participant** → `GROWTH_OR_EXPANSION`; without one → `UNDISCLOSED_LATE_STAGE`.
+- Explicit "Series X" → that `SERIES_X`. An unlabelled round is read from the company's history first: a round beyond Series A behind it → late, whatever the size; none → early. Only when the history is unknown does the size decide: under $10M with no late-stage signal → early, otherwise late.
+- A **PE participant** is an investor of type `PRIVATE_EQUITY_AND_INST` (PE, sovereign, pension or institutional money); taking part is enough, it need not lead.
+- A SAFE or convertible note sold to venture investors as a round → typed by stage; a convertible loan from a bank or credit fund → `PRIVATE_DEBT`, or `FIXED_INCOME` for a listed borrower.
 - Take-private by a consortium → `MA_CONTROL` (consortium lead = Lead Investor; others = Other Investors).
-- Convertible notes/bonds issued by a public company → `FIXED_INCOME` (not PIPE).
+- A formal tender or takeover offer → M&A by the control test, even when the shares are bought on the market.
 - Pre-existing stake + acquisition of the rest → `MA_CONTROL` for the new transaction (note prior stake).
 - de-SPAC / SPAC merger / direct listing / secondary listing (the same company arriving on a further exchange, never `SECONDARY_OFFERING`) → `LISTING`; an at-the-market programme or an underwritten follow-on on an exchange the company already trades on → `PIPE`.
-- MBO → `MA_CONTROL` (note in description).
-- **Non-dilutive financing** (`UA_FINANCING`, `PRIVATE_DEBT`, `DEVELOPMENT_FINANCING`) is real,
-  queryable and its own visible category. It is neither fundraising nor M&A, never belonged to
-  those buckets, and is not counted as "funding raised": report it as its own row. The quarterly
-  report holds out UA financing, project financing and secondary offerings, so that those
-  comparisons stay consistent with earlier periods; private debt stays in it. Only `OTHER_MISC` is
-  hidden from the data entirely and is never queryable.
+- A loan drawn to pay an acquisition's price is no card: its lender, amount and instrument sit in the M&A card's terms. A bond or notes the acquirer issues to the market is its own debt card.
+- A division sold with its own name, website or LinkedIn page → its own company card and an M&A deal (equity sale); a game, IP, rights or other assets from a portfolio → an asset card under the acquirer (asset sale).
+- Non-dilutive financing and what counts as funding raised: `definitions.md`.
 
 ## Exit path (control M&A and listings)
 
@@ -50,7 +46,7 @@ The First-Time Exits and Public-to-Private question patterns are built on these.
 - M&A: acquirer = Lead Investor/Acquirer; target = `target_company`.
 - Investment: lead investor(s) = lead; co-investors = other. Always check **both** lead + other investor tables.
 - Advisors live in four separate roles: sell/buy × financial/legal. IPO underwriters are **advisors**, not investors.
-- Service-provider firms (banks/law) participate as advisors, not targets/investors.
+- Service-provider firms (banks/law) participate as advisors, never targets; a bank may also lend or invest on the same deal, a law firm never.
 
 ## What "Size" means (by category and type)
 
@@ -59,12 +55,12 @@ misstates every minority deal:
 
 | Type | Size = |
 |------|--------|
-| `MA_CONTROL` | Upfront EV × stake % + maximum earn-out (the transaction basis: what changed hands) |
+| `MA_CONTROL` | Upfront EV × stake % + maximum earn-out (the transaction basis: what changed hands); with no disclosed EV, the price paid for the stake + maximum earn-out; a remaining stake bought in the same deal sits in the earn-out, and once it is paid the size is the total actually paid, Upfront EV unchanged; when control comes by paying the company, every amount put in counts, equity and debt alike |
 | `MA_MINORITY` | stake % × equity value, where equity = Upfront EV - debt + cash; stake % × Upfront EV with a "bridge missing" flag when debt and cash are unknown |
 | Early / Late investment | round size (total raised this round) |
-| `LISTING` and `PIPE` | listing gross proceeds (offer price × shares offered) |
-| `SECONDARY_OFFERING` | gross proceeds to the selling holder(s) (offer price × shares sold) |
-| `FIXED_INCOME` and `PRIVATE_DEBT` | total raised (principal) |
+| `LISTING` and `PIPE` | listing gross proceeds (offer price × shares offered; for a PIPE the shares allotted at completion); a spin-off by distribution: the opening price on the first trading day × all shares of every class, listed or not, at that day's central-bank rate; a direct listing with no shares offered: no size (its market cap goes in its own field) |
+| `SECONDARY_OFFERING` | the consideration paid for the shares: the seller's gross proceeds when a seller is named, the buyer's disclosed outlay when bought on the exchange |
+| `FIXED_INCOME` and `PRIVATE_DEBT` | the principal; for a credit line the full facility amount, drawn or not |
 | `UA_FINANCING` and `DEVELOPMENT_FINANCING` | the committed amount (a publisher's advance or minimum guarantee included) |
 | `ACCELERATOR_GRANT` | the award |
 
@@ -75,29 +71,16 @@ All monetary values are **millions, reported currency**; `Size, $M` = Size / FX 
 units of reported currency per 1 USD** (USD deal → 1.0).
 
 ## Valuation & multiples conventions
-- **The EV basis depends on the deal category**, and it is **never** the transaction/Max EV:
-  M&A → **Upfront EV** at 100%; early/late-stage rounds → **post-money EV**; public offerings →
-  **listing market cap**. Fixed income, private debt and non-dilutive money carry no EV, so no
-  multiples. The bridge to equity value takes the minorities of a consolidated listed subsidiary as
-  a debt-like line at market value; a minority deal with unknown debt and cash carries EV = price ÷
-  stake and a "bridge missing" flag. Every transaction carries its own valuation.
-- A **deferred** payment (fixed, delayed) sits inside Upfront EV; **earn-out** is contingent only.
-- **Earn-out 0 vs "-":** `0` = source confirms no earn-out; `"-"` = unknown/undisclosed. Never use "-"
-  when the source confirms there is none.
-- Multiples shown as "2.6x". **"NM"** = not meaningful: negative, or outside the band. EV/Revenue is
-  NM below 0.1x or above 20x; EV/EBITDA, EV/EBIT and EV/Cash EBITDA are NM below 0.25x or above 50x.
-  **Blank means no data, which is not the same as NM.** Neither is ever zero.
-- Periods: **LTM** (trailing twelve months, the default) · **CY0** (the calendar year OF THE
-  ANNOUNCEMENT, not the current year) · **NTM** (forward). Where one headline multiple is shown, the
-  fallback order is LTM, then CY0, then NTM. Always write **CY0 with a zero**, never with a letter O.
-- Financials (revenue/EBITDA) are in **reported currency**, separate from the deal record.
+- The EV basis of every multiple, the NM rule and the periods: `definitions.md`.
+- The bridge to equity value takes the minorities of a consolidated listed subsidiary as a debt-like
+  line at market value; a minority deal with unknown debt and cash carries EV = price ÷ stake and a
+  "bridge missing" flag. Every transaction carries its own valuation.
+- **Earn-out:** `0` = the source confirms no earn-out; empty = unknown or undisclosed, never a dash.
 
 ## For querying (what this means for the agent)
-- "M&A" → category `MA`; "fundraising/VC" → early + late stage; "raised capital" (any event) → the
-  four equity and public-offering categories (`MA`, early, late, `PUBLIC_OFFERING`). Non-dilutive
-  financing (`UA_FINANCING` category) is not funding raised: show it as its own row when asked, and
-  say so, since it is repaid from revenue and not comparable with equity.
+- "M&A" → category `MA`; "fundraising/VC" → early + late stage; "funding raised", "raised capital"
+  and non-dilutive financing → the buckets in `definitions.md`.
 - "growth round" spans `SERIES_B+`, `GROWTH_OR_EXPANSION`, and `UNDISCLOSED_LATE_STAGE` - confirm scope.
 - For valuation questions, default to **EV/Revenue (LTM)** on the EV basis for that deal's category
-  (M&A → Upfront EV; rounds → post-money; public offerings → listing market cap) and state it in the
-  methodology line. Exclude undisclosed sizes from totals; include all deals in counts/trends.
+  (`definitions.md`) and state it in the methodology line. Exclude undisclosed sizes from totals;
+  include all deals in counts/trends.

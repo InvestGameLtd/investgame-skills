@@ -1,6 +1,6 @@
 ---
 name: investgame-public-markets
-version: 0.10.0
+version: 0.10.1
 description: >
   Live public-market data for any LISTED company (now or formerly public) and for currency / FX conversion.
   Use when a request needs market data the InvestGame deal database does not itself hold: a current share
@@ -26,7 +26,7 @@ membership and earnings releases. Those power the indices and the press digest. 
 question needs a live quote, a full statement, an analyst view or an FX rate.)
 
 ## When to use it
-- A **listed** company: currently public, OR public in the past (e.g. a strategic / CVC acquirer, or a
+- A **listed** company: currently public, OR public in the past (e.g. a strategic acquirer, or a
   company that later went private), and the question needs public-market data the deal database doesn't
   carry.
 - Any **currency / FX** need: convert an amount between currencies, or look up an exchange rate today or
