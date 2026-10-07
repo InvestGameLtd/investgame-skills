@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.10.0
+version: 0.10.1
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -98,15 +98,15 @@ game - engines/tools) · `INFRASTRUCTURE_SERVICES` (helps *run/scale* - cloud, a
 *Critical: `platform` ≠ `ecosystem_segment`. "Mobile" is a platform; "esports" is an ecosystem segment.*
 
 **Consumer Apps subsegment** (CONSUMER_APPS only): `EDTECH` · `FITNESS_WELLNESS` ·
-`ENTERTAINMENT_SOCIAL` · `OTHER`.
+`ENTERTAINMENT_SOCIAL` · `FINTECH` · `OTHER`.
 
-**Company type:** `ANGELS_INDIVIDUALS` · `VENTURE_CAPITAL_AND_ACC` · `PRIVATE_EQUITY_AND_INST` ·
-`STRATEGIC_OR_CVC` · `SERVICE_PROVIDERS` (banks/advisors/law firms) · `ASSET` (IP/franchise) · `OTHER`.
+**Company type:** `ANGELS_INDIVIDUALS` · `VENTURE_CAPITAL_AND_ACC` · `PRIVATE_EQUITY_AND_INST` (investing a balance sheet or a fund) ·
+`STRATEGIC_OR_CVC` (label "Strategic": any operating company, gaming or not) · `SERVICE_PROVIDERS` (consultants on deals that only advise or lend: banks/advisors/brokers/law firms; a firm that leads deals keeps an investor type, and its advisor role is read from the deals' advisor fields, not from the type) · `ASSET` (IP/franchise) · `OTHER` (government, non-profits, associations; never an investor).
 
 **Deal category** (five visible): `MA` (types `MA_CONTROL`, `MA_MINORITY`) · `EARLY_STAGE_INVESTMENT`
 (accelerator/grant, Seed, Series A, undisclosed-early) · `LATE_STAGE_INVESTMENT` (Series B to H,
 growth/expansion, undisclosed-late) · `PUBLIC_OFFERING` (`LISTING`, `PIPE`, `SECONDARY_OFFERING`,
-`FIXED_INCOME`) · `UA_FINANCING` (label "Non-dilutive Financing": `UA_FINANCING`, `PRIVATE_DEBT`,
+`FIXED_INCOME`) · `NON_DILUTIVE_FINANCING` (label "Non-dilutive Financing": `UA_FINANCING`, `PRIVATE_DEBT`,
 `DEVELOPMENT_FINANCING` labelled "Project Financing", publishing financing included; counted in general
 analytics, not in funding raised). A sixth category, `OTHER`, holds `OTHER_MISC`,
 hidden and never queryable: **22 visible types across 5 visible categories**.
@@ -137,12 +137,12 @@ These are the difference between "181 M&A in 2025" and "104 M&A in 2025" for the
 | **"fundraising" / "VC funding"** | `EARLY_STAGE_INVESTMENT` + `LATE_STAGE_INVESTMENT` |
 | **"most funded companies" / "top raisers"** | VC rounds only (Most Funded Companies view) |
 | **"raised capital" (any event)** | the four equity and public-offering categories (`MA`, early, late, `PUBLIC_OFFERING`). Non-dilutive financing is **not** funding raised: show it as its own row and say so |
-| **Non-dilutive financing** | the `UA_FINANCING` category (label "Non-dilutive Financing": UA financing, private debt, project financing with publishing financing included), neither fundraising nor M&A. Counted in general analytics; the quarterly report holds out UA financing, project financing and secondary offerings, while private debt stays in |
+| **Non-dilutive financing** | the `NON_DILUTIVE_FINANCING` category (label "Non-dilutive Financing": UA financing, private debt, project financing with publishing financing included), neither fundraising nor M&A. Counted in general analytics; the quarterly report holds out UA financing, project financing and secondary offerings, while private debt stays in |
 | **never in the data at all** | `OTHER_MISC`: a hidden type, never queryable |
 | **"recent / latest / new"** | last **18 months** by effective date (`closed_date` ?? `announcement_date`) |
 | **no time word at all** | no date filter - whole database |
 | **deal size** | USD millions; undisclosed = no value recorded → excluded from sums, shown as "n/d" in lists. Control and minority M&A use different Size formulas: see `deal-taxonomy.md` |
-| **enterprise value for multiples** | by category: M&A → **Upfront EV** at 100%; early/late rounds → **post-money EV**; public offerings → **listing market cap**. Never the Max/transaction EV |
+| **enterprise value for multiples** | by category: M&A → **Upfront EV** at 100%; early/late rounds → **post-money EV**; a listing or a PIPE → **market cap at the offer**; a secondary offering, fixed income and non-dilutive financing carry no multiples. Never the Max/transaction EV |
 | **multiples** | shown as "2.6x". **"NM"** = negative or outside the band (EV/Revenue 0.1x to 20x; EV/EBITDA, EV/EBIT, EV/Cash EBITDA 0.25x to 50x). Blank = no data, which is not NM. Neither is zero |
 | **date** | the **effective date** (`closed_date` ?? `announcement_date`) is the default anchor and matches the site filter, the curated views and the quarterly reports. The announcement date is used only when asked for. State which anchor the `assumptions` report |
 
@@ -198,7 +198,7 @@ Render in the **InvestGame** look (two themes, never mixed):
 - **Southeast-Asia early-stage mobile equity** - sparse and dated; widen the lens or flag the gap.
 
 Note what IS in scope (don't mistakenly decline it): **non-dilutive financing** is real and
-queryable, **its own visible category** (`UA_FINANCING`, label "Non-dilutive Financing") holding UA
+queryable, **its own visible category** (`NON_DILUTIVE_FINANCING`, label "Non-dilutive Financing") holding UA
 financing, private debt and project financing, counted in general analytics; **exit paths**
 (first-time exits, public-to-private, carve-outs) are a derived filter you can ask for; **geography**
 by any country or region is fully supported; and **headcount history** is queryable: a company's

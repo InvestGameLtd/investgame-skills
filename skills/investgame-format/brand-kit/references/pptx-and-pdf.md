@@ -50,8 +50,7 @@ For an A4 **report** (notes, methodology write-ups, anything that flows across p
 - Render with explicit margins and **without** `preferCSSPageSize`:
 
   ```python
-  page.pdf(format="A4", print_background=True,
-           margin={"top": "12mm", "bottom": "14mm", "left": "12mm", "right": "12mm"})
+  page.pdf(format="A4", print_background=True, margin={"top": "12mm", "bottom": "14mm", "left": "12mm", "right": "12mm"})
   ```
 
 - QA every page image: `pdftoppm -jpeg -r 120 out.pdf qa`, then look at each one.
