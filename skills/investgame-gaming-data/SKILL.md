@@ -1,6 +1,6 @@
 ---
 name: investgame-gaming-data
-version: 0.10.1
+version: 0.10.2
 description: >
   The home for games-industry deal and market intelligence. Use the moment a question pairs gaming with
   money, deals, investors, or classification: listing or counting M&A, fundraises, financing rounds, or
@@ -101,7 +101,7 @@ game - engines/tools) · `INFRASTRUCTURE_SERVICES` (helps *run/scale* - cloud, a
 `ENTERTAINMENT_SOCIAL` · `FINTECH` · `OTHER`.
 
 **Company type:** `ANGELS_INDIVIDUALS` · `VENTURE_CAPITAL_AND_ACC` · `PRIVATE_EQUITY_AND_INST` (investing a balance sheet or a fund) ·
-`STRATEGIC_OR_CVC` (label "Strategic": any operating company, gaming or not) · `SERVICE_PROVIDERS` (consultants on deals that only advise or lend: banks/advisors/brokers/law firms; a firm that leads deals keeps an investor type, and its advisor role is read from the deals' advisor fields, not from the type) · `ASSET` (IP/franchise) · `OTHER` (government, non-profits, associations; never an investor).
+`STRATEGIC_OR_CVC` (label "Strategic": any operating company, gaming or not) · `SERVICE_PROVIDERS` (consultants on deals that only advise or lend: banks/advisors/brokers/law firms; a firm that leads deals keeps an investor type, and its advisor role is read from the deals' advisor fields, not from the type) · `ASSET` (IP/franchise) · `OTHER` (government, non-profits, associations; never an investor except a government body that gives grants; a non-profit whose main business is investing carries an investor type).
 
 **Deal category** (five visible): `MA` (types `MA_CONTROL`, `MA_MINORITY`) · `EARLY_STAGE_INVESTMENT`
 (accelerator/grant, Seed, Series A, undisclosed-early) · `LATE_STAGE_INVESTMENT` (Series B to H,

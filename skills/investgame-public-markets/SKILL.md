@@ -1,6 +1,6 @@
 ---
 name: investgame-public-markets
-version: 0.10.1
+version: 0.10.2
 description: >
   Live public-market data for any LISTED company (now or formerly public) and for currency / FX conversion.
   Use when a request needs market data the InvestGame deal database does not itself hold: a current share

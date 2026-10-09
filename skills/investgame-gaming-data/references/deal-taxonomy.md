@@ -45,6 +45,7 @@ The First-Time Exits and Public-to-Private question patterns are built on these.
 ## Participants
 - M&A: acquirer = Lead Investor/Acquirer; target = `target_company`.
 - Investment: lead investor(s) = lead; co-investors = other. Always check **both** lead + other investor tables.
+- Public offering (listing, PIPE, secondary, Fixed Income): a buyer the source calls the lead, an anchor or a cornerstone is lead; every other named buyer is other; on a Fixed Income loan the lenders are leads, up to five, the rest other. Cards written before October 2026 may list no others on an offering.
 - Advisors live in four separate roles: sell/buy × financial/legal. IPO underwriters are **advisors**, not investors.
 - Service-provider firms (banks/law) participate as advisors, never targets; a bank may also lend or invest on the same deal, a law firm never.
 
